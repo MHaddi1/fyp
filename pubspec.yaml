@@ -38,6 +38,7 @@ dependencies:
   velocity_x: ^4.1.1
   get: ^4.6.6
   shared_preferences: ^2.2.2
+  video_player: ^2.8.1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/image/
+    - assets/video/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

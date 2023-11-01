@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/views/splash_screen.dart';
+import 'package:fyp/const/routes/routes.dart';
+import 'package:fyp/const/routes/routes_name.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,17 +10,17 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'A²RI Craft',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+      initialRoute: RoutesName.splashScreen,
+      getPages: AppRoutes.appRoutes(),
     );
   }
 }
