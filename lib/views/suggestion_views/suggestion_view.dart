@@ -35,15 +35,9 @@ class SuggestionView extends StatelessWidget {
             left: 20,
             child: VStack(
               [
-                "A²RI Craft".text.color(Colors.white).bold.xl4.make(),
+                "title".tr.text.color(Colors.white).bold.xl4.make(),
                 10.heightBox,
-                "Tailor Service is.\nOn Demand"
-                    .text
-                    .justify
-                    .bold
-                    .color(Colors.white)
-                    .xl2
-                    .make(),
+                "des".tr.text.justify.bold.color(Colors.white).xl2.make(),
               ],
             ),
           ),
@@ -67,15 +61,15 @@ class SuggestionView extends StatelessWidget {
             bottom: 10,
             left: 0,
             right: 0,
-            child: const Row(
+            child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   MyTextButton(
-                    text: "Sign In",
+                    text: "sign_in".tr,
                     color: Colors.orange,
                   ),
                   MyTextButton(
-                    text: "Skip",
+                    text: "skip".tr,
                     color: Colors.orange,
                   )
                 ]).marginZero,
@@ -88,7 +82,7 @@ class SuggestionView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   MyContainer(
-                    text: "Tailor",
+                    text: "tailor".tr,
                     width: 150,
                     height: 150,
                     image: AppImage.mainImg,
@@ -96,7 +90,7 @@ class SuggestionView extends StatelessWidget {
                     minWidth: MediaQuery.of(context).size.width,
                   ),
                   MyContainer(
-                    text: "Customer",
+                    text: "customer".tr,
                     width: 150,
                     height: 150,
                     image: AppImage.coustomer,
