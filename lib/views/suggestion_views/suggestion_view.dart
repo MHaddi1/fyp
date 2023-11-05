@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/const/components/my_container.dart';
-import 'package:fyp/const/components/my_text_button.dart';
-import 'package:fyp/const/images/app_image.dart';
+import 'package:fyp/const/components/suggestions/my_container.dart';
+import 'package:fyp/const/components/suggestions/my_text_button.dart';
+import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
+import 'package:fyp/views/login/login_view.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:video_player/video_player.dart';
@@ -67,10 +68,15 @@ class SuggestionView extends StatelessWidget {
                   MyTextButton(
                     text: "sign_in".tr,
                     color: Colors.orange,
+                    onPressed: () {
+                      Get.bottomSheet(const SignView(),
+                          isScrollControlled: true, enableDrag: false);
+                    },
                   ),
                   MyTextButton(
                     text: "skip".tr,
                     color: Colors.orange,
+                    onPressed: () {},
                   )
                 ]).marginZero,
           ),
@@ -83,7 +89,7 @@ class SuggestionView extends StatelessWidget {
                 children: [
                   MyContainer(
                     text: "tailor".tr,
-                    width: 150,
+                    width: 170,
                     height: 150,
                     image: AppImage.mainImg,
                     minHeight: 30,
@@ -91,7 +97,7 @@ class SuggestionView extends StatelessWidget {
                   ),
                   MyContainer(
                     text: "customer".tr,
-                    width: 150,
+                    width: 170,
                     height: 150,
                     image: AppImage.coustomer,
                     minHeight: 30,

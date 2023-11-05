@@ -5,6 +5,8 @@ class Languages extends Translations {
   Map<String, Map<String, String>> get keys => {
         'en_US': {
           "email_hint": 'Email',
+          "password_hint": "Password",
+          "enter_validate_email": "Enter a valid email",
           "title": 'A²RI Craft',
           "des": "Tailor Service is.\nOn Demand",
           "tailor": "Tailor",

@@ -4,7 +4,7 @@ import 'package:fyp/controllers/suggestion_controller.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:fyp/const/images/app_image.dart';
+import 'package:fyp/const/assets/images/app_image.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -51,7 +51,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: child,
               );
             },
-            child: 'A²RI Craft'
+            child: 'title'
+                .tr
                 .text
                 .xl4
                 .bold
