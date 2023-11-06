@@ -12,7 +12,14 @@ class Languages extends Translations {
           "tailor": "Tailor",
           "customer": "Customer",
           "sign_in": 'Sign In',
-          "skip": 'Skip'
+          "skip": 'Skip',
+          "facebook": "Continue with Facebook",
+          "google": "Continue with Google",
+          "email": "Continue with Email",
+          "sign_up": 'Sign Up',
+          "sign_out": 'Sign Out',
+          "sign_in_with_facebook": 'Sign In with Facebook',
+          "sign_in_with_google": 'Sign In with Google',
         },
         'ur_PK': {
           'email_hint': 'ای میل درج کریں۔',

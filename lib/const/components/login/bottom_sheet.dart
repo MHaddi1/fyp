@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/const/components/social_media_button.dart';
@@ -14,26 +15,26 @@ class MyBottomLoginSheet extends StatelessWidget {
     final key = GlobalKey<FormState>();
     return SafeArea(
       top: false,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+      bottom: false,
+      child: Expanded(
+        flex: 1,
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
           ),
-        ),
-        height: MediaQuery.of(context).size.height,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
+          height: Get.height,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               //mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 20.heightBox,
-                const Icon(Icons.close).box.alignBottomRight.make().onTap(() {
-                  Get.back();
-                }),
+               
                 "A²RI Craft".text.bold.xl3.make().box.alignBottomLeft.make(),
                 20.heightBox,
                 "Welcome Back!"
@@ -62,14 +63,14 @@ class MyBottomLoginSheet extends StatelessWidget {
                         height: 30,
                         text: "Facebook",
                         image: const DecorationImage(
-                            image: AssetImage("assets/image/facebook.png"))),
+                            image: AssetImage(AppImage.facebook))),
                     SocialMedia(
                         color: Colors.grey[200],
                         width: 50,
                         height: 30,
                         text: "Google",
                         image: const DecorationImage(
-                            image: AssetImage("assets/image/google.png"))),
+                            image: AssetImage(AppImage.google))),
                   ],
                 ),
                 30.heightBox,
@@ -133,7 +134,7 @@ class MyBottomLoginSheet extends StatelessWidget {
                   ],
                 )
               ],
-            ),
+            ).scrollVertical(),
           ),
         ),
       ),

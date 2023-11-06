@@ -14,23 +14,16 @@ class MyField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: Theme.of(context).dividerColor,
-            width: 1,
-          )),
-      height: 50,
-      child: TextFormField(
-        obscureText: obscureText,
-        validator: validate,
-        keyboardType: textInputType,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          labelText: text,
-        ),
+    return TextFormField(
+      onTapOutside: (value) {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      obscureText: obscureText,
+      validator: validate,
+      keyboardType: textInputType,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        labelText: text,
       ),
     );
   }

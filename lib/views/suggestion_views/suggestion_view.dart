@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:video_player/video_player.dart';
 
+import '../skip/skip_view.dart';
+
 class SuggestionView extends StatelessWidget {
   const SuggestionView({super.key});
 
@@ -69,14 +71,15 @@ class SuggestionView extends StatelessWidget {
                     text: "sign_in".tr,
                     color: Colors.orange,
                     onPressed: () {
-                      Get.bottomSheet(const SignView(),
-                          isScrollControlled: true, enableDrag: false);
+                      Get.to(() => const SignView());
                     },
                   ),
                   MyTextButton(
                     text: "skip".tr,
                     color: Colors.orange,
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(()=> const SkipView());
+                    },
                   )
                 ]).marginZero,
           ),
