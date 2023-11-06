@@ -23,10 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 4), () {
       setState(() {
         _textOpacity = 1.0;
-        suggestionController.videoController;
       });
     });
     Future.delayed(const Duration(seconds: 8), () {
+      suggestionController.videoController;
       Get.toNamed(RoutesName.suggestionScreen);
     });
   }
