@@ -5,16 +5,26 @@ class MyField extends StatelessWidget {
   final String? Function(String?) validate;
   final TextInputType? textInputType;
   final bool obscureText;
+  final IconData? iconData;
+  final TextEditingController controller;
+  final Function()? iconTap;
+  final Function(String?)? onChanged;
   const MyField(
       {super.key,
+      required this.controller,
       required this.text,
       required this.validate,
       this.textInputType,
-      this.obscureText = false});
+      this.obscureText = false,
+      this.iconData,
+      this.iconTap,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
+      controller: controller,
       onTapOutside: (value) {
         FocusScope.of(context).requestFocus(FocusNode());
       },
@@ -22,6 +32,14 @@ class MyField extends StatelessWidget {
       validator: validate,
       keyboardType: textInputType,
       decoration: InputDecoration(
+        suffixIcon: iconData != null
+            ? IconButton(
+                onPressed: iconTap,
+                icon: Icon(
+                  iconData,
+                  color: Colors.orange,
+                ))
+            : null,
         border: const OutlineInputBorder(),
         labelText: text,
       ),

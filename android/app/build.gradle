@@ -2,6 +2,8 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
+    
 }
 
 def localProperties = new Properties()
@@ -21,6 +23,8 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
+//id("") version "4.4.0" apply false
+ 
 
 android {
     namespace "com.example.fyp"
@@ -45,11 +49,12 @@ android {
         applicationId "com.example.fyp"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+   
 
     buildTypes {
         release {
@@ -64,4 +69,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+   implementation platform('com.google.firebase:firebase-bom:32.5.0')
+   implementation 'com.google.firebase:firebase-analytics'
+}

@@ -3,29 +3,34 @@ import 'package:velocity_x/velocity_x.dart';
 
 class MyButton extends StatelessWidget {
   final String text;
-  final Function? onPressed;
+  final Function()? onPressed;
   final double? width;
   final double? height;
-  const MyButton(
-      {super.key,
-      required this.text,
-      this.onPressed,
-      this.width = 300,
-      this.height = 45});
+  final bool isLoading; // Added to control the loading state
+  const MyButton({
+    Key? key,
+    required this.text,
+    this.onPressed,
+    this.width = 300,
+    this.height = 45,
+    this.isLoading = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return text.text
-        .align(TextAlign.center)
-        .color(Colors.white)
-        .makeCentered()
-        .box
-        .size(width!, height!)
-        .color(Colors.orange)
-        .roundedSM
-        .make()
-        .onTap(() {
-      onPressed;
-    });
+    return GestureDetector(
+      onTap: isLoading ? null : onPressed,
+      child: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : text.text
+              .align(TextAlign.center)
+              .color(Colors.white)
+              .makeCentered()
+              .box
+              .size(width!, height!)
+              .color(Colors.orange)
+              .roundedSM
+              .make(),
+    );
   }
 }

@@ -2,20 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/components/suggestions/my_container.dart';
 import 'package:fyp/const/components/suggestions/my_text_button.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
+import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
-import 'package:fyp/views/login/login_view.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:video_player/video_player.dart';
 
-import '../skip/skip_view.dart';
-
-class SuggestionView extends StatelessWidget {
+class SuggestionView extends StatefulWidget {
   const SuggestionView({super.key});
 
   @override
+  State<SuggestionView> createState() => _SuggestionViewState();
+}
+
+class _SuggestionViewState extends State<SuggestionView> {
+  final suggestionController = Get.find<SuggestionController>();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    suggestionController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final suggestionController = Get.find<SuggestionController>();
     return Scaffold(
       backgroundColor: Colors.black12,
       body: Stack(
@@ -71,14 +81,14 @@ class SuggestionView extends StatelessWidget {
                     text: "sign_in".tr,
                     color: Colors.orange,
                     onPressed: () {
-                      Get.to(() => const SignView());
+                      Get.toNamed(RoutesName.signScreen);
                     },
                   ),
                   MyTextButton(
                     text: "skip".tr,
                     color: Colors.orange,
                     onPressed: () {
-                      Get.to(()=> const SkipView());
+                      Get.toNamed(RoutesName.skipScreen);
                     },
                   )
                 ]).marginZero,

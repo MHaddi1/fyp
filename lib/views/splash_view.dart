@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
+import 'package:fyp/services/splash_services.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -16,19 +17,29 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   double _textOpacity = 0.0;
   final suggestionController = Get.put(SuggestionController());
+  final splashService = SplashServices();
 
   @override
   void initState() {
     super.initState();
+    splashService.isLogin();
     Future.delayed(const Duration(seconds: 4), () {
       setState(() {
         _textOpacity = 1.0;
       });
     });
     Future.delayed(const Duration(seconds: 8), () {
-      Get.toNamed(RoutesName.suggestionScreen);
+      //Get.toNamed(RoutesName.suggestionScreen);
       suggestionController.videoController;
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    suggestionController.dispose();
+    
   }
 
   @override
