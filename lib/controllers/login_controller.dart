@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fyp/services/SharedPrefernece/shared_preference.dart';
-import 'package:fyp/services/sign_services.dart';
+import 'package:fyp/services/auth/sign_services.dart';
 import 'package:fyp/utils/logger.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
@@ -31,7 +31,7 @@ class LoginController extends GetxController {
 
   Future<void> login() async {
     try {
-      isLoading.value = true;
+      //isLoading.value = true;
       final UserPreference userPreference = UserPreference();
       String? userToken = await FirebaseAuth.instance.currentUser?.getIdToken();
       await SignServices.mySignIn(getEmail, getPassword).then((value) {
@@ -41,7 +41,7 @@ class LoginController extends GetxController {
     } catch (e) {
       Utils.myBoxShow("title", e.toString());
     } finally {
-      isLoading.value = false;
+      //isLoading.value = false;
     }
   }
 

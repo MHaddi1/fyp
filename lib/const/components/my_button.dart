@@ -19,18 +19,16 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isLoading ? null : onPressed,
-      child: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : text.text
-              .align(TextAlign.center)
-              .color(Colors.white)
-              .makeCentered()
-              .box
-              .size(width!, height!)
-              .color(Colors.orange)
-              .roundedSM
-              .make(),
+      onTap: onPressed,
+      child: text.text
+          .align(TextAlign.center)
+          .color(Colors.white)
+          .makeCentered()
+          .box
+          .size(width!, height!)
+          .color(Colors.orange)
+          .roundedSM
+          .make(),
     );
   }
 }

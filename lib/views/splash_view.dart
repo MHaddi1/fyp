@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
 import 'package:fyp/services/splash_services.dart';
 import 'package:get/get.dart';

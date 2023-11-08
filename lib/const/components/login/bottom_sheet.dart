@@ -70,6 +70,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
                         image: AssetImage(AppImage.facebook))),
                 SocialMedia(
                     onPressed: () {
+                      
                       _controllerLogin.googleSignIn().then((value) {
                         Get.toNamed(RoutesName.homeScreen);
                       });

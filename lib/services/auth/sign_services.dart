@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/views/home/home_view.dart';
 import 'package:get/get.dart';
@@ -10,10 +11,16 @@ class SignServices {
 
   static Future<void> mySignIn(String email, String password) async {
     try {
+      Get.defaultDialog(
+          title: "Sign in",
+          content: const Center(
+            child: CircularProgressIndicator(),
+          ));
       await mAuth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) {
         debug(value.toString());
+        Get.back();
         Get.to(() => const HomeView());
       });
     } catch (e) {

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/components/my_button.dart';
-import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
-
-import '../../services/SharedPrefernece/shared_preference.dart';
 import 'screens/home_screen.dart';
 
 class HomeView extends StatefulWidget {
@@ -25,7 +21,7 @@ class _HomeViewState extends State<HomeView> {
     SearchScreen(),
     ProfileScreen(),
   ];
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
