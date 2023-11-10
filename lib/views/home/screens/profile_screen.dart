@@ -12,57 +12,137 @@ class ProfileScreen extends StatelessWidget {
     final pref = UserPreference();
     return Scaffold(
       appBar: AppBar(
+        leading: const Icon(null),
         title: const Text('Profile'),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Column(
               children: [
                 Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    child: Row(children: [
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.grey,
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  child: Row(
+                    children: [
                       CircleAvatar(
-                        radius: 50,
+                        radius: 60,
                         backgroundImage: NetworkImage(
-                            firebaseAuth.currentUser != null &&
-                                    firebaseAuth.currentUser!.photoURL != null
-                                ? firebaseAuth.currentUser!.photoURL.toString()
-                                : "https://picsum.photos/200/300?random=2"),
+                          firebaseAuth.currentUser != null &&
+                                  firebaseAuth.currentUser!.photoURL != null
+                              ? firebaseAuth.currentUser!.photoURL.toString()
+                              : "https://yt3.googleusercontent.com/-H4bsnS3lUHCiaDtVcHxm9dJudoCyLdjnBCaIJZSsMJPNqIJFZFqs5iaTx0OjZcxwwCxycfEnA=s900-c-k-c0x00ffffff-no-rj",
+                        ),
                       ),
-                      SizedBox(
-                        width: 10,
+                      //https://picsum.photos/200/300?random=2
+                      const SizedBox(
+                        width: 20,
                       ),
-                      VStack([
-                        firebaseAuth.currentUser!.email!.text.makeCentered(),
-                        Text(
-                          (firebaseAuth.currentUser != null &&
-                                  firebaseAuth.currentUser!.displayName != null)
-                              ? firebaseAuth.currentUser!.displayName!
-                              : "anonymous",
-                        )
-                      ])
-                    ])),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      child: IconButton(
-                        icon: const Icon(Icons.logout),
-                        onPressed: () {
-                          pref.clearUserToken().then((value) {
-                            Get.offAndToNamed(RoutesName.signScreen);
-                          });
-                        },
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Welcome back!",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              firebaseAuth.currentUser != null &&
+                                      firebaseAuth.currentUser!.displayName !=
+                                          null
+                                  ? "Hello, ${firebaseAuth.currentUser!.displayName}!"
+                                  : "Hello, Anonymous!",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              "Email:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              firebaseAuth.currentUser != null &&
+                                      firebaseAuth.currentUser!.email != null
+                                  ? firebaseAuth.currentUser!.email!
+                                  : "Email not found",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    "LogOut".text.make()
-                  ],
+                    ],
+                  ),
                 ),
+                350.heightBox,
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(12.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.grey,
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(0, 3),
+                        )
+                      ]),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        alignment: Alignment.bottomLeft,
+                        child: IconButton(
+                          icon: const Icon(Icons.logout),
+                          onPressed: () {},
+                        ),
+                      ),
+                      "LogOut".text.make()
+                    ],
+                  ),
+                ).onTap(() {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const AlertDialog(
+                            title: Text("Log Out"),
+                            content: Center(
+                              child: CircularProgressIndicator(),
+                            ));
+                      });
+                  pref.clearUserToken();
+                  Get.back();
+                  Get.offAndToNamed(RoutesName.signScreen);
+                }),
               ],
             )
           ],

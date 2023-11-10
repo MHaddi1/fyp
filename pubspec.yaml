@@ -44,6 +44,10 @@ dependencies:
   fluttertoast: ^8.2.2
   logger: ^2.0.2+1
   google_sign_in: ^6.1.5
+  firebase_messaging: ^14.7.3
+  flutter_local_notifications: ^16.1.0
+  google_nav_bar: ^5.0.6
+  flutter_facebook_auth: ^6.0.2
 
 dev_dependencies:
   flutter_test:

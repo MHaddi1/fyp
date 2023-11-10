@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/const/components/social_media_button.dart';
+import 'package:fyp/views/sign_up_view.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -38,30 +39,36 @@ class SkipView extends StatelessWidget {
                 .make()
                 .px8(),
             40.heightBox,
-            SocialMedia(
-                color: Colors.grey[200],
-                width: 50,
-                height: 30,
-                text: "facebook".tr,
-                image: const DecorationImage(
-                    image: AssetImage(AppImage.facebook))),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SocialMedia(
+                    color: Colors.white,
+                    width: 40,
+                    height: 40,
+                    text: "facebook".tr,
+                    image: const DecorationImage(
+                        image: AssetImage(AppImage.facebook))),
+                SocialMedia(
+                    color: Colors.white,
+                    width: 40,
+                    height: 40,
+                    text: "google".tr,
+                    image: const DecorationImage(
+                        image: AssetImage(AppImage.google))),
+                SocialMedia(
+                    onPressed: () {
+                      Get.to(() => const SignUpView());
+                    },
+                    color: Colors.white,
+                    width: 40,
+                    height: 40,
+                    text: "email".tr,
+                    image: const DecorationImage(
+                        image: AssetImage(AppImage.email))),
+              ],
+            ),
             30.heightBox,
-            SocialMedia(
-                color: Colors.grey[200],
-                width: 50,
-                height: 30,
-                text: "google".tr,
-                image:
-                    const DecorationImage(image: AssetImage(AppImage.google))),
-            30.heightBox,
-            SocialMedia(
-                color: Colors.grey[200],
-                width: 50,
-                height: 30,
-                text: "email".tr,
-                image:
-                    const DecorationImage(image: AssetImage(AppImage.email))),
-            20.heightBox,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

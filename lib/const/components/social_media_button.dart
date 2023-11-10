@@ -24,14 +24,18 @@ class SocialMedia extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        decoration: BoxDecoration(color: color, boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 3,
-            blurRadius: 1,
-            offset: const Offset(0, 2),
-          ),
-        ]),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: color,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 0,
+                offset: const Offset(0, 1),
+              ),
+            ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -43,7 +47,6 @@ class SocialMedia extends StatelessWidget {
                 image: image,
               ),
             ),
-            text.text.make().px8(),
           ],
         ),
       ),

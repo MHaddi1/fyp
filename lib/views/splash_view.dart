@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
 import 'package:fyp/services/splash_services.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
 
@@ -38,7 +37,6 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement dispose
     super.dispose();
     suggestionController.dispose();
-    
   }
 
   @override
@@ -46,11 +44,15 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: VStack(
         [
-          Lottie.asset(
-            AppImage.splashLogo,
-            width: MediaQuery.of(context).size.width,
-            height: 250,
-          ),
+          // Lottie.asset(
+          //   AppImage.splashLogo,
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 250,
+          // ),
+          Image.asset(
+            AppImage.logo,
+            width: 200,
+          ).centered(),
           20.heightBox,
           TweenAnimationBuilder<double>(
             tween: Tween<double>(begin: 0.0, end: _textOpacity),

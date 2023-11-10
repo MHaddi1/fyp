@@ -1,9 +1,9 @@
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/views/home/home_view.dart';
-import 'package:fyp/views/login/login_view.dart';
-import 'package:fyp/views/skip/skip_view.dart';
+import 'package:fyp/views/login_view.dart';
+import 'package:fyp/views/skip_view.dart';
 import 'package:fyp/views/splash_view.dart';
-import 'package:fyp/views/suggestion/suggestion_view.dart';
+import 'package:fyp/views/suggestion_view.dart';
 import 'package:get/route_manager.dart';
 
 class AppRoutes {

@@ -15,6 +15,6 @@ class UserPreference {
 
   Future<void> clearUserToken() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await prefs.remove(_tokenKey);
   }
 }

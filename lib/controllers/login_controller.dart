@@ -15,7 +15,7 @@ class LoginController extends GetxController {
   final SignServices signServices = SignServices();
 
   void setEmail(String value) {
-    email.value = value;
+    email.value = value.toLowerCase();
   }
 
   void setPassword(String value) {
@@ -32,12 +32,9 @@ class LoginController extends GetxController {
   Future<void> login() async {
     try {
       //isLoading.value = true;
-      final UserPreference userPreference = UserPreference();
-      String? userToken = await FirebaseAuth.instance.currentUser?.getIdToken();
-      await SignServices.mySignIn(getEmail, getPassword).then((value) {
-        userPreference.saveUserToken(userToken!);
-        loggerService.logInfo("Successfully Logged in");
-      });
+
+      await SignServices.mySignIn(getEmail.toLowerCase(), getPassword)
+          .then((value) {});
     } catch (e) {
       Utils.myBoxShow("title", e.toString());
     } finally {

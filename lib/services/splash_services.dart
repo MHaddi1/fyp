@@ -13,7 +13,7 @@ class SplashServices {
       }
       if (token == null) {
         Timer(const Duration(seconds: 3),
-            () => Get.toNamed(RoutesName.signScreen));
+            () => Get.toNamed(RoutesName.suggestionScreen));
       } else {
         Timer(const Duration(seconds: 3),
             () => Get.toNamed(RoutesName.homeScreen));
