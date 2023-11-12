@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
@@ -36,6 +37,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
+                  Image.asset(AppImage.email),
                   MyField(
                       onChanged: (value) {
                         signUpController.setEmail(value!);

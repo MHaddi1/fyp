@@ -8,7 +8,7 @@ import 'package:fyp/const/components/suggestions/my_text_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/login_controller.dart';
 import 'package:fyp/utils/utils.dart';
-import 'package:fyp/views/forget_password.dart';
+import 'package:fyp/views/auth/forget_password.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -175,15 +175,8 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
             ),
             20.heightBox,
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SocialMedia(
-                    color: Colors.white,
-                    width: 50,
-                    height: 50,
-                    text: "Facebook",
-                    image: const DecorationImage(
-                        image: AssetImage(AppImage.facebook))),
                 SocialMedia(
                     onPressed: () {
                       Get.defaultDialog(
@@ -193,10 +186,8 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
                               color: Colors.orange,
                             ),
                           ));
-                      _controllerLogin.googleSignIn().then((value) {
-                        Get.back();
-                        Get.toNamed(RoutesName.homeScreen);
-                      });
+                      _controllerLogin.googleSignIn();
+                      Get.back();
                     },
                     color: Colors.white,
                     width: 30,

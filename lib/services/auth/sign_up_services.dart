@@ -1,15 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/routes/routes_name.dart';
+import 'package:fyp/models/get_user_model.dart';
 import 'package:fyp/utils/utils.dart';
-import 'package:fyp/views/home/home_view.dart';
-import 'package:fyp/views/login_view.dart';
-import 'package:fyp/views/my_view.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class SignUpServices {
-  FirebaseAuth _authService = FirebaseAuth.instance;
+  final FirebaseAuth _authService = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> signUp(String email, String password) async {
     try {
@@ -80,8 +82,46 @@ class SignUpServices {
       print('Error: $e');
       debug(e.toString());
       Utils.snackBar("Error", e.toString());
-      //throw Exception('Unexpected error occurred.');
     }
+  }
+
+  Future<void> userData(GetUserModel userModel) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(_authService.currentUser!.uid)
+          .set(userModel.toJson());
+    } catch (e) {
+      print('Error: $e');
+      debug(e.toString());
+      Utils.snackBar("Error", e.toString());
+    }
+  }
+
+  Future<void> updateUser(GetUserModel userModel) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(_authService.currentUser!.uid)
+          .update(userModel.toJson());
+    } catch (e) {
+      debug(e.toString());
+    }
+  }
+
+  Future<String> currentCity() async {
+    LocationPermission locationPermission = await Geolocator.checkPermission();
+    if (locationPermission == LocationPermission.denied) {
+      locationPermission = await Geolocator.requestPermission();
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    String? cityName = placemark[0].locality;
+
+    return cityName ?? "";
   }
 
   debug(String message) {

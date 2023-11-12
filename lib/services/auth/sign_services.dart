@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:fyp/const/components/suggestions/my_text_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/utils/logger.dart';
-import 'package:fyp/utils/utils.dart';
-import 'package:fyp/views/home/home_view.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 

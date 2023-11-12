@@ -1,11 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
-import 'package:fyp/views/home/home_view.dart';
-import 'package:fyp/views/login_view.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 

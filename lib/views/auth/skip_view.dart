@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/const/components/social_media_button.dart';
-import 'package:fyp/views/sign_up_view.dart';
+import 'package:fyp/views/auth/sign_up_view.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 

@@ -20,12 +20,10 @@ class _HomeViewState extends State<HomeView> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   int _currentIndex = 0;
   final List<Widget> _screens = [
-    HomeScreen(),
+    const HomeScreen(),
     SearchScreen(),
     ProfileScreen(),
   ];
-
-  
 
   @override
   Widget build(BuildContext context) {
