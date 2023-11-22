@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/models/get_user_model.dart';
 import 'package:fyp/services/auth/sign_up_services.dart';
@@ -10,21 +12,16 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SignUpController extends GetxController {
-  final sigUpServices = SignUpServices();
+  final SignUpServices signUpServices = SignUpServices();
+  final FirebaseAuth _authService = FirebaseAuth.instance;
+
   RxString email = ''.obs;
   RxString password = ''.obs;
   final _image = Rx<File?>(null);
   DateTime time = DateTime.now();
   RxInt type = 0.obs;
   RxString name = ''.obs;
-  FirebaseAuth _authService = FirebaseAuth.instance;
   Rx<GetUserModel?> user = Rx<GetUserModel?>(null);
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //    user.bindStream(_authService.authStateChanges());
-  // }
 
   void setEmail(String value) {
     email.value = value;
@@ -52,52 +49,60 @@ class SignUpController extends GetxController {
   int get myType => type.value;
   String get myName => name.value;
 
-  void mySingUp() async {
+  void mySignUp() async {
     try {
-      sigUpServices.signUp(myEmail.trim(), myPassword.trim()).then((value) {
-        myData();
-      });
+      await signUpServices.signUp(myEmail.trim(), myPassword.trim());
+      GetUserModel userModel = GetUserModel(
+        name: myEmail.split("@")[0],
+        email: myEmail,
+        type: 1,
+        location: await SignUpServices().currentCity(),
+        dateTime: DateTime.now(),
+        bio: "Write You Bio",
+        uid: FirebaseAuth.instance.currentUser?.uid,
+        
+      );
+      await signUpServices.userData(userModel);
     } catch (e) {
-      print(e);
+      print('Error signing up: $e');
     }
   }
 
-  forgetPassword() async {
+  void forgetPassword() async {
     try {
-      await sigUpServices.resetPassword(myEmail);
+      await signUpServices.resetPassword(myEmail);
     } catch (e) {
-      Utils.snackBar("error", e.toString());
-    }
-  }
-
-  getMyLocation() async {
-    try {
-      await sigUpServices.currentCity();
-    } catch (e) {
-      Utils.snackBar("error", e.toString());
+      Utils.snackBar("Error", e.toString());
     }
   }
 
   Future<void> myData() async {
-    String location = await sigUpServices.currentCity();
-
-    GetUserModel userModel = GetUserModel(
-      name: myName,
-      email: myEmail,
-      location: location,
-      dateTime: time,
-      image: image.toString(),
-      type: 1,
+    Get.defaultDialog(
+      title: "Sign Up",
+      content: const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
 
     try {
-      await sigUpServices.userData(userModel).then((value) {
-        Utils.snackBar("Add Data", "Data Add successfully");
-        Get.offAndToNamed(RoutesName.signScreen);
-      });
-      await uploadImageToFirebaseStorage(_image.value!);
+      String location = await signUpServices.currentCity();
+      GetUserModel userModel = GetUserModel(
+        name: myEmail.split("@")[0],
+        email: myEmail,
+        location: location,
+        dateTime: time,
+        image: image?.toString() ?? '',
+        type: 1,
+      );
+
+      await signUpServices.userData(userModel);
+      await uploadImageToFirebaseStorage(image!);
+      Utils.snackBar("Add Data", "Data Add successfully");
+      Get.offAndToNamed(RoutesName.signScreen);
     } catch (e) {
-      Utils.snackBar("error", e.toString());
+      Utils.snackBar("Error", e.toString());
+    } finally {
+      Get.back();
     }
   }
 
@@ -107,6 +112,7 @@ class SignUpController extends GetxController {
 
     if (pickedFile != null) {
       _image.value = File(pickedFile.path);
+      await uploadImageToFirebaseStorage(File(pickedFile.path));
     } else {
       print('No image selected.');
     }
@@ -114,31 +120,26 @@ class SignUpController extends GetxController {
 
   Future<void> uploadImageToFirebaseStorage(File imageFile) async {
     try {
-      String location = await sigUpServices.currentCity();
+      String location = await signUpServices.currentCity();
       final storage = FirebaseStorage.instance;
       final storageRef = storage
           .ref()
           .child('images/${DateTime.now().millisecondsSinceEpoch}.png');
       await storageRef.putFile(imageFile);
-
       final String downloadURL = await storageRef.getDownloadURL();
 
-      // Update the user model with the download URL
       GetUserModel userModel = GetUserModel(
-        name: myName,
-        email: myEmail,
+        name: _authService.currentUser?.email!.split("@")[0],
+        email: _authService.currentUser?.email ?? '',
         location: location,
         dateTime: time,
         image: downloadURL,
         type: 1,
+        bio: "Write You Bio",
       );
 
-      print('Image uploaded to Firebase Storage. Download URL: $downloadURL');
-
-      // Continue with saving user data using the updated user model
-      await sigUpServices.updateUser(userModel).then((value) {
-        Utils.snackBar("Update Data", "Data Update successfully");
-      });
+      await signUpServices.updateUser(userModel);
+      Utils.snackBar("Update Data", "Data Update successfully");
     } catch (e) {
       print('Error uploading image to Firebase Storage: $e');
     }

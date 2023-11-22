@@ -5,6 +5,8 @@ class GetUserModel {
   final String? image;
   final String? location;
   final int? type;
+  final String? bio;
+  final String? uid;
 
   GetUserModel({
     this.name,
@@ -13,6 +15,8 @@ class GetUserModel {
     this.image,
     this.location,
     this.type,
+    this.bio,
+    this.uid,
   });
 
   Map<String, dynamic> toJson() {
@@ -23,6 +27,8 @@ class GetUserModel {
       'image': image,
       'location': location,
       'type': type,
+      'bio': bio,
+      'uid': uid,
     };
   }
 
@@ -35,11 +41,13 @@ class GetUserModel {
       image: json['image'],
       location: json['location'],
       type: json['type'],
+      bio: json['bio'],
+      uid: json['uid'],
     );
   }
 
   @override
   String toString() {
-    return 'GetUserModel{name: $name, email: $email, dateTime: $dateTime, image: $image, location: $location, type: $type}';
+    return 'GetUserModel{name: $name, email: $email, dateTime: $dateTime, image: $image, location: $location, type: $type, bio: $bio, uid: $uid}';
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fyp/models/get_user_model.dart';
 
 class ProfileServices {
@@ -6,15 +7,27 @@ class ProfileServices {
 
   Future<List<GetUserModel>> displayUser() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await firebaseFirestore.collection("users").get();
+      User? currentUser = FirebaseAuth.instance.currentUser;
 
-      List<GetUserModel> posts = querySnapshot.docs
-          .map((doc) => GetUserModel.fromJson(doc.data()))
+      if (currentUser == null || currentUser.email == null) {
+        // Handle the case where the user is not logged in or email is null
+        return [];
+      }
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await firebaseFirestore
+              .collection("users")
+              .where("email", isEqualTo: currentUser.email)
+              .get();
+
+      List<GetUserModel> users = querySnapshot.docs
+          .map((doc) =>
+              GetUserModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
-      return posts;
+
+      return users;
     } catch (e) {
-      print(e);
+      print("Error fetching user profile: $e");
       rethrow;
     }
   }

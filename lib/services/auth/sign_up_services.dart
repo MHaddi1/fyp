@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/routes/routes_name.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 class SignUpServices {
   final FirebaseAuth _authService = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> signUp(String email, String password) async {
     try {
@@ -29,6 +31,8 @@ class SignUpServices {
 
       if (user != null) {
         await user.sendEmailVerification();
+
+        await setFCMToken();
 
         Get.back();
 
@@ -89,8 +93,9 @@ class SignUpServices {
     try {
       await _firestore
           .collection('users')
-          .doc(_authService.currentUser!.uid)
+          .doc(_authService.currentUser!.email)
           .set(userModel.toJson());
+      SetOptions(merge: true);
     } catch (e) {
       print('Error: $e');
       debug(e.toString());
@@ -102,7 +107,7 @@ class SignUpServices {
     try {
       await _firestore
           .collection('users')
-          .doc(_authService.currentUser!.uid)
+          .doc(_authService.currentUser!.email)
           .update(userModel.toJson());
     } catch (e) {
       debug(e.toString());
@@ -126,5 +131,17 @@ class SignUpServices {
 
   debug(String message) {
     if (kDebugMode) print(message);
+  }
+
+  Future<void> setFCMToken() async {
+    String? fcmToken = await _firebaseMessaging.getToken();
+    if (fcmToken != null) {
+      await _firestore
+          .collection("user")
+          .doc(_authService.currentUser!.uid)
+          .set({
+        'fcmToken': fcmToken,
+      }, SetOptions(merge: true));
+    }
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
+import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/login_controller.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
-import 'package:fyp/views/auth/sign_up_view_2.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -132,8 +132,9 @@ class _SignUpViewState extends State<SignUpView> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    
-                    Get.to(() => const InformationScreen());
+                    signUpController.mySignUp();
+                    Get.toNamed(RoutesName.signScreen);
+                    //Get.toNamed(RoutesName.signUpScreen2);
                   }
                 },
               )

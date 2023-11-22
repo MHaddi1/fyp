@@ -24,35 +24,32 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 4), () {
       setState(() {
         _textOpacity = 1.0;
+        suggestionController.videoController;
       });
     });
-    Future.delayed(const Duration(seconds: 8), () {
-      //Get.toNamed(RoutesName.suggestionScreen);
-      suggestionController.videoController;
-    });
+    // Future.delayed(const Duration(seconds: 8), () {
+    //   //Get.toNamed(RoutesName.suggestionScreen);
+    //
+    // });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    suggestionController.dispose();
+    // suggestionController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       body: VStack(
         [
-          // Lottie.asset(
-          //   AppImage.splashLogo,
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 250,
-          // ),
           Image.asset(
             AppImage.logo,
             width: 200,
-          ).centered(),
+          ).box.alignCenter.color(Colors.white).size(200, 200).makeCentered(),
           20.heightBox,
           TweenAnimationBuilder<double>(
             tween: Tween<double>(begin: 0.0, end: _textOpacity),

@@ -4,6 +4,7 @@ import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -37,10 +38,20 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
-                  Image.asset(AppImage.email),
+                  Lottie.asset(AppImage.forgetPassword,width: 200, height: 150),
+                  20.heightBox,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      "please enter you email to".text.xl.color(Colors.grey[500]).make().box.alignCenterLeft.make(),
+                      "change your password".text.xl2.make().box.alignCenterLeft.make()
+                    ],
+                  ),
+                  10.heightBox,
                   MyField(
                       onChanged: (value) {
                         signUpController.setEmail(value!);
+
                       },
                       controller: _emailController,
                       text: "email_hint".tr,
@@ -60,8 +71,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             ),
             60.heightBox,
             MyButton(
+              height: 50,
               width: Get.width,
-              text: "Send ",
+              text: "Continue" ,
               onPressed: () {
                 if (key.currentState!.validate()) {
                   key.currentState!.save();

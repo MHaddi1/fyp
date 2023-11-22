@@ -14,6 +14,7 @@ class MyView extends StatelessWidget {
     final SignUpController signUpController = Get.find<SignUpController>();
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     return Scaffold(
+      drawer: const Drawer(),
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

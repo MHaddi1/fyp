@@ -1,14 +1,20 @@
 class PostModel {
+  String id;
   String name;
   String image;
   DateTime date;
   String post;
+  int likes;
+   final bool isLiked;
 
   PostModel({
     required this.name,
     required this.image,
     required this.date,
     required this.post,
+    required this.likes,
+    required this.id,
+    required this.isLiked,
   });
 
   Map<String, dynamic> toJson() {
@@ -18,6 +24,9 @@ class PostModel {
       'image': image,
       'date': date.toIso8601String(),
       'post': post,
+      'likes': likes,
+      'id': id,
+      'isLiked': isLiked,
     };
   }
 
@@ -28,8 +37,11 @@ class PostModel {
       image: json['image'] ?? '',
       date: json['date'] != null
           ? DateTime.parse(json['date'])
-          : DateTime.now(), // Fallback to current date if 'date' is null
+          : DateTime.now(), 
       post: json['post'] ?? '',
+      likes: json['likes'] ?? 0,
+      id: json['id']?? '',
+      isLiked: json['isLiked']?? false,
     );
   }
 }

@@ -1,129 +1,261 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/const/components/my_icons.dart';
-import 'package:get/get.dart';
+import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/controllers/profile_controller.dart';
-import 'package:fyp/const/routes/routes_name.dart';
-import 'package:fyp/services/SharedPrefernece/shared_preference.dart';
+import 'package:fyp/controllers/sign_up_controller.dart';
+import 'package:fyp/models/get_user_model.dart';
+import 'package:fyp/services/auth/sign_up_services.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class ProfileScreen extends StatelessWidget {
+import '../../../const/components/my_text_box.dart';
+
+class ProfileScreen extends StatefulWidget {
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
+  final currentUser = FirebaseAuth.instance.currentUser;
+  final userCollection = FirebaseFirestore.instance.collection("users");
+  final _signUpController = Get.put(SignUpController());
+
+  String _formatDate(DateTime dateTime) {
+    String formattedDate = DateFormat.yMMMd().format(dateTime);
+    return formattedDate;
+  }
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    final pref = UserPreference();
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Obx(() {
-          if (_profileController.users.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: userCollection.doc(currentUser!.email!).snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error loading data'));
           } else {
-            return Column(
-              children: _profileController.users
-                  .where(
-                      (user) => user.email == firebaseAuth.currentUser?.email)
-                  .map((user) {
-                return Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.grey,
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 16),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
+            final userData = snapshot.data!.data() as Map<String, dynamic>;
+            DateTime datetime = DateTime.parse(userData['dateTime']);
+
+            return Container(
+              padding: const EdgeInsets.all(10),
+              color: Colors.white70,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      VStack([
+                        10.heightBox,
+                        GestureDetector(
+                          onTap: () async {
+                            _signUpController.pickImage(ImageSource.gallery);
+                          },
+                          child: CircleAvatar(
                             radius: 60,
-                            backgroundImage: CachedNetworkImageProvider(
-                              user.image ??
-                                  "https://yt3.googleusercontent.com/-H4bsnS3lUHCiaDtVcHxm9dJudoCyLdjnBCaIJZSsMJPNqIJFZFqs5iaTx0OjZcxwwCxycfEnA=s900-c-k-c0x00ffffff-no-rj",
-                            ),
+                            backgroundColor: Colors.orange,
+                            backgroundImage: CachedNetworkImageProvider(userData[
+                                    'image'] ??
+                                "https://cdn-icons-png.flaticon.com/512/2815/2815428.png"),
+                          )
+                              .box
+                              .border(color: Colors.black, width: 5)
+                              .roundedFull
+                              .alignCenter
+                              .make(),
+                        ),
+                        10.heightBox,
+                        currentUser != null
+                            ? currentUser!.email!.text.xl.bold
+                                .make()
+                                .box
+                                .alignCenter
+                                .make()
+                            : "Your Email"
+                                .text
+                                .xl
+                                .bold
+                                .make()
+                                .box
+                                .alignCenter
+                                .make(),
+                        10.heightBox,
+                        GestureDetector(
+                            onTap: () => editBio("bio"),
+                            child: "Edit Bio"
+                                .text
+                                .underline
+                                .bold
+                                .make()
+                                .box
+                                .alignCenter
+                                .make()),
+                        userData['bio'] != null
+                            ? userData['bio']
+                                .toString()
+                                .text
+                                .justify
+                                .make()
+                                .box
+                                .alignCenter
+                                .p24
+                                .make()
+                            : "Your Bio"
+                                .text
+                                .justify
+                                .make()
+                                .box
+                                .alignCenter
+                                .p24
+                                .make()
+                      ])
+                          .box
+                          .shadow
+                          .color(Colors.white)
+                          .roundedLg
+                          .make()
+                          .px12()
+                          .py16(),
+                      10.heightBox,
+                      "Details"
+                          .text
+                          .xl3
+                          .bold
+                          .color(Colors.black)
+                          .make()
+                          .px16()
+                          .box
+                          .alignTopLeft
+                          .make(),
+                      Column(
+                        children: [
+                          MyTextBox(
+                            text: "Name",
+                            yourName: userData["name"] != null
+                                ? userData['name'].toString()
+                                : "Your Name",
+                            onPressed: () => editField("name"),
                           ),
-                          const SizedBox(
-                            width: 20,
+                          20.heightBox,
+                          MyTextBox(
+                            text: "Location",
+                            yourName: userData['location'] != null
+                                ? userData['location'].toString()
+                                : "Your Location",
+                            onPressed: () => editField("location"),
                           ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Welcome back!",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 4,
-                                ),
-                                Text(
-                                  "Hello, ${user.name ?? "Anonymous"}!",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  "Email:",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  user.email ?? "Email not found",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                                "Location:".text.xl.bold.make(),
-                                user.location!.text.make(),
-                              ],
-                            ),
-                          ),
+                          20.heightBox,
+                          MyTextBox(
+                              text: "Joined",
+                              // ignore: unnecessary_null_comparison
+                              yourName: datetime != null
+                                  ? _formatDate(datetime)
+                                  : "Your Date",
+                              onPressed: () {})
                         ],
-                      ),
-                    ),
-                  ],
-                );
-              }).toList(),
+                      )
+                          .box
+                          .shadow
+                          .color(Colors.white)
+                          .p16
+                          .roundedSM
+                          .make()
+                          .px8()
+                          .py16(),
+                    ],
+                  ).box.shadowSm.color(Colors.white).roundedSM.make(),
+                ),
+              ),
             );
           }
-        }),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          pref
-              .clearUserToken()
-              .then((value) => Get.offAndToNamed(RoutesName.signScreen));
         },
-        child: const Icon(Icons.logout),
       ),
     );
+  }
+
+  // The method to edit the field (name in this case)
+  editField(String field) {
+    String newValue = "";
+    Get.defaultDialog(
+      backgroundColor: Colors.black,
+      titleStyle: TextStyle(color: Colors.white),
+      title: "Edit $field",
+      content: TextField(
+        autofocus: true,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: "Enter New $field",
+          hintStyle: const TextStyle(color: Colors.grey),
+        ),
+        onChanged: (value) {
+          newValue = value;
+        },
+      ),
+      onConfirm: () async {
+        Get.back(result: newValue);
+
+        if (newValue.trim().isNotEmpty) {
+          try {
+            await userCollection
+                .doc(currentUser!.email)
+                .update({field: newValue});
+          } catch (e) {
+            // Handle the error
+            print("Error updating user document: $e");
+          }
+        }
+      },
+      onCancel: () {
+        //Get.back();
+      },
+    );
+  }
+
+  editBio(String value) {
+    String newValue = "";
+    Get.bottomSheet(Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "Bio",
+          ),
+          onChanged: (value) {
+            newValue = value;
+          },
+        ).p16(),
+        30.heightBox,
+        MyButton(
+          text: "Update Bio",
+          onPressed: () async {
+            if (newValue.trim().isNotEmpty) {
+              try {
+                Get.back(result: newValue);
+                await userCollection
+                    .doc(currentUser!.email)
+                    .update({value: newValue});
+              } catch (e) {
+                Logger().e(e.toString());
+              }
+            }
+          },
+        ).py16()
+      ],
+    ).box.shadow.color(Colors.white).size(Get.width, Get.height * 0.5).make());
   }
 }

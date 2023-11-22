@@ -1,4 +1,5 @@
 import 'package:fyp/const/routes/routes_name.dart';
+import 'package:fyp/views/auth/sign_up_view_2.dart';
 import 'package:fyp/views/home/home_view.dart';
 import 'package:fyp/views/auth/login_view.dart';
 import 'package:fyp/views/auth/skip_view.dart';
@@ -31,6 +32,11 @@ class AppRoutes {
         GetPage(
           name: RoutesName.homeScreen,
           page: () => const HomeView(),
+          transition: Transition.leftToRight,
+        ),
+        GetPage(
+          name: RoutesName.signUpScreen2,
+          page: () => const InformationScreen(),
           transition: Transition.leftToRight,
         ),
       ];

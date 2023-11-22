@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fyp/models/get_user_model.dart';
 import 'package:fyp/services/SharedPrefernece/shared_preference.dart';
 import 'package:fyp/services/auth/sign_services.dart';
+import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:fyp/utils/logger.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
@@ -33,8 +36,10 @@ class LoginController extends GetxController {
     try {
       //isLoading.value = true;
 
-      await SignServices.mySignIn(getEmail.toLowerCase(), getPassword)
-          .then((value) {});
+      await SignServices().mySignIn(getEmail, getPassword)
+          .then((value) async {
+       
+      });
     } catch (e) {
       Utils.myBoxShow("title", e.toString());
     } finally {

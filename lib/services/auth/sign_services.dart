@@ -4,18 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/components/suggestions/my_text_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
+import 'package:fyp/controllers/sign_up_controller.dart';
+import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:fyp/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 
 import '../SharedPrefernece/shared_preference.dart';
 
 class SignServices {
   static final FirebaseAuth mAuth = FirebaseAuth.instance;
   static final logger = LoggerService();
+  final signUpController = Get.put(SignUpController());
 
-  static Future<void> mySignIn(String email, String password) async {
+   Future<void> mySignIn(String email, String password) async {
     try {
+      Logger().d("Login Not");
       Get.defaultDialog(
         title: "Sign in",
         content: const Center(
@@ -24,9 +29,10 @@ class SignServices {
           ),
         ),
       );
-
+ 
       final userCredential = await mAuth.signInWithEmailAndPassword(
           email: email, password: password);
+          Logger().d("Login successful");
 
       if (userCredential.user != null) {
         final UserPreference userPreference = UserPreference();
@@ -80,24 +86,28 @@ class SignServices {
     }
   }
 
-  //final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  // GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
 
-  handleSignIn() async {
+  Future<void> handleSignIn() async {
     try {
-      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+      GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken,
-        idToken: gAuth.idToken,
-      );
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (error) {
-      if (error is PlatformException) {
-        debug(error.toString());
-      } else {
-        debug(error.toString());
+      if (googleUser == null) {
+        return;
       }
+
+      GoogleSignInAuthentication? googleAuth = await googleUser.authentication;
+
+      AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final auth = await FirebaseAuth.instance.signInWithCredential(credential);
+
+      print(auth.user?.displayName);
+    } catch (error) {
+      print('Google Sign-In Error: $error');
     }
   }
 }

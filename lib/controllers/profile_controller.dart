@@ -1,25 +1,43 @@
-import 'package:fyp/models/get_user_model.dart';
-import 'package:fyp/services/profile_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
+import 'package:fyp/services/profile_services.dart';
+import 'package:fyp/models/get_user_model.dart';
 
 class ProfileController extends GetxController {
-  final profileServices = ProfileServices();
-  final users = <GetUserModel>[].obs;
-  final logger = Logger();
+  var users = <GetUserModel>[].obs;
+  var isLoading = true.obs;
+
   @override
   void onInit() {
     super.onInit();
-    displayMyProfile();
+
+    fetchUser();
   }
 
-  displayMyProfile() async {
+  void fetchUser() async {
     try {
-      final myUser = await profileServices.displayUser();
-      users.addAll(myUser);
-      logger.i(users.toString());
-    } catch (e) {
-      logger.d(e.toString());
+      isLoading(true);
+      List<GetUserModel> userResult = await ProfileServices().displayUser();
+      users.assignAll(userResult);
+    } catch (error) {
+      print("Error fetching user: $error");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void updateName() async {
+    var nameUpdate = GetUserModel(
+        name: "Muhammad Haddi",
+        email: FirebaseAuth.instance.currentUser!.email);
+    try {
+      isLoading(true);
+      await SignUpServices().updateUser(nameUpdate);
+    } catch (error) {
+      print("Error updating name: $error");
+    } finally {
+      isLoading(false);
     }
   }
 }
