@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/const/components/chat_persons.dart';
 import 'package:fyp/const/components/list_title.dart';
+import 'package:fyp/const/components/login/bottom_sheet.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/home_controller.dart';
 import 'package:fyp/main.dart';
@@ -99,10 +100,10 @@ class MyDrawer extends StatelessWidget {
             child: MyListTitle(
               icon: Icons.logout,
               text: "Logout",
-              onPressed: () {
-                UserPreference().clearUserToken();
+              onPressed: () async {
                 Get.back();
-                Get.offAndToNamed(RoutesName.signScreen);
+                UserPreference().clearUserToken();
+                await Get.offNamed(RoutesName.suggestionScreen, );
               },
             ),
           ),

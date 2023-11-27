@@ -10,7 +10,7 @@ import '../../../../../main.dart';
 enum ScreenMode { liveFeed, gallery }
 
 class CameraView extends StatefulWidget {
-  CameraView(
+  const CameraView(
       {Key? key,
       required this.title,
       required this.customPaint,
@@ -81,22 +81,22 @@ class _CameraViewState extends State<CameraView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        actions: [
-          if (_allowPicker)
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: _switchScreenMode,
-                child: Icon(
-                  _mode == ScreenMode.liveFeed
-                      ? Icons.photo_library_outlined
-                      : (Platform.isIOS
-                          ? Icons.camera_alt_outlined
-                          : Icons.camera),
-                ),
-              ),
-            ),
-        ],
+        // actions: [
+        //   if (_allowPicker)
+        //     Padding(
+        //       padding: EdgeInsets.only(right: 20.0),
+        //       child: GestureDetector(
+        //         onTap: _switchScreenMode,
+        //         child: Icon(
+        //           _mode == ScreenMode.liveFeed
+        //               ? Icons.photo_library_outlined
+        //               : (Platform.isIOS
+        //                   ? Icons.camera_alt_outlined
+        //                   : Icons.camera),
+        //         ),
+        //       ),
+        //     ),
+        // ],
       ),
       body: _body(),
       floatingActionButton: _floatingActionButton(),

@@ -14,7 +14,7 @@ class SignView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         leading: IconButton(
             onPressed: () {
               Get.offAndToNamed(RoutesName.suggestionScreen);

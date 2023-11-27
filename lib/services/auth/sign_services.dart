@@ -7,6 +7,7 @@ import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
 import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:fyp/utils/logger.dart';
+import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
@@ -80,6 +81,7 @@ class SignServices {
         );
         logger.logDebug("Login Page");
       } else {
+        Utils.myBoxShow("Error", "Server Error");
         logger.logDebug("Login Page");
         debug(error.toString());
       }

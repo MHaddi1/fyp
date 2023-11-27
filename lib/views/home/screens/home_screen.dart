@@ -78,12 +78,7 @@ class _HomeScreenState extends State<HomeScreen>
                 },
               ),
             ),
-            MyButton(
-              text: "Submit",
-              onPressed: () {
-                sendMessage();
-              },
-            )
+           
           ],
         ),
       ),

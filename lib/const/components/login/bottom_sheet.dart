@@ -10,6 +10,8 @@ import 'package:fyp/controllers/login_controller.dart';
 import 'package:fyp/services/auth/sign_services.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:fyp/views/auth/forget_password.dart';
+import 'package:fyp/views/auth/login_view.dart';
+import 'package:fyp/views/auth/suggestion_view.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -54,7 +56,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           IconButton(onPressed: (){
-            Get.back();
+            Get.offAndToNamed(RoutesName.suggestionScreen);
           }, icon: const Icon(Icons.close)),
           "close".text.make(),
           20.heightBox,
@@ -156,9 +158,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
                       user = FirebaseAuth.instance.currentUser;
     
                       if (user!.emailVerified) {
-                        signinService.mySignIn(_emailController.text, _passwordController.text).then((value) {
-                          Get.toNamed(RoutesName.homeScreen);
-                        });
+                        signinService.mySignIn(_emailController.text, _passwordController.text);
                       } else {
                         Get.defaultDialog(
                             title: "Please Verify Your Email",
@@ -194,18 +194,18 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
             children: [
               SocialMedia(
                   onPressed: () {
-                    Get.defaultDialog(
-                        title: "Google Sign in",
-                        content: const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.orange,
-                          ),
-                        ));
-                    _controllerLogin.googleSignIn().then((value) {
-                      Get.offAndToNamed(RoutesName.homeScreen);
-                    });
-                    Get.back();
-                  },
+                  //   Get.defaultDialog(
+                  //       title: "Google Sign in",
+                  //       content: const Center(
+                  //         child: CircularProgressIndicator(
+                  //           color: Colors.orange,
+                  //         ),
+                  //       ));
+                  //   _controllerLogin.googleSignIn().then((value) {
+                  //     Get.offAndToNamed(RoutesName.homeScreen);
+                  //   });
+                  //   Get.back();
+                   },
                   color: Colors.white,
                   width: 30,
                   height: 30,

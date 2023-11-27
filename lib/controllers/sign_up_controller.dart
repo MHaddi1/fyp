@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class SignUpController extends GetxController {
   RxInt type = 0.obs;
   RxString name = ''.obs;
   Rx<GetUserModel?> user = Rx<GetUserModel?>(null);
-
+  final userCollection = FirebaseFirestore.instance.collection("users");
   void setEmail(String value) {
     email.value = value;
   }
@@ -60,7 +61,6 @@ class SignUpController extends GetxController {
         dateTime: DateTime.now(),
         bio: "Write You Bio",
         uid: FirebaseAuth.instance.currentUser?.uid,
-        
       );
       await signUpServices.userData(userModel);
     } catch (e) {
@@ -128,17 +128,19 @@ class SignUpController extends GetxController {
       await storageRef.putFile(imageFile);
       final String downloadURL = await storageRef.getDownloadURL();
 
-      GetUserModel userModel = GetUserModel(
-        name: _authService.currentUser?.email!.split("@")[0],
-        email: _authService.currentUser?.email ?? '',
-        location: location,
-        dateTime: time,
-        image: downloadURL,
-        type: 1,
-        bio: "Write You Bio",
-      );
+      // GetUserModel userModel = GetUserModel(
+      //   name: _authService.currentUser?.email!.split("@")[0],
+      //   email: _authService.currentUser?.email ?? '',
+      //   location: location,
+      //   dateTime: time,
+      //   image: downloadURL,
+      //   type: 1,
+      //   bio: "Write You Bio",
+      // );
 
-      await signUpServices.updateUser(userModel);
+      await userCollection
+          .doc(_authService.currentUser!.email)
+          .update({"image": downloadURL});
       Utils.snackBar("Update Data", "Data Update successfully");
     } catch (e) {
       print('Error uploading image to Firebase Storage: $e');

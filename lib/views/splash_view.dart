@@ -27,10 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
         suggestionController.videoController;
       });
     });
-    // Future.delayed(const Duration(seconds: 8), () {
-    //   //Get.toNamed(RoutesName.suggestionScreen);
-    //
-    // });
   }
 
   @override
