@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/social_media_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/login_controller.dart';
@@ -16,8 +17,9 @@ class SkipView extends StatelessWidget {
     final _controllerLogin = Get.put(LoginController());
     final _controllerSignup = Get.put(SignUpController());
     return Scaffold(
-     
-      body: SizedBox(
+      backgroundColor: mainBack,
+      body: Container(
+        color: mainBack,
         height: Get.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -26,24 +28,52 @@ class SkipView extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: const Icon(Icons.close)),
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(Icons.close)),
                 "Close".text.make()
               ],
             ),
             20.heightBox,
-            "title".tr.text.xl3.bold.make().box.alignCenterLeft.make(),
+            "title"
+                .tr
+                .text
+                .xl3
+                .bold
+                .color(textWhite)
+                .make()
+                .box
+                .alignCenterLeft
+                .make(),
             20.heightBox,
             Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              "Join".text.bold.xl2.make().box.alignTopLeft.make(),
+              "Join"
+                  .text
+                  .bold
+                  .color(textWhite)
+                  .xl2
+                  .make()
+                  .box
+                  .alignTopLeft
+                  .make(),
               10.widthBox,
-              "title".tr.text.xl2.bold.make().box.alignTopLeft.make()
+              "title"
+                  .tr
+                  .text
+                  .xl2
+                  .color(textWhite)
+                  .bold
+                  .color(textWhite)
+                  .make()
+                  .box
+                  .alignTopLeft
+                  .make()
             ]),
             30.heightBox,
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat maximus placerat. Suspendisse potenti. Fusce velit risus, finibus quis risus et, malesuada viverra ex. Cras volutpat ante non lorem sollicitudin."
                 .text
+                .color(textWhite)
                 .justify
                 .make()
                 .px8(),
@@ -78,12 +108,12 @@ class SkipView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                "BY Joining, you agree to ".text.make(),
-                "title".tr.text.make(),
+                "BY Joining, you agree to ".text.color(textWhite).make(),
+                "title".tr.text.color(textWhite).make(),
                 10.widthBox,
               ],
             ),
-            "Term Of Service".text.color(Colors.orange).bold.make(),
+            "Term Of Service".text.color(mainColor).bold.make(),
           ],
         ).scrollVertical(),
       ).backgroundColor(Colors.white).px12(),

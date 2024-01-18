@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../color.dart';
 
 class MyField extends StatelessWidget {
   final String text;
@@ -32,12 +33,15 @@ class MyField extends StatelessWidget {
       validator: validate,
       keyboardType: textInputType,
       decoration: InputDecoration(
+        hintStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        fillColor: textWhite,
+        filled: true,
         suffixIcon: iconData != null
             ? IconButton(
                 onPressed: iconTap,
                 icon: Icon(
                   iconData,
-                  color: Colors.orange,
+                  color: mainColor,
                 ))
             : null,
         border: const OutlineInputBorder(),

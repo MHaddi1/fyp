@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/like_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -55,7 +56,7 @@ class _MyPostState extends State<MyPost> {
       margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          color: postBlock, borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           20.widthBox,
@@ -67,14 +68,16 @@ class _MyPostState extends State<MyPost> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       widget.user,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: textWhite),
                     )),
                 Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Text(
                     widget.message,
                     textAlign: TextAlign.start,
-                    style: TextStyle(fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400, color: textWhite),
                   ),
                 ),
                 const Divider(),
@@ -87,7 +90,7 @@ class _MyPostState extends State<MyPost> {
                         Text(
                           widget.likes.length.toString(),
                           style: const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                              color: textWhite, fontWeight: FontWeight.bold),
                         ),
                       ],
                     )),

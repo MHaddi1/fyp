@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/routes/routes.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/firebase_options.dart';
-import 'package:fyp/views/auth/sign_up_view_2.dart';
-
 import 'package:get/get.dart';
+import 'const/color.dart';
 import 'const/localization/languages.dart';
 
 List<CameraDescription> cameras = [];
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'title'.tr,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        colorScheme: ColorScheme.fromSeed(seedColor: mainColor),
         useMaterial3: true,
       ),
       initialRoute: RoutesName.splashScreen,

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/controllers/profile_controller.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
@@ -34,10 +35,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainBack,
       appBar: AppBar(),
-      backgroundColor: Colors.white,
       body: StreamBuilder<DocumentSnapshot>(
-        stream: userCollection.doc(currentUser!.email!).snapshots(),
+        stream: userCollection
+            .doc(currentUser!.email ?? "youName@example.com")
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -49,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             return Container(
               padding: const EdgeInsets.all(10),
-              color: Colors.white70,
+              color: mainBack,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 15,
@@ -65,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           },
                           child: CircleAvatar(
                             radius: 60,
-                            backgroundColor: Colors.orange,
+                            backgroundColor: mainColor,
                             backgroundImage: CachedNetworkImageProvider(userData[
                                     'image'] ??
                                 "https://cdn-icons-png.flaticon.com/512/2815/2815428.png"),
@@ -79,12 +82,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         10.heightBox,
                         currentUser != null
                             ? currentUser!.email!.text.xl.bold
+                                .color(textWhite)
                                 .make()
                                 .box
                                 .alignCenter
                                 .make()
                             : "Your Email"
                                 .text
+                                .color(textWhite)
                                 .xl
                                 .bold
                                 .make()
@@ -96,6 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onTap: () => editBio("bio"),
                             child: "Edit Bio"
                                 .text
+                                .color(textWhite)
                                 .underline
                                 .bold
                                 .make()
@@ -107,6 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 .toString()
                                 .text
                                 .justify
+                                .color(textWhite)
                                 .make()
                                 .box
                                 .alignCenter
@@ -115,6 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             : "Your Bio"
                                 .text
                                 .justify
+                                .color(textWhite)
                                 .make()
                                 .box
                                 .alignCenter
@@ -123,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ])
                           .box
                           .shadow
-                          .color(Colors.white)
+                          .color(postBlock)
                           .roundedLg
                           .make()
                           .px12()
@@ -133,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           .text
                           .xl3
                           .bold
-                          .color(Colors.black)
+                          .color(textWhite)
                           .make()
                           .px16()
                           .box
@@ -147,6 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ? userData['name'].toString()
                                 : "Your Name",
                             onPressed: () => editField("name"),
+                            icon: Icons.settings,
                           ),
                           20.heightBox,
                           MyTextBox(
@@ -155,6 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ? userData['location'].toString()
                                 : "Your Location",
                             onPressed: () => editField("location"),
+                            icon: Icons.settings,
                           ),
                           20.heightBox,
                           MyTextBox(
@@ -168,14 +178,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       )
                           .box
                           .shadow
-                          .color(Colors.white)
+                          .color(postBlock)
                           .p16
                           .roundedSM
                           .make()
                           .px8()
                           .py16(),
                     ],
-                  ).box.shadowSm.color(Colors.white).roundedSM.make(),
+                  ).box.shadowSm.color(mainBack).roundedSM.make(),
                 ),
               ),
             );

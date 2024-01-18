@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/chat_persons.dart';
 import 'package:fyp/const/components/list_title.dart';
 import 'package:fyp/const/components/login/bottom_sheet.dart';
@@ -27,12 +28,13 @@ class MyDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
     return Drawer(
+      backgroundColor: mainBack,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: Colors.amber,
+              color: mainColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,6 +70,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 const Divider(),
                 MyListTitle(
+                  
                   icon: Icons.person,
                   text: "Profile",
                   onPressed: () {
@@ -103,7 +106,9 @@ class MyDrawer extends StatelessWidget {
               onPressed: () async {
                 Get.back();
                 UserPreference().clearUserToken();
-                await Get.offNamed(RoutesName.suggestionScreen, );
+                await Get.offNamed(
+                  RoutesName.suggestionScreen,
+                );
               },
             ),
           ),

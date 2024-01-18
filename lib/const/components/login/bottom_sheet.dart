@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/const/components/social_media_button.dart';
@@ -29,6 +30,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final signinService = SignServices();
+  bool isLoggedIn = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -55,15 +57,26 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
         //mainAxisAlignment: MainAxisAlignment.spaceAround,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          IconButton(onPressed: (){
-            Get.offAndToNamed(RoutesName.suggestionScreen);
-          }, icon: const Icon(Icons.close)),
-          "close".text.make(),
+          IconButton(
+              onPressed: () {
+                Get.offAndToNamed(RoutesName.suggestionScreen);
+              },
+              icon: const Icon(Icons.close, color: Colors.white)),
+          "close".text.color(textWhite).make(),
           20.heightBox,
-          "A²RI Craft".text.bold.xl3.make().box.alignBottomLeft.make(),
+          "A²RI Craft"
+              .text
+              .color(textWhite)
+              .bold
+              .xl3
+              .make()
+              .box
+              .alignBottomLeft
+              .make(),
           20.heightBox,
           "Welcome Back!"
               .text
+              .color(textWhite)
               .xl2
               .bold
               .make()
@@ -73,6 +86,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
           20.heightBox,
           "We welcome you into our A²RI Craft to build your carior!"
               .text
+              .color(textWhite)
               .xl
               .make()
               .animatedBox
@@ -80,7 +94,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
               .make(),
           20.heightBox,
           Container(
-            color: Colors.white,
+            color: mainBack,
             child: Form(
               autovalidateMode: AutovalidateMode.onUserInteraction,
               key: key,
@@ -133,7 +147,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
                             Get.to(() => const ForgetPassword());
                           },
                           text: "Forget Password?",
-                          color: Colors.orange,
+                          color: mainColor,
                         ),
                       ],
                     ),
@@ -151,22 +165,20 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
                 onPressed: () async {
                   if (key.currentState!.validate()) {
                     key.currentState!.save();
-    
+
                     User? user = FirebaseAuth.instance.currentUser;
                     if (user != null) {
                       await user.reload();
                       user = FirebaseAuth.instance.currentUser;
-    
+
                       if (user!.emailVerified) {
-                        signinService.mySignIn(_emailController.text, _passwordController.text);
+                        signinService.mySignIn(
+                            _emailController.text, _passwordController.text);
                       } else {
                         Get.defaultDialog(
                             title: "Please Verify Your Email",
-                            content: Lottie.asset(
-                              AppImage.mailCheck,
-                              width: 150,
-                              height: 150
-                            ),
+                            content: Lottie.asset(AppImage.mailCheck,
+                                width: 150, height: 150),
                             middleText:
                                 "Please verify your email by clicking on the verification link we have sent to your email. Once you have verified your email, you will be able to login",
                             confirm: ElevatedButton(
@@ -183,9 +195,13 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text("----------------------"),
+              Divider(
+                color: textWhite,
+              ),
               Text("Or"),
-              Text("----------------------"),
+              Divider(
+                color: textWhite,
+              ),
             ],
           ),
           20.heightBox,
@@ -194,18 +210,18 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
             children: [
               SocialMedia(
                   onPressed: () {
-                  //   Get.defaultDialog(
-                  //       title: "Google Sign in",
-                  //       content: const Center(
-                  //         child: CircularProgressIndicator(
-                  //           color: Colors.orange,
-                  //         ),
-                  //       ));
-                  //   _controllerLogin.googleSignIn().then((value) {
-                  //     Get.offAndToNamed(RoutesName.homeScreen);
-                  //   });
-                  //   Get.back();
-                   },
+                    //   Get.defaultDialog(
+                    //       title: "Google Sign in",
+                    //       content: const Center(
+                    //         child: CircularProgressIndicator(
+                    //           color: mainColor,
+                    //         ),
+                    //       ));
+                    //   _controllerLogin.googleSignIn().then((value) {
+                    //     Get.offAndToNamed(RoutesName.homeScreen);
+                    //   });
+                    //   Get.back();
+                  },
                   color: Colors.white,
                   width: 30,
                   height: 30,

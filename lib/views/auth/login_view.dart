@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/login/bottom_sheet.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
@@ -12,7 +13,7 @@ class SignView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: mainBack,
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         leading: IconButton(
@@ -21,7 +22,7 @@ class SignView extends StatelessWidget {
             },
             icon: const Icon(
               Icons.arrow_back,
-              color: Colors.orange,
+              color: mainColor,
             )),
       ),
       extendBody: true,

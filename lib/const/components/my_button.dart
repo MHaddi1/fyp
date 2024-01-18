@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class MyButton extends StatelessWidget {
@@ -19,16 +20,17 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
-      child: text.text
-          .align(TextAlign.center)
-          .color(Colors.white)
-          .makeCentered()
-          .box
-          .size(width!, height!)
-          .color(Colors.orange)
-          .roundedSM
-          .make(),
-    );
+        onTap: onPressed,
+        child: Container(
+          padding: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+              color: mainColor, borderRadius: BorderRadius.circular(12.0)),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(color: textWhite),
+            ),
+          ),
+        ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/const/routes/routes_name.dart';
@@ -39,6 +40,7 @@ class _SignUpViewState extends State<SignUpView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainBack,
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20.0),
@@ -53,9 +55,9 @@ class _SignUpViewState extends State<SignUpView> {
               Text(
                 'Sign Up',
                 style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: textWhite),
               ),
               20.heightBox,
               Container(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_icons.dart';
 import 'package:fyp/const/components/my_text_field.dart';
@@ -43,7 +44,7 @@ class _InformationScreenState extends State<InformationScreen> {
                         children: [
                           CircleAvatar(
                             radius: 100,
-                            backgroundColor: Colors.orange,
+                            backgroundColor: mainColor,
                             backgroundImage: _signUpController.image != null
                                 ? Image.file(_signUpController.image!).image
                                 : CachedNetworkImageProvider(
@@ -52,7 +53,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           )
                               .box
                               .roundedFull
-                              .border(color: Colors.orange, width: 15)
+                              .border(color: mainColor, width: 15)
                               .make(),
                           IconButton(
                             icon: Icon(

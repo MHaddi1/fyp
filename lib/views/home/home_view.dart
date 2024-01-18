@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/drawer.dart';
 import 'package:fyp/const/components/my_button.dart';
+import 'package:fyp/const/components/profile_card.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:get/get.dart';
@@ -28,7 +30,17 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: mainBack,
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SearchScreen()));
+              },
+              icon: Icon(Icons.search))
+        ],
+      ),
       drawer: const MyDrawer(),
       body: WillPopScope(
         onWillPop: () => _onBackButtonPressed(context),

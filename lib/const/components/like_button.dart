@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 
 class MyLikeButton extends StatelessWidget {
   final bool isLiked;
@@ -11,7 +12,7 @@ class MyLikeButton extends StatelessWidget {
       onTap: onTap,
       child: Icon(
         isLiked ? Icons.favorite : Icons.favorite_border,
-        color: isLiked ? Colors.orange : Colors.grey,
+        color: isLiked ? mainColor : Colors.grey,
       ),
     );
   }

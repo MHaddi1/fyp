@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 
 class MyListTitle extends StatelessWidget {
   final String text;
@@ -14,8 +15,14 @@ class MyListTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onPressed,
-      title: Text(text),
-      leading: Icon(icon),
+      title: Text(
+        text,
+        style: TextStyle(color: textWhite),
+      ),
+      leading: Icon(
+        icon,
+        color: textWhite,
+      ),
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_post.dart';
+import 'package:fyp/const/components/profile_card.dart';
 import 'package:fyp/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: mainBack,
       body: Center(
         child: Column(
           children: [
@@ -73,12 +75,11 @@ class _HomeScreenState extends State<HomeScreen>
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    return const CircularProgressIndicator();
+                    return Center(child: const CircularProgressIndicator());
                   }
                 },
               ),
             ),
-           
           ],
         ),
       ),

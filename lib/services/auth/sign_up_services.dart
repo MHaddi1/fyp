@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/models/get_user_model.dart';
 import 'package:fyp/utils/utils.dart';
+import 'package:fyp/views/auth/login_view.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -75,6 +76,7 @@ class SignUpServices {
       await _authService.sendPasswordResetEmail(email: email);
       Get.back();
       Utils.snackBar("Success", "Password reset email sent.");
+      Get.to(() => SignView());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Utils.snackBar("Error", "No user found for that email.");

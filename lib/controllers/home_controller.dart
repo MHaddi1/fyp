@@ -1,8 +1,9 @@
+// ignore_for_file: unnecessary_import
 import 'package:flutter/material.dart';
-import 'package:fyp/const/components/pose_painter.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:fyp/const/components/pose_painter.dart';
 import '../models/post_model.dart';
 import '../services/post_services.dart';
 

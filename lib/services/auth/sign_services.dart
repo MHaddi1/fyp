@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/suggestions/my_text_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
@@ -19,21 +20,21 @@ class SignServices {
   static final logger = LoggerService();
   final signUpController = Get.put(SignUpController());
 
-   Future<void> mySignIn(String email, String password) async {
+  Future<void> mySignIn(String email, String password) async {
     try {
       Logger().d("Login Not");
       Get.defaultDialog(
         title: "Sign in",
         content: const Center(
           child: CircularProgressIndicator(
-            color: Colors.orange,
+            color: mainColor,
           ),
         ),
       );
- 
+
       final userCredential = await mAuth.signInWithEmailAndPassword(
           email: email, password: password);
-          Logger().d("Login successful");
+      Logger().d("Login successful");
 
       if (userCredential.user != null) {
         final UserPreference userPreference = UserPreference();

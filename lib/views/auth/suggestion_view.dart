@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/assets/videos/app_videos.dart';
+import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/login/bottom_sheet.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/suggestions/my_container.dart';
@@ -41,7 +42,7 @@ class _SuggestionViewState extends State<SuggestionView> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()=> _onBackButtonPressed(context),
+      onWillPop: () => _onBackButtonPressed(context),
       child: Scaffold(
         backgroundColor: Colors.black12,
         body: Stack(
@@ -65,9 +66,9 @@ class _SuggestionViewState extends State<SuggestionView> {
               left: 20,
               child: VStack(
                 [
-                  "title".tr.text.color(Colors.white).bold.xl4.make(),
+                  "title".tr.text.color(textWhite).bold.xl4.make(),
                   10.heightBox,
-                  "des".tr.text.justify.bold.color(Colors.white).xl2.make(),
+                  "des".tr.text.justify.bold.color(textWhite).xl2.make(),
                 ],
               ),
             ),
@@ -80,7 +81,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                     Container(
                       height: 150,
                       decoration: const BoxDecoration(
-                          color: Colors.white,
+                          color: mainBack,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(12),
                               topRight: Radius.circular(12))),
@@ -96,13 +97,13 @@ class _SuggestionViewState extends State<SuggestionView> {
                   children: [
                     MyTextButton(
                       text: "sign_in".tr,
-                      color: Colors.orange,
+                      color: mainColor,
                       onPressed: () async {
                         await Get.bottomSheet(
                             useRootNavigator: true,
                             isScrollControlled: true,
-                            backgroundColor: Colors.white,
-                            barrierColor: Colors.orange,
+                            backgroundColor: mainBack,
+                            barrierColor: mainColor,
                             isDismissible: false,
                             exitBottomSheetDuration:
                                 const Duration(milliseconds: 500),
@@ -113,13 +114,13 @@ class _SuggestionViewState extends State<SuggestionView> {
                     ),
                     MyTextButton(
                       text: "skip".tr,
-                      color: Colors.orange,
+                      color: mainColor,
                       onPressed: () async {
                         await Get.bottomSheet(
                             enableDrag: false,
                             isScrollControlled: true,
-                            backgroundColor: Colors.white,
-                            barrierColor: Colors.orange,
+                            backgroundColor: mainBack,
+                            barrierColor: mainColor,
                             isDismissible: false,
                             exitBottomSheetDuration:
                                 const Duration(milliseconds: 500),
@@ -138,10 +139,12 @@ class _SuggestionViewState extends State<SuggestionView> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     MyContainer(
+                      color: mainBack,
                       onPressed: () {
                         Get.bottomSheet(
                           isDismissible: false,
-                          SizedBox(
+                          Container(
+                            color: mainBack,
                             height: MediaQuery.of(context).size.height,
                             child: Padding(
                               padding:
@@ -161,10 +164,16 @@ class _SuggestionViewState extends State<SuggestionView> {
                                             onPressed: () {
                                               Get.back();
                                             },
-                                            icon: const Icon(Icons.close),
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: textWhite,
+                                            ),
                                           ),
                                           5.heightBox,
-                                          const Text("Close"),
+                                          const Text(
+                                            "Close",
+                                            style: TextStyle(color: textWhite),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -173,6 +182,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                         .text
                                         .bold
                                         .xl3
+                                        .color(textWhite)
                                         .make()
                                         .box
                                         .alignCenterLeft
@@ -180,6 +190,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                     10.heightBox,
                                     "Earning is not just about making money; it's about creating value."
                                         .text
+                                        .color(textWhite)
                                         .make(),
                                     10.heightBox,
                                     Row(
@@ -188,11 +199,14 @@ class _SuggestionViewState extends State<SuggestionView> {
                                       children: [
                                         Column(
                                           children: [
-                                            "A Profile\nis bought".text.make(),
+                                            "A Profile\nis bought"
+                                                .text
+                                                .color(textWhite)
+                                                .make(),
                                             5.heightBox,
                                             "5 Sec"
                                                 .text
-                                                .color(Colors.orange)
+                                                .color(mainColor)
                                                 .bold
                                                 .xl
                                                 .make()
@@ -200,11 +214,14 @@ class _SuggestionViewState extends State<SuggestionView> {
                                         ),
                                         Column(
                                           children: [
-                                            "A Price\nRange".text.make(),
+                                            "A Price\nRange"
+                                                .text
+                                                .color(textWhite)
+                                                .make(),
                                             5.heightBox,
                                             "10\$ to 10K\$"
                                                 .text
-                                                .color(Colors.orange)
+                                                .color(mainColor)
                                                 .bold
                                                 .xl
                                                 .make()
@@ -223,6 +240,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                             [
                                               "Create Profile"
                                                   .text
+                                                  .color(textWhite)
                                                   .bold
                                                   .xl2
                                                   .make()
@@ -232,7 +250,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                               const Text(
                                                 "Profile mirrors you; choose words for professionalism and authenticity.",
                                                 style: TextStyle(
-                                                  color: Colors.black,
+                                                  color: textWhite,
                                                   fontSize: 15,
                                                 ),
                                               ),
@@ -254,6 +272,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                                 [
                                                   "Fast Delivery"
                                                       .text
+                                                      .color(textWhite)
                                                       .bold
                                                       .xl2
                                                       .make()
@@ -263,7 +282,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                                   const Text(
                                                     "Swift delivery builds trust, ensuring reliability and satisfaction in every transaction.",
                                                     style: TextStyle(
-                                                      color: Colors.black,
+                                                      color: textWhite,
                                                       fontSize: 15,
                                                     ),
                                                   ),
@@ -285,6 +304,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                             [
                                               "Get Paid"
                                                   .text
+                                                  .color(textWhite)
                                                   .bold
                                                   .xl2
                                                   .make()
@@ -294,7 +314,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                                               const Text(
                                                 "Craft your GetPaid profile with words reflecting professionalism and authenticity.",
                                                 style: TextStyle(
-                                                  color: Colors.black,
+                                                  color: textWhite,
                                                   fontSize: 15,
                                                 ),
                                               ),
@@ -317,7 +337,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                             ),
                           ),
                           ignoreSafeArea: true,
-                          barrierColor: Colors.orange,
+                          barrierColor: mainColor,
                           isScrollControlled: true,
                           backgroundColor: Colors.white,
                           enterBottomSheetDuration:
@@ -340,7 +360,7 @@ class _SuggestionViewState extends State<SuggestionView> {
                             enableDrag: false,
                             isScrollControlled: true,
                             backgroundColor: Colors.white,
-                            barrierColor: Colors.orange,
+                            barrierColor: mainColor,
                             isDismissible: false,
                             exitBottomSheetDuration:
                                 const Duration(milliseconds: 500),

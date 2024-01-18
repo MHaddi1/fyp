@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
 
 class MyContainer extends StatelessWidget {
   final double height;
@@ -26,7 +27,6 @@ class MyContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        
         height: height,
         width: width,
         decoration: BoxDecoration(
@@ -45,13 +45,13 @@ class MyContainer extends StatelessWidget {
               height: minHeight,
               width: minWidth,
               decoration: BoxDecoration(
-                color: Colors.grey,
-                border: Border.all(color: Colors.grey),
+                color: mainColor,
+                border: Border.all(color: mainBack),
               ),
               child: Text(
                 text!,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: textWhite,
                   fontSize: 20,
                 ),
                 textAlign: TextAlign.center,
