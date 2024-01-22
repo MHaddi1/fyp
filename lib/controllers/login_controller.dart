@@ -7,6 +7,7 @@ import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:fyp/utils/logger.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginController extends GetxController {
   RxBool ispassword = true.obs;
@@ -36,10 +37,9 @@ class LoginController extends GetxController {
     try {
       //isLoading.value = true;
 
-      await SignServices().mySignIn(getEmail, getPassword)
-          .then((value) async {
-       
-      });
+      await SignServices()
+          .mySignIn(getEmail, getPassword)
+          .then((value) async {});
     } catch (e) {
       Utils.myBoxShow("title", e.toString());
     } finally {
@@ -47,16 +47,42 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> googleSignIn() async {
+  Future<UserCredential> googleSignIn() async {
     try {
-      final UserPreference userPreference = UserPreference();
-      String? userToken = await FirebaseAuth.instance.currentUser?.getIdToken();
-      userPreference.saveUserToken(userToken!);
-      await signServices.handleSignIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      loggerService.logInfo("Successfully Logged in");
+      if (googleUser == null) {
+        // The user canceled the sign-in process
+        throw Exception("Google Sign-In was canceled");
+      }
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
-      debug(e.toString());
+      // Handle specific exceptions
+      if (e is FirebaseAuthException) {
+        // Firebase authentication-related errors
+        debug("Firebase Auth Error: ${e.message}");
+      } else if (e is GoogleSignInAccount) {
+        // Google Sign-In errors
+        debug("Google Sign-In Error: $e");
+      } else {
+        // Other unhandled exceptions
+        debug("Unexpected Error: $e");
+      }
+
+      // Rethrow the exception after handling
+      throw e;
     }
   }
 }

@@ -198,7 +198,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
               Divider(
                 color: textWhite,
               ),
-              Text("Or"),
+              Text("Or", style: TextStyle(color: textWhite)),
               Divider(
                 color: textWhite,
               ),
@@ -210,17 +210,17 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
             children: [
               SocialMedia(
                   onPressed: () {
-                    //   Get.defaultDialog(
-                    //       title: "Google Sign in",
-                    //       content: const Center(
-                    //         child: CircularProgressIndicator(
-                    //           color: mainColor,
-                    //         ),
-                    //       ));
-                    //   _controllerLogin.googleSignIn().then((value) {
-                    //     Get.offAndToNamed(RoutesName.homeScreen);
-                    //   });
-                    //   Get.back();
+                    Get.defaultDialog(
+                        title: "Google Sign in",
+                        content: const Center(
+                          child: CircularProgressIndicator(
+                            color: mainColor,
+                          ),
+                        ));
+                    _controllerLogin.googleSignIn().then((value) {
+                      Get.offAndToNamed(RoutesName.homeScreen);
+                    });
+                    Get.back();
                   },
                   color: Colors.white,
                   width: 30,

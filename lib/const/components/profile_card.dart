@@ -8,11 +8,13 @@ class ProfileCard extends StatelessWidget {
       required this.image,
       required this.desctiption,
       required this.name,
-      required this.onPressed});
+      required this.onPressed,
+      this.avg = 0.0});
   final String image;
   final String name;
   final String desctiption;
   final Function() onPressed;
+  final double avg;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class ProfileCard extends StatelessWidget {
             style: TextStyle(color: textWhite),
           ),
           subtitle: Text(
-            desctiption,
+            "${desctiption} ⭐ ${avg}",
             style: TextStyle(color: Colors.grey),
           ),
           trailing: ElevatedButton(

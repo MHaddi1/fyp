@@ -88,7 +88,7 @@ class SignUpController extends GetxController {
       String location = await signUpServices.currentCity();
       GetUserModel userModel = GetUserModel(
         name: myEmail.split("@")[0],
-        email: myEmail,
+        email: myEmail.toLowerCase(),
         location: location,
         dateTime: time,
         image: image?.toString() ?? '',

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
@@ -24,11 +25,13 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     splashService.isLogin();
-    SignUpServices().currentCity();
+    // SignUpServices().currentCity();
     Future.delayed(const Duration(seconds: 4), () {
       setState(() {
         _textOpacity = 1.0;
-        suggestionController.videoController;
+        if (!kDebugMode) {
+          suggestionController.videoController;
+        }
       });
     });
   }
