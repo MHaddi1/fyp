@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/profile_card.dart';
+import 'package:fyp/views/tailors_profile.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             num += value;
                           }
 
-                          double average =
+                          var average =
                               starListLength > 0 ? num / starListLength : 0.0;
 
                           // if (search.isEmpty) {
@@ -72,7 +73,20 @@ class _SearchScreenState extends State<SearchScreen> {
                             desctiption: starListLength.toString(),
                             avg: average.floorToDouble(),
                             name: userData['name'].toString().capitalized,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TailorsProfile(
+                                            name: userData['name'],
+                                            description: userData['bio'],
+                                            star: starListLength,
+                                            image: userData['image'] == null
+                                                ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
+                                                : userData['image'],
+                                            avg: average.floorToDouble(),
+                                          )));
+                            },
                           );
                           // } else if (userData['name']
                           //     .toString()
