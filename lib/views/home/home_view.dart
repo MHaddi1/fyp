@@ -5,6 +5,7 @@ import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/drawer.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/profile_card.dart';
+import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:get/get.dart';
@@ -20,12 +21,22 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final check = ChangeProfile();
+late String type;
+
   int _currentIndex = 0;
   final List<Widget> _screens = [
     const HomeScreen(),
     SearchScreen(),
     ProfileScreen(),
   ];
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +44,7 @@ class _HomeViewState extends State<HomeView> {
       backgroundColor: mainBack,
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SearchScreen()));
-              },
-              icon: Icon(Icons.search))
+
         ],
       ),
       drawer: const MyDrawer(),

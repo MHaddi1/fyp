@@ -31,7 +31,7 @@ class AppRoutes {
         ),
         GetPage(
           name: RoutesName.homeScreen,
-          page: () => const HomeView(),
+          page: () =>  HomeView(),
           transition: Transition.leftToRight,
         ),
         GetPage(

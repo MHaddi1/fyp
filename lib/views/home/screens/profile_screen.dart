@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(),
       body: StreamBuilder<DocumentSnapshot>(
         stream: userCollection
-            .doc(currentUser!.email ?? "youName@example.com")
+            .doc(currentUser!.email)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

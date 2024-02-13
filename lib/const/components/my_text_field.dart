@@ -10,6 +10,7 @@ class MyField extends StatelessWidget {
   final TextEditingController controller;
   final Function()? iconTap;
   final Function(String?)? onChanged;
+  final String? initialValue;
   const MyField(
       {super.key,
       required this.controller,
@@ -19,11 +20,13 @@ class MyField extends StatelessWidget {
       this.obscureText = false,
       this.iconData,
       this.iconTap,
-      this.onChanged});
+      this.onChanged,
+      this.initialValue});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialValue,
       onChanged: onChanged,
       controller: controller,
       onTapOutside: (value) {

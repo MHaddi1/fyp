@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fyp/views/verification_code.dart';
+import 'package:get/get.dart';
 
 class ChangeProfile {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String vrID = "";
 
   Future<bool> checkUserDataExists(User user) async {
     DocumentSnapshot userData = await FirebaseFirestore.instance
@@ -33,6 +36,7 @@ class ChangeProfile {
           .collection("users")
           .doc(_auth.currentUser!.email)
           .update({"phoneNo": phoneNo, "type": 2});
+      await sendVerificationCode("+92" + phoneNo);
     } catch (e) {}
   }
 
@@ -95,6 +99,49 @@ class ChangeProfile {
     } catch (e) {
       print('Error fetching image URL: $e');
       return null;
+    }
+  }
+
+  Future<void> sendVerificationCode(String phoneNumber) async {
+    try {
+      await _auth.verifyPhoneNumber(
+        timeout: const Duration(seconds: 60),
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _auth.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          if (e.code == "Invalid-phone-number") {
+            print("Phone number is invalid");
+          } else
+            print('Phone verification failed: ${e.message}');
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          print('Verification code sent to $phoneNumber');
+          this.vrID = verificationId;
+          Get.to(() => VerificationCode(
+                code: verificationId,
+              ));
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          print('Auto-retrieval timeout');
+          this.vrID = verificationId;
+        },
+      );
+    } catch (e) {
+      // Handle errors
+      print('Error sending verification code: $e');
+    }
+  }
+
+  Future<bool> verifyOTP(String otp) async {
+    try {
+      var credential = await _auth.signInWithCredential(
+          PhoneAuthProvider.credential(
+              verificationId: vrID.toString(), smsCode: otp));
+      return credential.user != null ? true : false;
+    } catch (e) {
+      return false;
     }
   }
 }

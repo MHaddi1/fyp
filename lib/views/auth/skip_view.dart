@@ -83,7 +83,7 @@ class SkipView extends StatelessWidget {
               children: [
                 SocialMedia(
                     onPressed: () {
-                      _controllerLogin.googleSignIn();
+                      _controllerLogin.signInWithGoogle(context);
                       Get.toNamed(RoutesName.signUpScreen2);
                     },
                     color: Colors.white,

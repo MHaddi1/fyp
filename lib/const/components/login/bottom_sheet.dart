@@ -217,7 +217,7 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
                             color: mainColor,
                           ),
                         ));
-                    _controllerLogin.googleSignIn().then((value) {
+                    _controllerLogin.signInWithGoogle(context).then((value) {
                       Get.offAndToNamed(RoutesName.homeScreen);
                     });
                     Get.back();

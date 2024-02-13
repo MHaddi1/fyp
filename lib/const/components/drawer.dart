@@ -22,6 +22,7 @@ import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../views/home/screens/search_screen.dart';
 import 'camera_view.dart';
 
 enum Gender { Male, Female }
@@ -104,6 +105,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     fontSize: 16,
                   ),
                 ),
+
               ],
             ),
           ),
@@ -192,13 +194,21 @@ class _MyDrawerState extends State<MyDrawer> {
                       return SizedBox();
                     } else {
                       if (snapshot.data == 1) {
-                        return MyListTitle(
-                          icon: Icons.camera,
-                          text: "Measurement",
-                          onPressed: () {
-                            Get.back();
-                            Get.to(() => const Measurement());
-                          },
+                        return Column(
+                          children: [
+                            MyListTitle(
+                              icon: Icons.camera,
+                              text: "Measurement",
+                              onPressed: () {
+                                Get.back();
+                                Get.to(() => const Measurement());
+                              },
+                            ),
+                            const Divider(),
+                            MyListTitle(icon: Icons.search, text: "Search", onPressed: (){
+                              Get.to(()=>SearchScreen());
+                            })
+                          ],
                         );
                       } else {
                         return SizedBox();
@@ -206,6 +216,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     }
                   },
                 ),
+
                 // Add more ListTitle widgets for additional items in the drawer
               ],
             ),

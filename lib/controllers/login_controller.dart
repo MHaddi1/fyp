@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/models/get_user_model.dart';
 import 'package:fyp/services/SharedPrefernece/shared_preference.dart';
 import 'package:fyp/services/auth/sign_services.dart';
@@ -8,6 +10,7 @@ import 'package:fyp/utils/logger.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   RxBool ispassword = true.obs;
@@ -17,6 +20,7 @@ class LoginController extends GetxController {
   RxString email = "".obs;
   RxString password = "".obs;
   final SignServices signServices = SignServices();
+  final check = SignServices();
 
   void setEmail(String value) {
     email.value = value.toLowerCase();
@@ -47,42 +51,79 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<UserCredential> googleSignIn() async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      // Sign out the previous Google account
+      await GoogleSignIn().signOut();
 
-      if (googleUser == null) {
-        // The user canceled the sign-in process
-        throw Exception("Google Sign-In was canceled");
+      final GoogleSignInAccount? googleSignInAccount =
+          await GoogleSignIn().signIn();
+
+      if (googleSignInAccount == null) {
+        // Google Sign-In canceled by user
+        return;
       }
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
       );
 
-      // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      // Handle specific exceptions
-      if (e is FirebaseAuthException) {
-        // Firebase authentication-related errors
-        debug("Firebase Auth Error: ${e.message}");
-      } else if (e is GoogleSignInAccount) {
-        // Google Sign-In errors
-        debug("Google Sign-In Error: $e");
-      } else {
-        // Other unhandled exceptions
-        debug("Unexpected Error: $e");
-      }
+      // Sign in to Firebase with Google credentials
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      User? user = userCredential.user;
 
-      // Rethrow the exception after handling
-      throw e;
+      if (user != null) {
+        bool userDataExists =
+            await check.checkUserDataExists(userCredential.user!);
+        if (!userDataExists) {
+          await check.saveUserData(userCredential.user!);
+        }
+        // Check if the user's email matches the university domain
+        if (user.email!.endsWith('@gmail.com')) {
+          // Successful login with university email
+          print('User: ${user.email} signed in');
+
+          UserPreference prefs = await UserPreference();
+          prefs.saveUserToken(user.email!);
+
+          // Navigate to the home screen
+          Get.toNamed(RoutesName.homeScreen);
+        } else {
+          // Login with non-university email
+          print('Login with correct gmail');
+
+          // Show an error message to the user
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Error'),
+                content:
+                    Text('Please login with your university email gmail).'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+
+          // Sign out the user as the email is not allowed
+          await FirebaseAuth.instance.signOut();
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      // Handle authentication errors
+      print('Error signing in with Google: $e');
     }
   }
 }
