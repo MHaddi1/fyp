@@ -7,6 +7,7 @@ import 'package:fyp/firebase_options.dart';
 import 'package:get/get.dart';
 import 'const/color.dart';
 import 'const/localization/languages.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 List<CameraDescription> cameras = [];
 void main() async {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: mainColor),
         useMaterial3: true,
       ),
+      builder: EasyLoading.init(),
       initialRoute: RoutesName.splashScreen,
       getPages: AppRoutes.appRoutes(),
     );

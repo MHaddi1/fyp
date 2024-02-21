@@ -10,7 +10,6 @@ class ProfileServices {
       User? currentUser = FirebaseAuth.instance.currentUser;
 
       if (currentUser == null || currentUser.email == null) {
-        // Handle the case where the user is not logged in or email is null
         return [];
       }
 
@@ -21,8 +20,7 @@ class ProfileServices {
               .get();
 
       List<GetUserModel> users = querySnapshot.docs
-          .map((doc) =>
-              GetUserModel.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => GetUserModel.fromJson(doc.data()))
           .toList();
 
       return users;

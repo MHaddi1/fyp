@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fyp/services/SharedPrefernece/state_save.dart';
 import 'package:fyp/views/verification_code.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeProfile {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -105,7 +107,7 @@ class ChangeProfile {
   Future<void> sendVerificationCode(String phoneNumber) async {
     try {
       await _auth.verifyPhoneNumber(
-        timeout: const Duration(seconds: 60),
+        timeout: const Duration(seconds: 90),
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
           await _auth.signInWithCredential(credential);
@@ -119,6 +121,7 @@ class ChangeProfile {
         codeSent: (String verificationId, int? resendToken) {
           print('Verification code sent to $phoneNumber');
           this.vrID = verificationId;
+          StateSave().saveState();
           Get.to(() => VerificationCode(
                 code: verificationId,
               ));

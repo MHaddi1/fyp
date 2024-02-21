@@ -19,6 +19,7 @@ import 'package:fyp/utils/utils.dart';
 import 'package:fyp/views/auth/login_view.dart';
 import 'package:fyp/views/camera_view.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
+import 'package:fyp/views/tailors_data_entry.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -70,42 +71,70 @@ class _MyDrawerState extends State<MyDrawer> {
             decoration: const BoxDecoration(
               color: mainColor,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                FutureBuilder<String?>(
-                  future: image(user),
-                  builder: (context, snapshot) {
-                    String? imageUrl = snapshot.data;
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // Show a loading indicator while fetching the image URL
-                    } else if (snapshot.hasError || snapshot.data == null) {
-                      print("image error: ${snapshot.error}r");
-                      return CircleAvatar(
-                        radius: 50,
-                        backgroundImage: CachedNetworkImageProvider(
-                          FirebaseAuth.instance.currentUser?.photoURL ??
-                              "https://cdn-icons-png.flaticon.com/512/2815/2815428.png",
-                        ),
-                      );
-                    } else {
-                      return CircleAvatar(
-                        radius: 50,
-                        backgroundImage: CachedNetworkImageProvider(imageUrl!),
-                      );
-                    }
-                  },
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    FutureBuilder<String?>(
+                      future: image(user),
+                      builder: (context, snapshot) {
+                        String? imageUrl = snapshot.data;
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError || snapshot.data == null) {
+                          print("image error: ${snapshot.error}r");
+                          return CircleAvatar(
+                            radius: 50,
+                            backgroundImage: CachedNetworkImageProvider(
+                              FirebaseAuth.instance.currentUser?.photoURL ??
+                                  "https://cdn-icons-png.flaticon.com/512/2815/2815428.png",
+                            ),
+                          );
+                        } else {
+                          return CircleAvatar(
+                            radius: 50,
+                            backgroundImage:
+                                CachedNetworkImageProvider(imageUrl!),
+                          );
+                        }
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      FirebaseAuth.instance.currentUser?.email ??
+                          "Please Login The Account",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
-                10.heightBox,
-                Text(
-                  FirebaseAuth.instance.currentUser?.email ??
-                      "Please Login The Account",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: FutureBuilder<int?>(
+                    future: change.getType(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting ||
+                          snapshot.hasError ||
+                          snapshot.data == null) {
+                        return SizedBox();
+                      } else {
+                        return Text(
+                          snapshot.data == 2 ? "Tailor" : "Customer",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
-
               ],
             ),
           ),
@@ -205,19 +234,26 @@ class _MyDrawerState extends State<MyDrawer> {
                               },
                             ),
                             const Divider(),
-                            MyListTitle(icon: Icons.search, text: "Search", onPressed: (){
-                              Get.to(()=>SearchScreen());
-                            })
+                            MyListTitle(
+                                icon: Icons.search,
+                                text: "Search",
+                                onPressed: () {
+                                  Get.to(() => SearchScreen());
+                                })
                           ],
                         );
                       } else {
-                        return SizedBox();
+                        return MyListTitle(
+                    icon: Icons.data_array,
+                    text: "Data",
+                    onPressed: () {
+                      Get.to(() => TailorDataEntry());
+                    });
                       }
                     }
                   },
                 ),
-
-                // Add more ListTitle widgets for additional items in the drawer
+                
               ],
             ),
           ),
