@@ -25,6 +25,8 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../views/home/screens/search_screen.dart';
 import 'camera_view.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 enum Gender { Male, Female }
 
@@ -47,12 +49,18 @@ class _MyDrawerState extends State<MyDrawer> {
   User user = FirebaseAuth.instance.currentUser!;
 
   Future confirmChange() async {
+    EasyLoading.show(
+        dismissOnTap: true,
+        status: "Profile change",
+        indicator: CircularProgressIndicator(),
+        maskType: EasyLoadingMaskType.black);
     int? userType = await change.getType();
     print("User type: $userType");
     if (userType == 2 || userType == 1) {
       change.changeProfileType();
       print("Profile type changed successfully");
     }
+    EasyLoading.dismiss();
   }
 
   Future<String?> image(User? user) async {
@@ -156,13 +164,20 @@ class _MyDrawerState extends State<MyDrawer> {
                               title: "",
                               middleText: "",
                               actions: [
-                                MyField(
-                                  controller: _phoneNumber,
-                                  text: "Phone Number",
-                                  validate: (value) => null,
-                                  onChanged: (value) {
-                                    phone = value!;
+                                InternationalPhoneNumberInput(
+                                  textFieldController: _phoneNumber,
+                                  onInputChanged: (PhoneNumber number) {
+                                    phone = number.phoneNumber.toString();
                                   },
+                                  selectorConfig: SelectorConfig(
+                                    selectorType:
+                                        PhoneInputSelectorType.DROPDOWN,
+                                  ),
+                                  countries: [
+                                    'PK'
+                                  ], // Restrict to Pakistan (PK) only
+                                  errorMessage:
+                                      'Invalid phone number', // Customize error message if needed
                                 ),
                               ],
                               confirm: MyButton(
@@ -244,16 +259,15 @@ class _MyDrawerState extends State<MyDrawer> {
                         );
                       } else {
                         return MyListTitle(
-                    icon: Icons.data_array,
-                    text: "Data",
-                    onPressed: () {
-                      Get.to(() => TailorDataEntry());
-                    });
+                            icon: Icons.data_array,
+                            text: "Data",
+                            onPressed: () {
+                              Get.to(() => TailorDataEntry());
+                            });
                       }
                     }
                   },
                 ),
-                
               ],
             ),
           ),

@@ -38,7 +38,7 @@ class ChangeProfile {
           .collection("users")
           .doc(_auth.currentUser!.email)
           .update({"phoneNo": phoneNo, "type": 2});
-      await sendVerificationCode("+92" + phoneNo);
+      await sendVerificationCode(phoneNo);
     } catch (e) {}
   }
 

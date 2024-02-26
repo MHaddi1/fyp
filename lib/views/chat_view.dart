@@ -22,11 +22,72 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   final messageContrller = TextEditingController();
   final chatServices = ChatServices();
+  final _fireStore = FirebaseFirestore.instance.collection("users");
   final _auth = FirebaseAuth.instance;
+  Map<String, dynamic>? msgData;
+
   sendMessage() {
     if (messageContrller.text.isNotEmpty) {
       chatServices.sendMessage(messageContrller.text, widget.receiverUserID);
       messageContrller.clear();
+
+      String userEmail = widget.receiverUserEmail;
+      String userUID = widget.receiverUserID;
+
+      _fireStore
+          .where('Tailors_Email', isEqualTo: userEmail)
+          .where('Tailors_UID', isEqualTo: userUID)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          print('Document with the same email and UID already exists');
+        } else {
+          try {
+            Map<String, dynamic> msgData = {
+              "Tailors_Email": widget.receiverUserEmail,
+              "Tailors_UID": widget.receiverUserID,
+            };
+            List<Map<String, dynamic>> listOfMaps = [];
+
+            _fireStore
+                .doc(FirebaseAuth.instance.currentUser!.email)
+                .get()
+                .then((DocumentSnapshot documentSnapshot) {
+              if (documentSnapshot.exists) {
+                List<dynamic> existingData = (documentSnapshot.data()
+                        as Map<String, dynamic>)['MessageUsers'] ??
+                    [];
+
+                listOfMaps
+                    .addAll(List<Map<String, dynamic>>.from(existingData));
+
+                bool combinationExists = listOfMaps.any((element) =>
+                    element['MessageUsers']['Tailors_Email'] == userEmail &&
+                    element['MessageUsers']['Tailors_UID'] == userUID);
+
+                // If the combination doesn't exist, add it to the list
+                if (!combinationExists) {
+                  listOfMaps.add({"MessageUsers": msgData});
+                }
+              } else {
+                // If no existing data, simply add the new user data to the list
+                listOfMaps.add({"MessageUsers": msgData});
+              }
+
+              // Update Firestore with the updated list
+              _fireStore
+                  .doc(FirebaseAuth.instance.currentUser!.email)
+                  .set({"MessageUsers": listOfMaps}, SetOptions(merge: true));
+            }).catchError((error) {
+              print('Error retrieving existing data: $error');
+            });
+          } catch (e) {
+            print('Error adding data to Firestore: $e');
+          }
+        }
+      }).catchError((error) {
+        print('Error checking document existence: $error');
+      });
     }
   }
 
@@ -71,6 +132,7 @@ class _ChatViewState extends State<ChatView> {
   Widget _buildMessageItem(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data =
         documentSnapshot.data()! as Map<String, dynamic>;
+
     var alignment = (data["senderId"] == _auth.currentUser!.uid)
         ? Alignment.centerLeft
         : Alignment.centerRight;

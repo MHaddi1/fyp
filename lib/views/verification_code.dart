@@ -44,13 +44,7 @@ class _VerificationCodeState extends State<VerificationCode> {
                         await PhoneAuthProvider.credential(
                             verificationId: widget.code,
                             smsCode: _codeText.text.toString());
-                    FirebaseAuth.instance
-                        .signInWithCredential(phone)
-                        .then((value) async {
-                      // if (await StateSave().loadState()) {
-                      Get.to(() => TailorDataEntry());
-                      //}
-                    });
+                    FirebaseAuth.instance.signInWithCredential(phone);
                   } catch (e) {
                     print(e.toString());
                   }

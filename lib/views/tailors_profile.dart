@@ -1,28 +1,40 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:get/get.dart';
 
-class TailorsProfile extends StatelessWidget {
-  const TailorsProfile({
-    super.key,
-    this.image = "",
-    this.description = "",
-    this.name = "",
-    this.star = 0,
-    this.avg = 0.0,
-  });
+import 'chat_view.dart';
+
+class TailorsProfile extends StatefulWidget {
+  const TailorsProfile(
+      {super.key,
+      this.image = "",
+      this.description = "",
+      this.name = "",
+      this.star = 0,
+      this.avg = 0.0,
+      this.email,
+      this.uid});
 
   final String name;
   final String description;
   final int star;
   final String image;
   final double avg;
+  final String? uid;
+  final String? email;
 
   @override
+  State<TailorsProfile> createState() => _TailorsProfileState();
+}
+
+class _TailorsProfileState extends State<TailorsProfile> {
+  @override
   Widget build(BuildContext context) {
-    print("name: ${name}");
+    print("name: ${widget.name}");
     return DefaultTabController(
-      length: 3, 
+      length: 3,
       child: Scaffold(
         backgroundColor: mainBack,
         body: SafeArea(
@@ -41,7 +53,7 @@ class TailorsProfile extends StatelessWidget {
                       Center(
                         child: CircleAvatar(
                           radius: 100,
-                          backgroundImage: NetworkImage(image),
+                          backgroundImage: NetworkImage(widget.image),
                         ),
                       ),
                       SizedBox(
@@ -55,7 +67,7 @@ class TailorsProfile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            name,
+                            widget.name,
                             style: TextStyle(
                                 color: textWhite,
                                 fontSize: 30,
@@ -71,11 +83,11 @@ class TailorsProfile extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        "Total Rating: ${star.toString()} ⭐",
+                        "Total Rating: ${widget.star.toString()} ⭐",
                         style: TextStyle(color: textWhite, fontSize: 25),
                       ),
                       Text(
-                        "⭐ ${avg}",
+                        "⭐ ${widget.avg}",
                         style: TextStyle(fontSize: 25.0, color: textWhite),
                       ),
                       SizedBox(
@@ -99,7 +111,7 @@ class TailorsProfile extends StatelessWidget {
                                 height: 10.0,
                               ),
                               Text(
-                                description,
+                                widget.description,
                                 style:
                                     TextStyle(color: textWhite, fontSize: 17.0),
                                 textAlign: TextAlign.justify,
@@ -163,10 +175,15 @@ class TailorsProfile extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => ChatView(
+                        receiverUserEmail: widget.email!,
+                        receiverUserID: widget.uid!,
+                      ));
+                },
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage(image),
+                  backgroundImage: NetworkImage(widget.image),
                 ),
               ),
               Text("Chat")

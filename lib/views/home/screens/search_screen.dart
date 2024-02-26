@@ -78,6 +78,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => TailorsProfile(
+                                            email: userData['email'],
+                                            uid: userData['uid'],
                                             name: userData['name'],
                                             description: userData['bio'],
                                             star: starListLength,

@@ -53,7 +53,6 @@ class _ChatPersonState extends State<ChatPerson> {
           Get.to(() => ChatView(
                 receiverUserEmail: data['email'],
                 receiverUserID: data['uid'],
-                
               ));
         },
       );
