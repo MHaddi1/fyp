@@ -9,6 +9,8 @@ class ChangeProfile {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String vrID = "";
 
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Future<bool> checkUserDataExists(User user) async {
     DocumentSnapshot userData = await FirebaseFirestore.instance
         .collection('users')
@@ -85,12 +87,26 @@ class ChangeProfile {
     }
   }
 
+  getUserName(String? email) async {
+    try {
+      DocumentSnapshot userSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(email).get();
+      if (userSnapshot.exists) {
+        return userSnapshot.get('name');
+      } else {
+        print('User document does not exist');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching image URL: $e');
+      return null;
+    }
+  }
+
   Future<String?> getImageUrl(String email) async {
     try {
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(_auth.currentUser!.email)
-          .get();
+      DocumentSnapshot userSnapshot =
+          await FirebaseFirestore.instance.collection("users").doc(email).get();
 
       if (userSnapshot.exists) {
         return userSnapshot.get('image');
@@ -145,6 +161,134 @@ class ChangeProfile {
       return credential.user != null ? true : false;
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<int> getMessageUsersLength() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .get();
+      final userData = snapshot.data() as Map<String, dynamic>;
+      final List<dynamic> messageUsers = userData['MessageUsers'] ?? [];
+      return messageUsers.length;
+    } catch (e) {
+      print('Error getting message users length: $e');
+      rethrow; // Rethrow the error to handle it in the UI if needed
+    }
+  }
+
+  Future<int?> getUserEmailIndex() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .get();
+      final userData = snapshot.data() as Map<String, dynamic>;
+      final List<dynamic> messageUsers = userData['MessageUsers'] ?? [];
+
+      for (var i = 0; i < messageUsers.length; i++) {
+        final user = messageUsers[i]['MessageUsers'] as Map<String, dynamic>;
+        final String? userEmail = user['email'];
+        if (userEmail != null) {
+          return i;
+        }
+      }
+      return null; // User email not found
+    } catch (e) {
+      print('Error getting user email index: $e');
+      rethrow; // Rethrow the error to handle it in the UI if needed
+    }
+  }
+
+  // Future<String> getUserEmail(int index) async {
+  //   try {
+  //     final snapshot = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(FirebaseAuth.instance.currentUser!.email)
+  //         .get();
+  //     final userData = snapshot.data() as Map<String, dynamic>;
+  //     final List<dynamic> messageUsers = userData['MessageUsers'] ?? [];
+
+  //     if (messageUsers.isNotEmpty && index < messageUsers.length) {
+  //       final user =
+  //           messageUsers[index]['MessageUsers'] as Map<String, dynamic>;
+  //       final String userEmail = user['email'];
+  //       return userEmail;
+  //     } else {
+  //       throw Exception('User email not found');
+  //     }
+  //   } catch (e) {
+  //     print('Error getting user email: $e');
+  //     rethrow; // Rethrow the error to handle it in the UI if needed
+  //   }
+  // }
+
+  Future<List<String>> getUserEmailsFromIndex(int startIndex) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .get();
+      final userData = snapshot.data() as Map<String, dynamic>;
+      final List<dynamic> messageUsers = userData['MessageUsers'] ?? [];
+      List<String> userEmails = [];
+
+      for (int i = startIndex; i < messageUsers.length; i++) {
+        final userMap = messageUsers[i]['MessageUsers'] as Map<String, dynamic>;
+        final String userEmail = userMap['email'] as String;
+        userEmails.add(userEmail);
+      }
+
+      if (userEmails.isNotEmpty) {
+        return userEmails;
+      } else {
+        throw Exception('No user emails found from index $startIndex');
+      }
+    } catch (e) {
+      print('Error getting user emails: $e');
+      rethrow; // Rethrow the error to handle it in the UI if needed
+    }
+  }
+
+  Future<void> updateUserName(List<String> userEmails, String newName) async {
+    try {
+      for (String userEmail in userEmails) {
+        final DocumentSnapshot senderSnapshot =
+            await _firestore.collection('users').doc(userEmail).get();
+
+        if (senderSnapshot.exists) {
+          List<dynamic> existingData =
+              (senderSnapshot.data() as Map<String, dynamic>)['MessageUsers'] ??
+                  [];
+          List<Map<String, dynamic>> userList =
+              List<Map<String, dynamic>>.from(existingData);
+
+          for (var userMap in userList) {
+            final String email = userMap['MessageUsers']['email'];
+            final String uid = userMap['MessageUsers']['UID'];
+
+            if (email == FirebaseAuth.instance.currentUser!.email &&
+                uid == FirebaseAuth.instance.currentUser!.uid) {
+              userMap['MessageUsers']['Name'] = newName;
+              break; // Exit loop after updating name for the user
+            }
+          }
+
+          // Update Firestore document
+          await _firestore
+              .collection('users')
+              .doc(userEmail)
+              .set({"MessageUsers": userList}, SetOptions(merge: true));
+          print('User name updated successfully for $userEmail');
+        } else {
+          print('User document does not exist for $userEmail');
+        }
+      }
+    } catch (error) {
+      print('Error updating user names: $error');
+      // Handle the error accordingly
     }
   }
 }

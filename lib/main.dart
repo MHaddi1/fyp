@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/routes/routes.dart';
 import 'package:fyp/const/routes/routes_name.dart';
@@ -14,7 +15,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHander);
   runApp(const MyApp());
+}
+
+@pragma('vm-entry-point')
+Future<void> _firebaseMessagingBackgroundHander(
+    RemoteMessage remoteMessage) async {
+  await Firebase.initializeApp();
+  print(remoteMessage.notification?.title.toString());
 }
 
 class MyApp extends StatelessWidget {

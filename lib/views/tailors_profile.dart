@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
+import 'package:fyp/services/changeProfile.dart';
 import 'package:get/get.dart';
 
 import 'chat_view.dart';
@@ -175,10 +176,14 @@ class _TailorsProfileState extends State<TailorsProfile> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  final userName = await ChangeProfile().getUserName(FirebaseAuth.instance.currentUser!.email);
+                  print(userName);
                   Get.to(() => ChatView(
+                        receiverUser: widget.name,
                         receiverUserEmail: widget.email!,
                         receiverUserID: widget.uid!,
+                        senderName: userName,
                       ));
                 },
                 child: CircleAvatar(

@@ -51,6 +51,7 @@ class _ChatPersonState extends State<ChatPerson> {
         username: data['name'],
         onPressed: () {
           Get.to(() => ChatView(
+                receiverUser: data['name'],
                 receiverUserEmail: data['email'],
                 receiverUserID: data['uid'],
               ));
