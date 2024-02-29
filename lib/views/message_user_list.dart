@@ -83,12 +83,14 @@ class _MessageListState extends State<MessageList> {
                 onTap: () async {
                   final userName = await ChangeProfile()
                       .getUserName(FirebaseAuth.instance.currentUser!.email);
+                  final myImage = await ChangeProfile().getImageUrl(userEmail);
                   final name = await myName(userEmail);
                   Get.to(() => ChatView(
                         senderName: userName,
                         receiverUser: name,
                         receiverUserEmail: userEmail,
                         receiverUserID: userUID,
+                        image: myImage,
                       ));
                 },
                 child: Padding(

@@ -18,14 +18,16 @@ class ChatView extends StatefulWidget {
   final String? receiverUserID;
   final String? receiverUser;
   final String? senderName;
+  final String? image;
 
-  const ChatView({
-    Key? key,
-    this.receiverUserEmail,
-    this.receiverUserID,
-    this.receiverUser,
-    this.senderName,
-  }) : super(key: key);
+  const ChatView(
+      {Key? key,
+      this.receiverUserEmail,
+      this.receiverUserID,
+      this.receiverUser,
+      this.senderName,
+      this.image})
+      : super(key: key);
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -183,11 +185,47 @@ class _ChatViewState extends State<ChatView> {
     }
   }
 
+  void sendNotification(String deviceToken, String message) async {
+    final RToken = await getToken(widget.receiverUserEmail.toString());
+    var data = {
+      "to": RToken == null ? deviceToken : RToken,
+      "priority": "high",
+      'notification': {
+        "title": RToken == null ? "You send Message" : " New Message",
+        "body": message,
+      },
+      "data": {'type': "chat"}
+    };
+
+    try {
+      await http.post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "Authorization":
+                "key=AAAANFZ7kDQ:APA91bFzd7VOzBXrRAd7B6l2PN5UEZv1NtXQR3QUqed2M32zYf4mLyppR5P9dzg9nid8pOGhKeVIsunwtJUDkye13ow4zQu8abSNdgYb_Ah29UVxZxPK5La37oQNF-226d8nmCDSL6Y3"
+          },
+          body: jsonEncode(data));
+    } catch (error) {
+      print("Error sending notification: $error");
+    }
+  }
+
+  void deviceTokken() async {
+    await MessageNotification().getMessageTokken().then((value) async {
+      final checkToken =
+          await getToken(FirebaseAuth.instance.currentUser!.email.toString());
+      if (checkToken == value) {
+        sendNotification(value, messageController.text);
+      } else {
+        sendToken(value);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         leading: InkWell(
           onTap: () {
             Get.back();
@@ -196,13 +234,26 @@ class _ChatViewState extends State<ChatView> {
             decoration: BoxDecoration(
                 color: textWhite, borderRadius: BorderRadius.circular(12.0)),
             margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            //padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             child: Icon(Icons.arrow_back),
           ),
         ),
-        title: Text(
-          widget.receiverUser!,
-          style: TextStyle(color: textWhite),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: NetworkImage(widget.image!), fit: BoxFit.cover)),
+            ),
+            SizedBox(
+              width: 5.0,
+            ),
+            Text(widget.senderName!),
+          ],
         ),
         backgroundColor: mainColor,
       ),
@@ -263,6 +314,9 @@ class _ChatViewState extends State<ChatView> {
                 style: TextStyle(fontWeight: FontWeight.bold, color: mainBack),
               ),
             ),
+          SizedBox(
+            width: 5.0,
+          ),
           BubbleNormal(
             text: data['message'],
             textStyle: TextStyle(color: Colors.white),
@@ -274,36 +328,6 @@ class _ChatViewState extends State<ChatView> {
         ],
       ),
     );
-  }
-
-  void sendNotification() async {}
-  void deviceTokken() {
-    MessageNotification().getMessageTokken().then((value) async {
-      final checkToken =
-          await getToken(FirebaseAuth.instance.currentUser!.email.toString());
-      if (checkToken == value) {
-        final RToken = await getToken(widget.receiverUserEmail.toString());
-
-        var data = {
-          "to": RToken == null ? value : RToken,
-          "priority": "high",
-          'notification': {
-            "title": RToken == null ? "You send Message" : " New Message",
-            "body": messageController.text,
-          },
-          "data": {'type': "chat"}
-        };
-        http.post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
-            headers: {
-              "Content-Type": "application/json; charset=UTF-8",
-              "Authorization":
-                  "key=AAAANFZ7kDQ:APA91bFzd7VOzBXrRAd7B6l2PN5UEZv1NtXQR3QUqed2M32zYf4mLyppR5P9dzg9nid8pOGhKeVIsunwtJUDkye13ow4zQu8abSNdgYb_Ah29UVxZxPK5La37oQNF-226d8nmCDSL6Y3"
-            },
-            body: jsonEncode(data));
-      } else {
-        sendToken(value);
-      }
-    });
   }
 
   Widget _buildMessageInput() {

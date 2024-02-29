@@ -78,14 +78,13 @@ class LoginController extends GetxController {
       User? user = userCredential.user;
 
       if (user != null) {
-        bool userDataExists =
-            await check.checkUserDataExists(userCredential.user!);
-        if (!userDataExists) {
-          await check.saveUserData(userCredential.user!);
-        }
-        // Check if the user's email matches the university domain
         if (user.email!.endsWith('@gmail.com')) {
-          // Successful login with university email
+          bool userDataExists =
+              await check.checkUserDataExists(userCredential.user!);
+          if (!userDataExists) {
+            await check.saveUserData(userCredential.user!);
+          }
+          // Successful login with Gmail account
           print('User: ${user.email} signed in');
 
           UserPreference prefs = await UserPreference();
@@ -94,21 +93,19 @@ class LoginController extends GetxController {
           // Navigate to the home screen
           Get.toNamed(RoutesName.homeScreen);
         } else {
-          // Login with non-university email
-          print('Login with correct gmail');
-
           // Show an error message to the user
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Error'),
-                content:
-                    Text('Please login with your university email gmail).'),
+                content: Text('Please login with your Gmail account.'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
+                      // Sign out the user as the email is not allowed
+                      FirebaseAuth.instance.signOut();
                     },
                     child: Text('OK'),
                   ),
@@ -116,9 +113,6 @@ class LoginController extends GetxController {
               );
             },
           );
-
-          // Sign out the user as the email is not allowed
-          await FirebaseAuth.instance.signOut();
         }
       }
     } on FirebaseAuthException catch (e) {
