@@ -118,7 +118,7 @@ class MessageNotification {
 
   void handleMessage(BuildContext context, RemoteMessage message) {
     if (message.data['type'] == "chat") {
-      Get.to(() => MessageList());
+      Get.to(() => MessageList(id: "123456"));
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {

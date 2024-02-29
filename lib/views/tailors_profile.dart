@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/services/changeProfile.dart';
-import 'package:get/get.dart';
 
 import 'chat_view.dart';
 
@@ -16,7 +16,9 @@ class TailorsProfile extends StatefulWidget {
       this.star = 0,
       this.avg = 0.0,
       this.email,
-      this.uid});
+      this.uid,
+      this.onRatingChanged,
+      this.rating = 1});
 
   final String name;
   final String description;
@@ -25,12 +27,22 @@ class TailorsProfile extends StatefulWidget {
   final double avg;
   final String? uid;
   final String? email;
+  final int? rating;
+  final void Function(int)? onRatingChanged;
 
   @override
   State<TailorsProfile> createState() => _TailorsProfileState();
 }
 
 class _TailorsProfileState extends State<TailorsProfile> {
+  late RatingController ratingController;
+  @override
+  void initState() {
+    super.initState();
+    ratingController = Get.put(RatingController());
+    ratingController.rating.value = widget.rating!;
+  }
+
   @override
   Widget build(BuildContext context) {
     print("name: ${widget.name}");
@@ -94,6 +106,27 @@ class _TailorsProfileState extends State<TailorsProfile> {
                       SizedBox(
                         height: 20.0,
                       ),
+                      Obx(() => Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(5, (index) {
+                              return IconButton(
+                                icon: Icon(
+                                  index < ratingController.rating.value
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: Colors.yellow,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    ratingController.updateRating(
+                                        index, widget.email!, context);
+                                    widget.onRatingChanged!(
+                                        ratingController.rating.value);
+                                  });
+                                },
+                              );
+                            }),
+                          )),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
@@ -177,7 +210,8 @@ class _TailorsProfileState extends State<TailorsProfile> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 onPressed: () async {
-                  final userName = await ChangeProfile().getUserName(FirebaseAuth.instance.currentUser!.email);
+                  final userName = await ChangeProfile()
+                      .getUserName(FirebaseAuth.instance.currentUser!.email);
                   print(userName);
                   Get.to(() => ChatView(
                         receiverUser: widget.name,
@@ -196,6 +230,53 @@ class _TailorsProfileState extends State<TailorsProfile> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class RatingController extends GetxController {
+  RxInt rating = 1.obs;
+
+  Future<void> updateRating(int index, String email, context) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      // Handle the case where the user is not logged in
+      return;
+    }
+
+    final userDoc = FirebaseFirestore.instance.collection("users").doc(email);
+    final userData = await userDoc.get();
+    final List<dynamic>? previousRatings = userData.data()?["ratings"];
+
+    if (previousRatings != null && previousRatings.contains(currentUser.uid)) {
+      // User has already rated this tailor
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Already Rated"),
+            content: Text("You have already rated this tailor."),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    rating.value = index + 1;
+    await userDoc.set(
+      {
+        "ratings": FieldValue.arrayUnion([currentUser.uid]),
+        "star": FieldValue.arrayUnion([rating.value.toString()])
+      },
+      SetOptions(merge: true),
     );
   }
 }

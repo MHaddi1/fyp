@@ -11,6 +11,7 @@ import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginController extends GetxController {
   RxBool ispassword = true.obs;
@@ -52,6 +53,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {
+    EasyLoading.show();
     try {
       // Sign out the previous Google account
       await GoogleSignIn().signOut();
@@ -92,6 +94,7 @@ class LoginController extends GetxController {
 
           // Navigate to the home screen
           Get.toNamed(RoutesName.homeScreen);
+          EasyLoading.dismiss();
         } else {
           // Show an error message to the user
           showDialog(
@@ -113,6 +116,7 @@ class LoginController extends GetxController {
               );
             },
           );
+          EasyLoading.dismiss();
         }
       }
     } on FirebaseAuthException catch (e) {

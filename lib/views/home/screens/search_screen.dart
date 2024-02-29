@@ -35,7 +35,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   onChanged: (value) {
                     setState(() {
                       search = value;
-                      // print(search);
                     });
                   },
                 ),
@@ -53,57 +52,46 @@ class _SearchScreenState extends State<SearchScreen> {
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           final userData = snapshot.data!.docs[index];
-                          List<dynamic>? starList = userData['star'];
-                          int starListLength = starList?.length ?? 0;
+                          List<dynamic>? starList = userData['star'] ?? [];
+                          int starListLength = starList!.length;
                           double num = 0.0;
                           for (int i = 0; i < starListLength; i++) {
-                            double value = double.tryParse(starList![i]) ??
-                                0.0; // Use 0.0 if parsing fails
+                            double value = double.tryParse(starList[i]) ?? 0.0;
                             num += value;
                           }
 
                           var average =
                               starListLength > 0 ? num / starListLength : 0.0;
 
-                          // if (search.isEmpty) {
                           return ProfileCard(
                             image: userData['image'] == null
                                 ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
-                                : userData['image'].toString(),
+                                : userData['image']?.toString() ?? '',
                             desctiption: starListLength.toString(),
                             avg: average.floorToDouble(),
-                            name: userData['name'].toString().capitalized,
+                            name:
+                                userData['name']?.toString().capitalized ?? '',
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TailorsProfile(
-                                            email: userData['email'],
-                                            uid: userData['uid'],
-                                            name: userData['name'],
-                                            description: userData['bio'],
-                                            star: starListLength,
-                                            image: userData['image'] == null
-                                                ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
-                                                : userData['image'],
-                                            avg: average.floorToDouble(),
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TailorsProfile(
+                                    rating: 1,
+                                    onRatingChanged: (value) {},
+                                    email: userData['email']?.toString(),
+                                    uid: userData['uid']?.toString(),
+                                    name: userData['name']!.toString(),
+                                    description: userData['bio']!.toString(),
+                                    star: starListLength,
+                                    image: userData['image'] == null
+                                        ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
+                                        : userData['image']?.toString() ?? '',
+                                    avg: average.floorToDouble(),
+                                  ),
+                                ),
+                              );
                             },
                           );
-                          // } else if (userData['name']
-                          //     .toString()
-                          //     .toLowerCase()
-                          //     .startsWith(search)) {
-                          //   return ProfileCard(
-                          //     image: userData['image'] == null
-                          //         ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
-                          //         : userData['image'].toString(),
-                          //     desctiption: userData['bio'].toString(),
-                          //     name: userData['name'].toString(),
-                          //     onPressed: () {},
-                          //   );
-                          // }
-                          // return Container();
                         },
                       );
                     } else if (snapshot.hasError) {

@@ -18,7 +18,7 @@ class ChatView extends StatefulWidget {
   final String? receiverUserID;
   final String? receiverUser;
   final String? senderName;
-  final String? image;
+  final String image;
 
   const ChatView(
       {Key? key,
@@ -26,7 +26,8 @@ class ChatView extends StatefulWidget {
       this.receiverUserID,
       this.receiverUser,
       this.senderName,
-      this.image})
+      this.image =
+          "https://imgv3.fotor.com/images/blog-richtext-image/10-profile-picture-ideas-to-make-you-stand-out.jpg"})
       : super(key: key);
 
   @override
@@ -194,7 +195,7 @@ class _ChatViewState extends State<ChatView> {
         "title": RToken == null ? "You send Message" : " New Message",
         "body": message,
       },
-      "data": {'type': "chat"}
+      "data": {'type': "chat", "id": "123456"}
     };
 
     try {
@@ -247,7 +248,7 @@ class _ChatViewState extends State<ChatView> {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: NetworkImage(widget.image!), fit: BoxFit.cover)),
+                      image: NetworkImage(widget.image), fit: BoxFit.cover)),
             ),
             SizedBox(
               width: 5.0,

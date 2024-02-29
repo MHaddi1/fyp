@@ -8,6 +8,8 @@ import 'package:fyp/views/chat_view.dart';
 import 'package:get/get.dart';
 
 class MessageList extends StatefulWidget {
+  MessageList({super.key, required this.id});
+  final id;
   @override
   State<MessageList> createState() => _MessageListState();
 }
@@ -90,7 +92,7 @@ class _MessageListState extends State<MessageList> {
                         receiverUser: name,
                         receiverUserEmail: userEmail,
                         receiverUserID: userUID,
-                        image: myImage,
+                        image: myImage!,
                       ));
                 },
                 child: Padding(

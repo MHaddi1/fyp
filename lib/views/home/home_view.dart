@@ -55,7 +55,9 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           IconButton(
             onPressed: () async {
-              Get.to(() => MessageList());
+              Get.offAll(() => MessageList(
+                    id: "123456",
+                  ));
             },
             icon: const Icon(Icons.chat_bubble),
           )
