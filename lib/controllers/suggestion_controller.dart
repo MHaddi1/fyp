@@ -21,4 +21,11 @@ class SuggestionController extends GetxController {
     videoController.dispose();
     super.onClose();
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    videoController.dispose();
+    super.dispose();
+  }
 }

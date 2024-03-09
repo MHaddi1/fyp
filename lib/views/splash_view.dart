@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
@@ -18,7 +17,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   double _textOpacity = 0.0;
-  final suggestionController = Get.put(SuggestionController());
+  //final suggestionController = Get.put(SuggestionController());
   final splashService = SplashServices();
 
   @override
@@ -26,14 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     splashService.isLogin();
     // SignUpServices().currentCity();
-    Future.delayed(const Duration(seconds: 4), () {
-      setState(() {
-        _textOpacity = 1.0;
-        if (!kDebugMode) {
-          suggestionController.videoController;
-        }
-      });
-    });
+
   }
 
   @override

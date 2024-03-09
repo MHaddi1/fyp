@@ -20,6 +20,7 @@ import 'package:fyp/views/auth/login_view.dart';
 import 'package:fyp/views/camera_view.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/tailors_data_entry.dart';
+import 'package:fyp/views/tailors_data_entry2.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 

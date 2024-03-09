@@ -10,8 +10,10 @@ import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/services/chat_services.dart';
 import 'package:fyp/services/notification_services.dart';
+import 'package:fyp/utils/check_internet_utils.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 class ChatView extends StatefulWidget {
   final String? receiverUserEmail;
@@ -34,11 +36,13 @@ class ChatView extends StatefulWidget {
   State<ChatView> createState() => _ChatViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   final messageController = TextEditingController();
   final chatServices = ChatServices();
   final _fireStore = FirebaseFirestore.instance.collection("users");
   final _auth = FirebaseAuth.instance;
+  bool delivered = false;
+  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   sendMessage() async {
     if (messageController.text.isNotEmpty) {
@@ -46,7 +50,16 @@ class _ChatViewState extends State<ChatView> {
       await updateSenderDocument();
       await updateReceiverDocument();
       deviceTokken();
-      messageController.clear();
+     setState(() {
+       messageController.clear();
+     });
+    }
+  }
+  void addToken(String token) async {
+    try{
+      await _firebaseFirestore.collection("users").doc(FirebaseAuth.instance.currentUser!.email).set({"FCMToken":token},SetOptions(merge: true));
+    }catch(e){
+      Logger().d(e);
     }
   }
 
@@ -212,7 +225,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   void deviceTokken() async {
-    await MessageNotification().getMessageTokken().then((value) async {
+    await MessageNotification.instance.getMessageTokken().then((value) async {
       final checkToken =
           await getToken(FirebaseAuth.instance.currentUser!.email.toString());
       if (checkToken == value) {
@@ -221,6 +234,44 @@ class _ChatViewState extends State<ChatView> {
         sendToken(value);
       }
     });
+  }
+
+  internetCheck() async {
+    delivered = await ConnectivityUtil.instance.checkInternetConnection();
+    return delivered;
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    // final email = await myCollection();
+    if (state == AppLifecycleState.resumed) {
+      //online
+      setStatus("Online");
+    } else {
+      //offline
+      setStatus("Offline");
+    }
+  }
+
+  void setStatus(String status) async {
+    try {
+      _firebaseFirestore
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .set({"status": status}, SetOptions(merge: true));
+    } catch (e) {
+      Logger().e(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    setStatus("Online");
+    MessageNotification.instance.getMessageTokken().then((value) {
+      addToken(value);
+    });
+    internetCheck();
   }
 
   @override
@@ -239,23 +290,29 @@ class _ChatViewState extends State<ChatView> {
             child: Icon(Icons.arrow_back),
           ),
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: NetworkImage(widget.image), fit: BoxFit.cover)),
-            ),
-            SizedBox(
-              width: 5.0,
-            ),
-            Text(widget.senderName!),
-          ],
-        ),
+        title: StreamBuilder<DocumentSnapshot>(
+            stream: _firebaseFirestore
+                .collection('users')
+                .doc(widget.receiverUserEmail)
+                .snapshots(),
+            builder: (context, snapshot) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(snapshot.data?['status'] == null
+                        ? "Offline"
+                        : snapshot.data!['status']),
+                  ),
+                  SizedBox(
+                    width: 5.0,
+                  ),
+                ],
+              );
+            }),
         backgroundColor: mainColor,
       ),
       body: Column(
@@ -324,7 +381,8 @@ class _ChatViewState extends State<ChatView> {
             isSender: isSender,
             color: isSender ? Colors.blue : Colors.grey[300]!,
             tail: true,
-            sent: true,
+            sent: delivered ? true : false,
+            delivered: delivered ? true : false,
           ),
         ],
       ),

@@ -1,17 +1,23 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/drawer.dart';
 import 'package:fyp/const/components/my_button.dart';
+import 'package:fyp/controllers/login_controller.dart';
+import 'package:fyp/services/auth/sign_services.dart';
+import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/services/notification_services.dart';
 import 'package:fyp/views/home/screens/home_screen.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:fyp/views/message_user_list.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class HomeView extends StatefulWidget {
@@ -23,26 +29,91 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  User? user;
+  final check = SignServices();
+  bool? userCheck;
+  List<String> email = [];
+  final changeProfile = ChangeProfile();
+  String email2 = "";
 
   int _currentIndex = 0;
+
   final List<Widget> _screens = [
     const HomeScreen(),
     SearchScreen(),
     ProfileScreen(),
   ];
+  // call() async {
+  //   //email2 = await myCollection();
+  //   // await Future.delayed(Duration(seconds: 20), () {
+  //     setStatus("Online");
+  //   // });
+  // }
+
+  // Future myCollection() async {
+  //   final lenght = await changeProfile.getMessageUsersLength();
+  //   final email = await changeProfile.getUserEmailsFromIndex(lenght);
+  //   print(email);
+  //   return email;
+  // }
+
+  // Future checkCollection() async {
+  //   if (user != null) {
+  //     // Assuming `checkUserDataExists()` returns a boolean
+  //     bool userCheck = await check.checkUserDataExists(user!);
+  //
+  //     if (userCheck) {
+  //       // Assuming `saveUserData()` returns a Future
+  //       await check.saveUserData(user!);
+  //       // Assuming `call()` is a function defined elsewhere
+  //       call();
+  //     }
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
+    // email2 = await checkCollection();
+   // WidgetsBinding.instance.addObserver(this);
+   //  call();
+setStatus("Online");
+    // login.signInWithGoogle(context);
 
-    // Initialize notification services
-    MessageNotification().requestNotificationPremission();
-    MessageNotification().firebaseInit(context);
-    MessageNotification().isTokenRefreshed();
-    MessageNotification().setupInteractMessage(context);
-    MessageNotification().getMessageTokken().then((value) {
+    // Initialize notification servicess
+    MessageNotification.instance.requestNotificationPremission();
+    MessageNotification.instance.firebaseInit(context);
+    MessageNotification.instance.isTokenRefreshed();
+    MessageNotification.instance.setupInteractMessage(context);
+    MessageNotification.instance.getMessageTokken().then((value) {
       print("Token $value");
+     // addToken(value);
     });
+  }
+
+
+  //
+  // void didChangeAppLifecycleState(AppLifecycleState state) async {
+  //   // final email = await myCollection();
+  //   if (state == AppLifecycleState.resumed) {
+  //     //online
+  //     setStatus("Online");
+  //   } else {
+  //     //offline
+  //     setStatus("Offline");
+  //   }
+  // }
+
+  void setStatus(String status) async {
+    try {
+      _firebaseFirestore
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .set({"status": status}, SetOptions(merge: true));
+    } catch (e) {
+      Logger().e(e);
+    }
   }
 
   @override
@@ -51,7 +122,6 @@ class _HomeViewState extends State<HomeView> {
       backgroundColor: mainBack,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('title'.tr),
         actions: [
           IconButton(
             onPressed: () async {

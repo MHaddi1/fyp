@@ -1,24 +1,27 @@
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/views/tailor_services.dart';
 import 'package:get/get.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/services/changeProfile.dart';
-
 import 'chat_view.dart';
 
 class TailorsProfile extends StatefulWidget {
-  const TailorsProfile(
-      {super.key,
-      this.image = "",
-      this.description = "",
-      this.name = "",
-      this.star = 0,
-      this.avg = 0.0,
-      this.email,
-      this.uid,
-      this.onRatingChanged,
-      this.rating = 1});
+  const TailorsProfile({
+    Key? key,
+    this.image = "",
+    this.description = "",
+    this.name = "",
+    this.star = 0,
+    this.avg = 0.0,
+    this.email,
+    this.uid,
+    this.onRatingChanged,
+    this.rating = 1,
+  }) : super(key: key);
 
   final String name;
   final String description;
@@ -34,8 +37,10 @@ class TailorsProfile extends StatefulWidget {
   State<TailorsProfile> createState() => _TailorsProfileState();
 }
 
-class _TailorsProfileState extends State<TailorsProfile> {
+class _TailorsProfileState extends State<TailorsProfile>
+    with SingleTickerProviderStateMixin {
   late RatingController ratingController;
+
   @override
   void initState() {
     super.initState();
@@ -45,189 +50,191 @@ class _TailorsProfileState extends State<TailorsProfile> {
 
   @override
   Widget build(BuildContext context) {
-    print("name: ${widget.name}");
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        backgroundColor: mainBack,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return Scaffold(
+      backgroundColor: mainBack,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(Icons.arrow_back, color: textWhite),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      // Implement action for another icon
+                    },
+                    icon: Icon(Icons.more_vert, color: textWhite),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            CircleAvatar(
+              radius: 100,
+              backgroundImage: CachedNetworkImageProvider(widget.image),
+              backgroundColor: Colors.transparent,
+            ),
+            SizedBox(height: 20),
+            Text(
+              widget.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: textWhite,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  color: mainBack,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Center(
-                        child: CircleAvatar(
-                          radius: 100,
-                          backgroundImage: NetworkImage(widget.image),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Text(
-                        'username',
-                        style: TextStyle(color: textWhite),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.name,
-                            style: TextStyle(
-                                color: textWhite,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Icon(
-                            Icons.verified,
-                            color: Colors.blue,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "Total Rating: ${widget.star.toString()} ⭐",
-                        style: TextStyle(color: textWhite, fontSize: 25),
-                      ),
-                      Text(
-                        "⭐ ${widget.avg}",
-                        style: TextStyle(fontSize: 25.0, color: textWhite),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                      Obx(() => Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: List.generate(5, (index) {
-                              return IconButton(
-                                icon: Icon(
-                                  index < ratingController.rating.value
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  color: Colors.yellow,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    ratingController.updateRating(
-                                        index, widget.email!, context);
-                                    widget.onRatingChanged!(
-                                        ratingController.rating.value);
-                                  });
-                                },
-                              );
-                            }),
-                          )),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Description:",
-                                style:
-                                    TextStyle(color: textWhite, fontSize: 30.0),
-                                textAlign: TextAlign.start,
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                widget.description,
-                                style:
-                                    TextStyle(color: textWhite, fontSize: 17.0),
-                                textAlign: TextAlign.justify,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                Icon(Icons.verified, color: Colors.blue),
+                SizedBox(width: 5),
+                Text(
+                  "Verified",
+                  style: TextStyle(color: Colors.blue, fontSize: 16),
                 ),
-                Container(
-                  height: 200,
-                  width: Get.width,
-                  child: TabBarView(
-                    children: [
-                      Container(
-                        color: mainBack,
-                        child: Center(
-                          child: Text(
-                            'Page 1',
-                            style: TextStyle(color: Colors.white, fontSize: 24),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        color: mainBack,
-                        child: Center(
-                          child: Text(
-                            'Page 2',
-                            style: TextStyle(color: Colors.white, fontSize: 24),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        color: mainBack,
-                        child: Center(
-                          child: Text(
-                            'Page 3',
-                            style: TextStyle(color: Colors.white, fontSize: 24),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
               ],
             ),
-          ),
-        ),
-        floatingActionButton: Container(
-          width: 120,
-          height: 70,
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-          decoration: BoxDecoration(
-              color: textWhite, borderRadius: BorderRadius.circular(20.0)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              FloatingActionButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                onPressed: () async {
-                  final userName = await ChangeProfile()
-                      .getUserName(FirebaseAuth.instance.currentUser!.email);
-                  print(userName);
-                  Get.to(() => ChatView(
-                        receiverUser: widget.name,
-                        receiverUserEmail: widget.email!,
-                        receiverUserID: widget.uid!,
-                        senderName: userName,
-                      ));
-                },
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(widget.image),
+            SizedBox(height: 20),
+            Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  5,
+                  (index) => IconButton(
+                    icon: Icon(
+                      index < ratingController.rating.value
+                          ? Icons.star
+                          : Icons.star_border,
+                      color: Colors.yellow,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        ratingController.updateRating(
+                          index,
+                          widget.email!,
+                          context,
+                        );
+                        widget.onRatingChanged!(ratingController.rating.value);
+                      });
+                    },
+                  ),
                 ),
               ),
-              Text("Chat")
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Total Rating: ${widget.star.toString()} ⭐",
+                  style: TextStyle(color: textWhite, fontSize: 20),
+                ),
+                SizedBox(width: 10),
+                Text(
+                  "⭐ ${widget.avg}",
+                  style: TextStyle(fontSize: 20, color: textWhite),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "Description",
+                style: TextStyle(color: textWhite, fontSize: 20),
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                widget.description,
+                style: TextStyle(color: textWhite, fontSize: 16),
+                textAlign: TextAlign.justify,
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('Tailor_Services')
+                    .doc(widget.email)
+                    .get()
+                    .then((doc) {
+                  if (doc.exists) {
+                    Get.to(() => TailorServices(
+                          email: widget.email,
+                        ));
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Services Not Available"),
+                          content: Text(
+                              "Tailor services are not available for this profile."),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("OK"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: mainColor,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                'Check Out Services',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            FloatingActionButton.extended(
+              onPressed: () async {
+                final userName = await ChangeProfile().getUserName(
+                  FirebaseAuth.instance.currentUser!.email,
+                );
+                Get.to(
+                  () => ChatView(
+                    receiverUser: widget.name,
+                    receiverUserEmail: widget.email!,
+                    receiverUserID: widget.uid!,
+                    senderName: userName,
+                  ),
+                );
+              },
+              icon: Icon(Icons.chat),
+              label: Text("Chat"),
+              backgroundColor: textWhite,
+              foregroundColor: mainBack,
+            ),
+            SizedBox(height: 20),
+          ],
         ),
       ),
     );
@@ -240,7 +247,6 @@ class RatingController extends GetxController {
   Future<void> updateRating(int index, String email, context) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      // Handle the case where the user is not logged in
       return;
     }
 
@@ -249,7 +255,6 @@ class RatingController extends GetxController {
     final List<dynamic>? previousRatings = userData.data()?["ratings"];
 
     if (previousRatings != null && previousRatings.contains(currentUser.uid)) {
-      // User has already rated this tailor
       showDialog(
         context: context,
         builder: (BuildContext context) {

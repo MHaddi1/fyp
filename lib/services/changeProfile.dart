@@ -291,4 +291,44 @@ class ChangeProfile {
       // Handle the error accordingly
     }
   }
+
+  Future<void> updateStatus(List<String> userEmails, String status) async {
+    try {
+      for (String userEmail in userEmails) {
+        final DocumentSnapshot senderSnapshot =
+            await _firestore.collection('users').doc(userEmail).get();
+
+        if (senderSnapshot.exists) {
+          List<dynamic> existingData =
+              (senderSnapshot.data() as Map<String, dynamic>)['MessageUsers'] ??
+                  [];
+          List<Map<String, dynamic>> userList =
+              List<Map<String, dynamic>>.from(existingData);
+
+          for (var userMap in userList) {
+            final String email = userMap['MessageUsers']['email'];
+            final String uid = userMap['MessageUsers']['UID'];
+
+            if (email == FirebaseAuth.instance.currentUser!.email &&
+                uid == FirebaseAuth.instance.currentUser!.uid) {
+              userMap['MessageUsers']['Name'] = status;
+              break; // Exit loop after updating name for the user
+            }
+          }
+
+          // Update Firestore document
+          await _firestore
+              .collection('users')
+              .doc(userEmail)
+              .set({"MessageUsers": userList}, SetOptions(merge: true));
+          print('User name updated successfully for $userEmail');
+        } else {
+          print('User document does not exist for $userEmail');
+        }
+      }
+    } catch (error) {
+      print('Error updating user names: $error');
+      // Handle the error accordingly
+    }
+  }
 }

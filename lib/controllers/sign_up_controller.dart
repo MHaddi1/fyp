@@ -131,7 +131,7 @@ class SignUpController extends GetxController {
 
   Future<void> uploadImageToFirebaseStorage(File imageFile) async {
     try {
-      String location = await signUpServices.currentCity();
+     // String location = await signUpServices.currentCity();
       final storage = FirebaseStorage.instance;
       final storageRef = storage
           .ref()

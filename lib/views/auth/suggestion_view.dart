@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter/foundation.dart';
 
 class SuggestionView extends StatefulWidget {
   const SuggestionView({super.key});
@@ -25,18 +26,20 @@ class SuggestionView extends StatefulWidget {
 class _SuggestionViewState extends State<SuggestionView> {
   final suggestionController = Get.put(SuggestionController());
 
-  @override
-  void initState() {
-    super.initState();
-    // suggestionController.videoController = VideoPlayerController.asset(AppVideos.backgroundVideo);
-  }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     suggestionController.videoController.dispose();
     suggestionController.dispose();
+    super.dispose();
+  }
+@override
+  void initState() {
+  suggestionController.videoController;
+    super.initState();
+    //if (!kDebugMode) {
+
+    //}
   }
 
   @override

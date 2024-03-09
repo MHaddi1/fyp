@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fyp/const/color.dart';
+import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/views/chat_view.dart';
+import 'package:fyp/views/home/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 class MessageList extends StatefulWidget {
@@ -26,7 +28,7 @@ class _MessageListState extends State<MessageList> {
         centerTitle: true,
         leading: InkWell(
           onTap: () {
-            Get.back();
+            Get.toNamed(RoutesName.homeScreen);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -100,10 +102,10 @@ class _MessageListState extends State<MessageList> {
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(Rimage),
+                      backgroundImage: NetworkImage(Rimage.toString()),
                     ),
                     title: Text(
-                      userNameT,
+                      userNameT.toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

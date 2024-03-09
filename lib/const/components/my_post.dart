@@ -75,7 +75,7 @@ class _MyPostState extends State<MyPost> {
                   alignment: AlignmentDirectional.centerStart,
                   child: Text(
                     widget.message,
-                    textAlign: TextAlign.start,
+                    textAlign: TextAlign.left,
                     style: TextStyle(
                         fontWeight: FontWeight.w400, color: textWhite),
                   ),

@@ -67,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             image: userData['image'] == null
                                 ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
                                 : userData['image']?.toString() ?? '',
-                            desctiption: starListLength.toString(),
+                            description: starListLength.toString(),
                             avg: average.floorToDouble(),
                             name:
                                 userData['name']?.toString().capitalized ?? '',
