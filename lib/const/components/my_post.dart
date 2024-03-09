@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:velocity_x/velocity_x.dart';
+
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/like_button.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class MyPost extends StatefulWidget {
   final String message;
@@ -81,19 +83,58 @@ class _MyPostState extends State<MyPost> {
                   ),
                 ),
                 const Divider(),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      children: [
-                        MyLikeButton(isLiked: isLiked, onTap: toggleLike),
-                        5.heightBox,
-                        Text(
-                          widget.likes.length.toString(),
-                          style: const TextStyle(
-                              color: textWhite, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                          children: [
+                            MyLikeButton(isLiked: isLiked, onTap: toggleLike),
+                            5.heightBox,
+                            Text(
+                              widget.likes.length.toString(),
+                              style: const TextStyle(
+                                  color: textWhite,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                          children: [
+                            MyLikeButton(isLiked: isLiked, onTap: toggleLike),
+                            5.heightBox,
+                            Text(
+                              widget.likes.length.toString(),
+                              style: const TextStyle(
+                                  color: textWhite,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                          children: [
+                            IconButton(
+                                onPressed: () async {
+                                  Share.share(
+                                      "${widget.user}\n${widget.message}");
+                                },
+                                icon: Icon(Icons.share_rounded)),
+                            5.heightBox,
+                            // Text(
+                            //   widget.likes.length.toString(),
+                            //   style: const TextStyle(
+                            //       color: textWhite,
+                            //       fontWeight: FontWeight.bold),
+                            // ),
+                          ],
+                        )),
+                  ],
+                ),
                 //count Likes
               ],
             ),
