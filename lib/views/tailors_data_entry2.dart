@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fyp/const/routes/routes_name.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class TailorsDataEntry2 extends StatefulWidget {
@@ -86,7 +88,7 @@ class _TailorsDataEntry2State extends State<TailorsDataEntry2> {
                   if (_validateDescription()) {
                     EasyLoading.show(
                       dismissOnTap: true,
-                      status: "Profile change",
+                      status: "Data In Process",
                       indicator: CircularProgressIndicator(),
                       maskType: EasyLoadingMaskType.black,
                     );
@@ -98,10 +100,11 @@ class _TailorsDataEntry2State extends State<TailorsDataEntry2> {
                         .doc(FirebaseAuth.instance.currentUser!.email)
                         .set(userData, SetOptions(merge: true));
                     EasyLoading.dismiss();
+                    Get.toNamed(RoutesName.homeScreen);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Please fill all description fields.'),
+                        content: Text('Please fill description fields.'),
                         duration: Duration(seconds: 2),
                       ),
                     );

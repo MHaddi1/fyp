@@ -72,7 +72,11 @@ class _HomeViewState extends State<HomeView> {
   //     }
   //   }
   // }
-
+@override
+  void dispose() {
+  setStatus("Offline");
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();
@@ -129,7 +133,7 @@ setStatus("Online");
             onPressed: () async {
               Get.offAll(() => MessageList(id: "123456"));
             },
-            icon: const Icon(Icons.chat_bubble),
+            icon: const Icon(Icons.chat,),
           ),
           IconButton(
             onPressed: () {
@@ -137,7 +141,7 @@ setStatus("Online");
             },
             icon: Stack(
               children: [
-                Icon(Icons.shopping_cart,size: 40), // Icon for the shopping cart
+                Icon(Icons.shopping_cart), // Icon for the shopping cart
                 if (length ?? 0 > 0) // Display badge only if length is greater than 0
                   Positioned(
                     top: 0,
