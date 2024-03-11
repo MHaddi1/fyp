@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -102,7 +103,7 @@ class _MessageListState extends State<MessageList> {
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(Rimage.toString()),
+                      backgroundImage: CachedNetworkImageProvider(Rimage.toString(),),
                     ),
                     title: Text(
                       userNameT.toString(),

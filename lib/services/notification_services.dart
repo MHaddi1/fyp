@@ -121,6 +121,8 @@ class MessageNotification {
   void handleMessage(BuildContext context, RemoteMessage message) {
     if (message.data['type'] == "chat") {
       Get.to(() => MessageList(id: "123456"));
+    }else if(message.data['type']=="order"){
+      print("Going to Order Placed View");
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {

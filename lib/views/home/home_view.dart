@@ -16,6 +16,7 @@ import 'package:fyp/views/home/screens/home_screen.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:fyp/views/message_user_list.dart';
+import 'package:fyp/views/shopping_cart.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -118,6 +119,7 @@ setStatus("Online");
 
   @override
   Widget build(BuildContext context) {
+    final length = Get.arguments;
     return Scaffold(
       backgroundColor: mainBack,
       appBar: AppBar(
@@ -125,13 +127,44 @@ setStatus("Online");
         actions: [
           IconButton(
             onPressed: () async {
-              Get.offAll(() => MessageList(
-                    id: "123456",
-                  ));
+              Get.offAll(() => MessageList(id: "123456"));
             },
             icon: const Icon(Icons.chat_bubble),
-          )
+          ),
+          IconButton(
+            onPressed: () {
+              Get.to(() => ShoppingCart(), arguments: length);
+            },
+            icon: Stack(
+              children: [
+                Icon(Icons.shopping_cart,size: 40), // Icon for the shopping cart
+                if (length ?? 0 > 0) // Display badge only if length is greater than 0
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle
+                      ),
+                      child: Text(
+                        length.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+
         ],
+
+
       ),
       drawer: const MyDrawer(),
       body: WillPopScope(
