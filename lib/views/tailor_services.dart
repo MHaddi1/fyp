@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fyp/const/color.dart';
-import 'package:fyp/views/home/home_view.dart';
-import 'package:fyp/views/home/screens/home_screen.dart';
 import 'package:get/get.dart';
+
+import '../const/color.dart';
+import 'home/home_view.dart';
 
 class TailorServices extends StatefulWidget {
   const TailorServices({Key? key, required this.email}) : super(key: key);
@@ -141,7 +140,8 @@ class _TailorServicesState extends State<TailorServices> {
                     itemCount: imagesData.length,
                     itemBuilder: (context, index) {
                       final imageType = imagesData.keys.elementAt(index);
-                      final images = imagesData[imageType] as List<dynamic>;
+                      final images =
+                      imagesData[imageType] as List<dynamic>;
                       final descriptionType =
                       descriptionData.keys.elementAt(index);
                       final description =
@@ -157,8 +157,8 @@ class _TailorServicesState extends State<TailorServices> {
                                 color: Colors.grey.withOpacity(0.5),
                                 spreadRadius: 3,
                                 blurRadius: 7,
-                                offset:
-                                Offset(0, 3), // changes position of shadow
+                                offset: Offset(
+                                    0, 3), // changes position of shadow
                               ),
                             ],
                           ),
@@ -259,12 +259,14 @@ class _TailorServicesState extends State<TailorServices> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Define the action when the button is pressed, such as navigating to an order screen.
-          // Example:
+          // Navigate to the order screen
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OrderScreen(email: widget.email, Price: Price),
+              builder: (context) => OrderScreen(
+                email: widget.email,
+                Price: Price,
+              ),
             ),
           );
         },
@@ -292,10 +294,28 @@ class _OrderScreenState extends State<OrderScreen> {
   final TextEditingController _priceController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
-
+  // Function to place the order
   void placeOrder() async {
     try {
+      // QuerySnapshot<Map<String, dynamic>> ordersSnapshot =
+      // await FirebaseFirestore.instance.collection('Orders')
+      //     .where('customerEmail', isEqualTo: FirebaseAuth.instance.currentUser!.email)
+      //     .get();
+      //
+      // int orderCount = ordersSnapshot.size;
+      //
+      // if (orderCount >= 5) {
+      //   // Limit of orders reached, show a snackbar and return
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text('You have reached the maximum limit of orders.'),
+      //       duration: Duration(seconds: 3),
+      //     ),
+      //   );
+      //   return;
+      // }
+
+      // Fetch tailor's data from Firestore
       DocumentSnapshot<Map<String, dynamic>> tailorSnapshot =
       await FirebaseFirestore.instance
           .collection('Tailor_Services')
@@ -303,23 +323,19 @@ class _OrderScreenState extends State<OrderScreen> {
           .get();
 
       if (tailorSnapshot.exists) {
+        // Extract required data from tailor's document
         Map<String, dynamic> tailorData = tailorSnapshot.data()!;
         List<dynamic> images = [];
         Map price = {};
 
         // Check if the 'images' key exists and if it's a list
-        if (tailorData.containsKey('images') && tailorData['images'] is Map) {
+        if (tailorData.containsKey('images') &&
+            tailorData['images'] is Map<String, dynamic>) {
           images = tailorData['images']['ServiceImages'];
-          if (kDebugMode) {
-            print("My Images ${images}");
-          }
         }
         if (tailorData.containsKey("priceList") &&
             tailorData['priceList'] is Map) {
           price.addAll(tailorData['priceList']);
-          if (kDebugMode) {
-            print("My Price ${price}");
-          }
         }
 
         // Match the selected price with the price in the priceList
@@ -345,55 +361,32 @@ class _OrderScreenState extends State<OrderScreen> {
         }
 
         // Create the new order
-        // Map<String, dynamic> newOrder = ;
-
-        // Add the new order to Firestore
-        await FirebaseFirestore.instance
-            .collection('Orders')
-
-            .add({
+        await FirebaseFirestore.instance.collection('Orders').add({
           'tailorEmail': widget.email,
           'customerEmail': FirebaseAuth.instance.currentUser!.email,
-          'images': images, // Use the images list here
+          'images': images,
           'price': selectedPrice,
           'priceType': PriceType,
           "Order Placed": false,
           "Yes": "ORDER PLACED",
           'NO': "PLACED ORDER FIRST"
-        }
+        });
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Order placed successfully.'),
+            duration: Duration(seconds: 3),
+          ),
         );
 
-        // Get the updated orders list from Firestore
-        // DocumentSnapshot<Map<String, dynamic>> updatedOrderSnapshot =
-        // await FirebaseFirestore.instance
-        //     .collection('Orders')
-        //     .doc(widget)
-        //     .get();
-
-       // if (updatedOrderSnapshot.exists) {
-         // int length =  updatedOrderSnapshot.data()!['orders'].length;
-          //print('Length of orders: $length');
-
-          // Show success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Order placed successfully.'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-
-
-
-          // Navigate to home screen
-          Get.offAll(() => HomeView());
-        }
-     // }
+        // Navigate to home screen
+        Get.offAll(() => HomeView());
+      }
     } catch (e) {
       print('Error placing order: $e');
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {

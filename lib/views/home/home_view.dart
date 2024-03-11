@@ -93,6 +93,7 @@ setStatus("Online");
     MessageNotification.instance.setupInteractMessage(context);
     MessageNotification.instance.getMessageTokken().then((value) {
       print("Token $value");
+      sendToken(value);
      // addToken(value);
     });
   }
@@ -120,10 +121,20 @@ setStatus("Online");
       Logger().e(e);
     }
   }
-
+  sendToken(String value) async {
+    try {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .set({"FCMToken": value}, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final length = Get.arguments;
+    print(length);
     return Scaffold(
       backgroundColor: mainBack,
       appBar: AppBar(
@@ -135,44 +146,64 @@ setStatus("Online");
             },
             icon: const Icon(Icons.chat,),
           ),
-          IconButton(
-            onPressed: () {
-              Get.to(() => ShoppingCart(), arguments: length);
-            },
-            icon: Stack(
-              children: [
-                Icon(Icons.shopping_cart), // Icon for the shopping cart
-                if (length ?? 0 > 0) // Display badge only if length is greater than 0
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle
-                      ),
-                      child: Text(
-                        length.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('Orders')
+                .where('customerEmail', isEqualTo: FirebaseAuth.instance.currentUser!.email)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // Return a loading indicator while waiting for data
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                // Handle error state
+                return Text('Error: ${snapshot.error}');
+              } else {
+                // Retrieve the length of documents
+                int length = snapshot.data!.docs.length;
+
+                return IconButton(
+                  onPressed: () {
+                    Get.to(() => ShoppingCart(), arguments: length);
+                  },
+                  icon: Stack(
+                    children: [
+                      Icon(Icons.shopping_cart), // Icon for the shopping cart
+                      if (length > 0) // Display badge only if length is greater than 0
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle
+                            ),
+                            child: Text(
+                              length.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                    ],
                   ),
-              ],
-            ),
+                );
+              }
+            },
           ),
+
 
         ],
 
 
       ),
       drawer: const MyDrawer(),
-      body: WillPopScope(
-        onWillPop: () => _onBackButtonPressed(context),
+      body:PopScope(
+        canPop: false,
+        onPopInvoked: (bool didPop) => _onBackButtonPressed(context),
         child: _screens[_currentIndex],
       ),
       // bottomNavigationBar: BottomNavigationBar(

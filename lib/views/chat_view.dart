@@ -230,9 +230,8 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
           await getToken(FirebaseAuth.instance.currentUser!.email.toString());
       if (checkToken == value) {
         sendNotification(value, messageController.text);
-      } else {
-        sendToken(value);
       }
+
     });
   }
 
@@ -262,7 +261,11 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
       Logger().e(e);
     }
   }
-
+@override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();

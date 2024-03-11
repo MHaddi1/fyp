@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:fyp/const/routes/routes_name.dart';
+import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:get/get.dart';
 import 'SharedPrefernece/shared_preference.dart';
 
@@ -16,7 +17,7 @@ class SplashServices {
             () => Get.toNamed(RoutesName.suggestionScreen));
       } else {
         Timer(const Duration(seconds: 3),
-            () => Get.toNamed(RoutesName.homeScreen));
+            () => Get.to(()=>SearchScreen()));
       }
     }).onError((error, stackTrace) {
       if (kDebugMode) {

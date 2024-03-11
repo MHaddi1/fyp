@@ -180,10 +180,13 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                         .doc(
                                         ordersSnapshot.docs[index].id)
                                         .update(order)
-                                        .then((value) {
+                                        .then((value) async{
+                                          final deviceToken = await getToken(FirebaseAuth.instance.currentUser!.email!);
+                                          print( order['tailorEmail']);
+                                          print(deviceToken);
                                       // Send notification to tailor
                                       sendNotification(
-                                          'DEVICE_TOKEN_HERE',
+                                          deviceToken!,
                                           'Order placed!',
                                           order['tailorEmail']);
 

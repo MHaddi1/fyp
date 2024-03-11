@@ -29,8 +29,9 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
         if (_uploading) {
           // If uploading, inform the user and prevent leaving the app
           ScaffoldMessenger.of(context).showSnackBar(
@@ -39,10 +40,7 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
               duration: Duration(seconds: 2),
             ),
           );
-          return false;
-        } else {
-          // If not uploading, allow leaving the app
-          return true;
+
         }
       },
       child: Scaffold(

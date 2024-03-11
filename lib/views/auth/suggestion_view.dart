@@ -44,8 +44,9 @@ class _SuggestionViewState extends State<SuggestionView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => _onBackButtonPressed(context),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) => _onBackButtonPressed(context),
       child: Scaffold(
         backgroundColor: Colors.black12,
         body: Stack(
