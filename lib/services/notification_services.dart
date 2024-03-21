@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/scheduler.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as local_notifications;
 import 'package:fyp/views/chat_view.dart';
 import 'package:fyp/views/message_user_list.dart';
+import 'package:fyp/views/view_orders.dart';
 import 'package:get/get.dart';
 
 //AAAANFZ7kDQ:APA91bFzd7VOzBXrRAd7B6l2PN5UEZv1NtXQR3QUqed2M32zYf4mLyppR5P9dzg9nid8pOGhKeVIsunwtJUDkye13ow4zQu8abSNdgYb_Ah29UVxZxPK5La37oQNF-226d8nmCDSL6Y3
@@ -121,8 +123,10 @@ class MessageNotification {
   void handleMessage(BuildContext context, RemoteMessage message) {
     if (message.data['type'] == "chat") {
       Get.to(() => MessageList(id: "123456"));
-    }else if(message.data['type']=="order"){
-      print("Going to Order Placed View");
+    } else if (message.data['type'] == "order") {
+      Get.to(() => ViewOrders(
+            uid: FirebaseAuth.instance.currentUser!.uid,
+          ));
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen((event) {

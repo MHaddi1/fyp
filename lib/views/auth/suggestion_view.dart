@@ -26,16 +26,16 @@ class SuggestionView extends StatefulWidget {
 class _SuggestionViewState extends State<SuggestionView> {
   final suggestionController = Get.put(SuggestionController());
 
-
   @override
   void dispose() {
     suggestionController.videoController.dispose();
     suggestionController.dispose();
     super.dispose();
   }
-@override
+
+  @override
   void initState() {
-  suggestionController.videoController;
+    suggestionController.videoController;
     super.initState();
     //if (!kDebugMode) {
 
@@ -57,11 +57,11 @@ class _SuggestionViewState extends State<SuggestionView> {
               child: FittedBox(
                 fit: BoxFit.cover,
                 child: SizedBox(
-                  width: suggestionController.videoController.value.size.width,
-                  height:
-                      suggestionController.videoController.value.size.height,
-                  child: VideoPlayer(suggestionController.videoController),
-                ),
+                    // width:
+                    //     suggestionController.videoController.value.size.width,
+                    // height:
+                    //     suggestionController.videoController.value.size.height,
+                    child: Lottie.asset("assets/image/splash_logo.json")),
               ),
             ),
             Container(color: Colors.black.withOpacity(0.5)),

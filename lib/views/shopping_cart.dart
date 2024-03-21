@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/components/my_button.dart';
+import 'package:fyp/views/status_view.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../const/color.dart';
@@ -32,7 +34,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
           stream: FirebaseFirestore.instance
               .collection("Orders")
               .where('customerEmail',
-              isEqualTo: FirebaseAuth.instance.currentUser!.email)
+                  isEqualTo: FirebaseAuth.instance.currentUser!.email)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,7 +55,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 itemBuilder: (context, index) {
                   final order = ordersSnapshot.docs[index].data();
                   final customerEmail = order['customerEmail'] ?? '';
-                  final TailorEmail = order['customerEmail'] ?? '';
+                  final TailorEmail = order['tailorEmail'] ?? '';
                   final images = order['images'] ?? [];
                   final price = order['price'] as double;
 
@@ -105,7 +107,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                 child: Row(
                                   children: images.map<Widget>((image) {
                                     return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: CachedNetworkImage(
@@ -122,26 +125,24 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           order['Order Placed']
                               ? Container()
                               : DropdownButton<String>(
-                            value: _paymentMethod,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _paymentMethod = newValue!;
-                              });
-                            },
-                            items: <String>[
-                              'Bank',
-                              'Cash on Delivery'
-                            ].map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: TextStyle(color: Colors.blue),
-                                    ),
-                                  );
-                                }).toList(),
-                          ),
+                                  value: _paymentMethod,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _paymentMethod = newValue!;
+                                    });
+                                  },
+                                  items: <String>['Bank', 'Cash on Delivery']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                           SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,91 +150,101 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               order['Order Placed']
                                   ? Container()
                                   : ElevatedButton(
-                                onPressed: () {
-                                  if (_paymentMethod == 'Bank') {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                            'Bank payment option is currently being worked on.'),
+                                      onPressed: () {
+                                        if (_paymentMethod == 'Bank') {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'Bank payment option is currently being worked on.'),
+                                            ),
+                                          );
+                                        } else if (_paymentMethod ==
+                                            'Cash on Delivery') {
+                                          double currentPrice = price;
+                                          double deliveryPrice = 200;
+                                          double updatedPrice =
+                                              currentPrice + deliveryPrice;
+                                          print(
+                                              'Total price with delivery charges: $updatedPrice');
+
+                                          order['totalPrice'] = updatedPrice;
+                                          order['delivery'] = deliveryPrice;
+                                          order['Order Placed'] = true;
+                                          order['deliveryType'] =
+                                              'Cash on Delivery';
+                                          order['deliveryStatus'] = 'Work';
+
+                                          FirebaseFirestore.instance
+                                              .collection("Orders")
+                                              .doc(
+                                                  ordersSnapshot.docs[index].id)
+                                              .update(order)
+                                              .then((value) async {
+                                            final deviceToken = await getToken(
+                                                FirebaseAuth.instance
+                                                    .currentUser!.email!);
+                                            print(order['tailorEmail']);
+                                            print(deviceToken);
+                                            // Send notification to tailor
+                                            sendNotification(
+                                                deviceToken!,
+                                                'Order placed!',
+                                                order['tailorEmail']);
+
+                                            // Show a confirmation message
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            );
+                                          }).catchError((error) {
+                                            print(
+                                                "Failed to update document: $error");
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        'Pay',
+                                        style: TextStyle(color: Colors.white),
                                       ),
-                                    );
-                                  } else if (_paymentMethod ==
-                                      'Cash on Delivery') {
-                                    double currentPrice = price;
-                                    double deliveryPrice = 200;
-                                    double updatedPrice =
-                                        currentPrice + deliveryPrice;
-                                    print(
-                                        'Total price with delivery charges: $updatedPrice');
-
-                                    order['totalPrice'] = updatedPrice;
-                                    order['delivery'] = deliveryPrice;
-                                    order['Order Placed'] = true;
-                                    order['deliveryType'] =
-                                    'Cash on Delivery';
-                                    order['deliveryStatus'] =
-                                    'Processing';
-
-                                    FirebaseFirestore.instance
-                                        .collection("Orders")
-                                        .doc(
-                                        ordersSnapshot.docs[index].id)
-                                        .update(order)
-                                        .then((value) async{
-                                          final deviceToken = await getToken(FirebaseAuth.instance.currentUser!.email!);
-                                          print( order['tailorEmail']);
-                                          print(deviceToken);
-                                      // Send notification to tailor
-                                      sendNotification(
-                                          deviceToken!,
-                                          'Order placed!',
-                                          order['tailorEmail']);
-
-                                      // Show a confirmation message
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
-                                            style: TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      );
-                                    }).catchError((error) {
-                                      print(
-                                          "Failed to update document: $error");
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  'Pay',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                  MaterialStateProperty.all<Color>(
-                                      Colors.green),
-                                ),
-                              ),
-                              order["Order Placed"]
-                                  ? MyButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.green),
+                                      ),
+                                    ),
+                              // order["Order Placed"]
+                              //     ?
+                              MyButton(
                                 text: "Status",
                                 width: 90,
                                 height: 36,
-                                onPressed: () {},
-                              )
-                                  : Container(),
+                                onPressed: () {
+                                  Get.to(() => StatusView(
+                                        check: order["orderConfirm"],
+                                        delivery: order['deliveryStatus'],
+                                        outForDelivery:
+                                            order['outFordelivery'] ?? "No",
+                                        delivered: order['delivered'] ?? "No",
+                                      ));
+                                },
+                              ),
+                              // : Container(),
                               Text(
-                                order["Order Placed"]
-                                    ? order["Yes"]
-                                    : order["NO"],
+                                order["orderConfirm"] == "Accept"
+                                    ? "Tailor is Working"
+                                    : "Please Wait...",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: order["Order Placed"]
+                                  color: order["orderConfirm"] == "Accept"
                                       ? Colors.green
-                                      : Colors.orange,
+                                      : Colors.red,
                                 ),
                               ),
                             ],
@@ -254,7 +265,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   Future<String?> getToken(String email) async {
     try {
       DocumentSnapshot userSnapshot =
-      await FirebaseFirestore.instance.collection("users").doc(email).get();
+          await FirebaseFirestore.instance.collection("users").doc(email).get();
 
       if (userSnapshot.exists) {
         return userSnapshot.get('FCMToken');
@@ -288,7 +299,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
           "Authorization":
-          "key=AAAANFZ7kDQ:APA91bFzd7VOzBXrRAd7B6l2PN5UEZv1NtXQR3QUqed2M32zYf4mLyppR5P9dzg9nid8pOGhKeVIsunwtJUDkye13ow4zQu8abSNdgYb_Ah29UVxZxPK5La37oQNF-226d8nmCDSL6Y3"
+              "key=AAAANFZ7kDQ:APA91bFzd7VOzBXrRAd7B6l2PN5UEZv1NtXQR3QUqed2M32zYf4mLyppR5P9dzg9nid8pOGhKeVIsunwtJUDkye13ow4zQu8abSNdgYb_Ah29UVxZxPK5La37oQNF-226d8nmCDSL6Y3"
         },
         body: jsonEncode(data),
       );

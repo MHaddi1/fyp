@@ -41,8 +41,8 @@ class _HomeViewState extends State<HomeView> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
     SearchScreen(),
+    const HomeScreen(),
     ProfileScreen(),
   ];
   // call() async {
@@ -72,18 +72,19 @@ class _HomeViewState extends State<HomeView> {
   //     }
   //   }
   // }
-@override
+  @override
   void dispose() {
-  setStatus("Offline");
+    setStatus("Offline");
     super.dispose();
   }
+
   @override
   void initState() {
     super.initState();
     // email2 = await checkCollection();
-   // WidgetsBinding.instance.addObserver(this);
-   //  call();
-setStatus("Online");
+    // WidgetsBinding.instance.addObserver(this);
+    //  call();
+    setStatus("Online");
     // login.signInWithGoogle(context);
 
     // Initialize notification servicess
@@ -94,10 +95,9 @@ setStatus("Online");
     MessageNotification.instance.getMessageTokken().then((value) {
       print("Token $value");
       sendToken(value);
-     // addToken(value);
+      // addToken(value);
     });
   }
-
 
   //
   // void didChangeAppLifecycleState(AppLifecycleState state) async {
@@ -121,6 +121,7 @@ setStatus("Online");
       Logger().e(e);
     }
   }
+
   sendToken(String value) async {
     try {
       FirebaseFirestore.instance
@@ -131,6 +132,9 @@ setStatus("Online");
       print(e.toString());
     }
   }
+
+  DateTime? currentBackPressTime;
+
   @override
   Widget build(BuildContext context) {
     final length = Get.arguments;
@@ -144,11 +148,15 @@ setStatus("Online");
             onPressed: () async {
               Get.offAll(() => MessageList(id: "123456"));
             },
-            icon: const Icon(Icons.chat,),
+            icon: const Icon(
+              Icons.chat,
+            ),
           ),
           StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance.collection('Orders')
-                .where('customerEmail', isEqualTo: FirebaseAuth.instance.currentUser!.email)
+            stream: FirebaseFirestore.instance
+                .collection('Orders')
+                .where('customerEmail',
+                    isEqualTo: FirebaseAuth.instance.currentUser!.email)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -168,16 +176,15 @@ setStatus("Online");
                   icon: Stack(
                     children: [
                       Icon(Icons.shopping_cart), // Icon for the shopping cart
-                      if (length > 0) // Display badge only if length is greater than 0
+                      if (length >
+                          0) // Display badge only if length is greater than 0
                         Positioned(
                           top: 0,
                           right: 0,
                           child: Container(
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle
-                            ),
+                                color: Colors.red, shape: BoxShape.circle),
                             child: Text(
                               length.toString(),
                               style: TextStyle(
@@ -194,70 +201,81 @@ setStatus("Online");
               }
             },
           ),
-
-
         ],
-
-
       ),
       drawer: const MyDrawer(),
-      body:PopScope(
+      body: PopScope(
         canPop: false,
-        onPopInvoked: (bool didPop) => _onBackButtonPressed(context),
+        onPopInvoked: (bool didPop) async {
+          if (!didPop) {
+            Get.to(() => SearchScreen());
+            // await showDialog(
+            //   context: context,
+            //   builder: (BuildContext context) {
+            //     return AlertDialog(
+            //       title: const Text("Exit"),
+            //       content: const Text("Are you sure you want to exit?"),
+            //       actions: <Widget>[
+            //         MyButton(
+            //           text: "NO",
+            //           onPressed: () {
+            //             Get.back(result: false);
+            //           },
+            //         ),
+            //         10.heightBox,
+            //         MyButton(
+            //           text: "Yes",
+            //           onPressed: () {
+            //             Get.back(result: true);
+            //             SystemChannels.platform
+            //                 .invokeMethod('SystemNavigator.pop');
+            //           },
+            //         )
+            //       ],
+            //     );
+            //   },
+            // );
+          }
+        },
         child: _screens[_currentIndex],
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: _currentIndex,
-      //   onTap: (index) {
-      //     setState(() {
-      //       _currentIndex = index;
-      //     });
-      //   },
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.search),
-      //       label: 'Search',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        landscapeLayout: BottomNavigationBarLandscapeLayout.spread,
+        enableFeedback: true,
+        fixedColor: mainColor,
+        unselectedItemColor: mainBack,
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.announcement),
+            label: 'Announcement',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 
-  Future<bool> _onBackButtonPressed(BuildContext context) async {
-    bool exitApp = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Exit"),
-          content: const Text("Are you sure you want to exit?"),
-          actions: <Widget>[
-            MyButton(
-              text: "NO",
-              onPressed: () {
-                Get.back(result: false);
-              },
-            ),
-            10.heightBox,
-            MyButton(
-              text: "Yes",
-              onPressed: () {
-                Get.back(result: true);
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              },
-            )
-          ],
-        );
-      },
-    );
+  // Future<bool> _onBackButtonPressed(BuildContext context) async {
+  //   bool exitApp = await
 
-    return exitApp;
-  }
+  //   if (!exitApp) {
+  //     _currentIndex = 1;
+  //   }
+
+  //   return exitApp;
+  // }
 }

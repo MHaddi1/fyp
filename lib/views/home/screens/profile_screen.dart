@@ -37,27 +37,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainBack,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: InkWell(
-          onTap: () {
-            Get.back();
-          },
-          child: Container(
-            decoration: BoxDecoration(
-                color: textWhite, borderRadius: BorderRadius.circular(12.0)),
-            margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-            child: Icon(Icons.arrow_back),
-          ),
-        ),
-        backgroundColor: mainBack,
-        elevation: 0,
-        title: const Text(
-          'Profile',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+      // appBar: AppBar(
+      //   centerTitle: true,
+      //   leading: InkWell(
+      //     onTap: () {
+      //       Get.back();
+      //     },
+      //     child: Container(
+      //       decoration: BoxDecoration(
+      //           color: textWhite, borderRadius: BorderRadius.circular(12.0)),
+      //       margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+      //       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+      //       child: Icon(Icons.arrow_back),
+      //     ),
+      //   ),
+      //   backgroundColor: mainBack,
+      //   elevation: 0,
+      //   title: const Text(
+      //     'Profile',
+      //     style: TextStyle(color: Colors.white),
+      //   ),
+      // ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: userCollection.doc(currentUser!.email!).snapshots(),
         builder: (context, snapshot) {
@@ -151,12 +151,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icons.settings,
                     ),
                     const SizedBox(height: 20),
+                    //editField("location")
                     MyTextBox(
                       text: "Location",
                       yourName: userData['location'] != null
                           ? userData['location'].toString()
                           : "Your Location",
-                      onPressed: () => editField("location"),
+                      onPressed: () => null,
                       icon: Icons.settings,
                     ),
                     const SizedBox(height: 20),

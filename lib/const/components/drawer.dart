@@ -18,9 +18,11 @@ import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:fyp/views/auth/login_view.dart';
 import 'package:fyp/views/camera_view.dart';
+import 'package:fyp/views/chat_view.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/tailors_data_entry.dart';
 import 'package:fyp/views/tailors_data_entry2.dart';
+import 'package:fyp/views/view_orders.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -73,83 +75,84 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: mainBack,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: mainColor,
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    FutureBuilder<String?>(
-                      future: image(user),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: mainColor,
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      FutureBuilder<String?>(
+                        future: image(user),
+                        builder: (context, snapshot) {
+                          String? imageUrl = snapshot.data;
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else if (snapshot.hasError ||
+                              snapshot.data == null) {
+                            print("image error: ${snapshot.error}r");
+                            return CircleAvatar(
+                              radius: 50,
+                              backgroundImage: CachedNetworkImageProvider(
+                                FirebaseAuth.instance.currentUser?.photoURL ??
+                                    "https://cdn-icons-png.flaticon.com/512/2815/2815428.png",
+                              ),
+                            );
+                          } else {
+                            return CircleAvatar(
+                              radius: 50,
+                              backgroundImage:
+                                  CachedNetworkImageProvider(imageUrl!),
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        FirebaseAuth.instance.currentUser?.email ??
+                            "Please Login The Account",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: FutureBuilder<int?>(
+                      future: change.getType(),
                       builder: (context, snapshot) {
-                        String? imageUrl = snapshot.data;
                         if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError || snapshot.data == null) {
-                          print("image error: ${snapshot.error}r");
-                          return CircleAvatar(
-                            radius: 50,
-                            backgroundImage: CachedNetworkImageProvider(
-                              FirebaseAuth.instance.currentUser?.photoURL ??
-                                  "https://cdn-icons-png.flaticon.com/512/2815/2815428.png",
-                            ),
-                          );
+                                ConnectionState.waiting ||
+                            snapshot.hasError ||
+                            snapshot.data == null) {
+                          return SizedBox();
                         } else {
-                          return CircleAvatar(
-                            radius: 50,
-                            backgroundImage:
-                                CachedNetworkImageProvider(imageUrl!),
+                          return Text(
+                            snapshot.data == 2 ? "Tailor" : "Customer",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           );
                         }
                       },
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      FirebaseAuth.instance.currentUser?.email ??
-                          "Please Login The Account",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: FutureBuilder<int?>(
-                    future: change.getType(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting ||
-                          snapshot.hasError ||
-                          snapshot.data == null) {
-                        return SizedBox();
-                      } else {
-                        return Text(
-                          snapshot.data == 2 ? "Tailor" : "Customer",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      }
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            flex: 4,
-            child: Column(
+            Column(
               children: [
                 MyListTitle(
                     icon: Icons.change_circle,
@@ -159,69 +162,88 @@ class _MyDrawerState extends State<MyDrawer> {
                       User? user = FirebaseAuth.instance.currentUser;
                       bool phoneNoExists =
                           await change.checkUserDataExists(user!);
-                      phoneNoExists
-                          ? confirmChange()
-                          : Get.defaultDialog(
-                              title: "",
-                              middleText: "",
-                              actions: [
-                                InternationalPhoneNumberInput(
-                                  textFieldController: _phoneNumber,
-                                  onInputChanged: (PhoneNumber number) {
-                                    phone = number.phoneNumber.toString();
-                                  },
-                                  selectorConfig: SelectorConfig(
-                                    selectorType:
-                                        PhoneInputSelectorType.DROPDOWN,
-                                  ),
-                                  countries: [
-                                    'PK'
-                                  ], // Restrict to Pakistan (PK) only
-                                  errorMessage:
-                                      'Invalid phone number', // Customize error message if needed
-                                ),
+
+                      if (phoneNoExists) {
+                        confirmChange();
+                      } else {
+                        //bool switchValue = false;
+                        await Get.defaultDialog(
+                          title: "Add Phone Number",
+                          middleText: "",
+                          actions: [
+                            Row(
+                              children: [
+                                // Text("Switch Text"),
+                                // Switch(
+                                //   value: switchValue,
+                                //   onChanged: (value) {
+                                //     switchValue = value;
+                                //   },
+                                // ),
                               ],
-                              confirm: MyButton(
-                                text: "Continue",
-                                onPressed: () async {
-                                  User? user =
-                                      FirebaseAuth.instance.currentUser;
-                                  if (user != null) {
-                                    bool phoneNoExists =
-                                        await change.checkUserDataExists(user);
-                                    if (!phoneNoExists) {
-                                      if (phone.isNotEmpty) {
-                                        change.changeProfilePhone(phone);
-                                      } else {
-                                        Utils.showToastMessage(
-                                            "Enter phone number");
-                                      }
-                                      Get.back();
-                                    } else {
-                                      change.changeProfileType();
-                                    }
+                            ),
+                            InternationalPhoneNumberInput(
+                              textFieldController: _phoneNumber,
+                              onInputChanged: (PhoneNumber number) {
+                                phone = number.phoneNumber.toString();
+                              },
+                              selectorConfig: SelectorConfig(
+                                selectorType: PhoneInputSelectorType.DROPDOWN,
+                              ),
+                              countries: ['PK'],
+                              errorMessage: 'Invalid phone number',
+                            ),
+                          ],
+                          confirm: MyButton(
+                            text: "Continue",
+                            onPressed: () async {
+                              User? user = FirebaseAuth.instance.currentUser;
+                              if (user != null) {
+                                bool phoneNoExists =
+                                    await change.checkUserDataExists(user);
+                                if (!phoneNoExists) {
+                                  if (phone.isNotEmpty) {
+                                    change.changeProfilePhone(phone);
+                                  } else {
+                                    Utils.showToastMessage(
+                                        "Enter phone number");
                                   }
-                                },
-                              ));
+                                  Get.back();
+                                } else {
+                                  change.changeProfileType();
+                                }
+                              }
+                            },
+                          ),
+                        );
+                      }
                     }),
                 const Divider(),
-                MyListTitle(
-                  icon: Icons.home,
-                  text: "Home",
-                  onPressed: () {
-                    Get.back();
-                  },
-                ),
-                const Divider(),
-                MyListTitle(
-                  icon: Icons.person,
-                  text: "Profile",
-                  onPressed: () {
-                    Get.back();
-                    Get.to(() => ProfileScreen());
-                  },
-                ),
-                const Divider(),
+                // MyListTitle(
+                //     icon: Icons.home,
+                //     text: "Home",
+                //     onPressed: () {
+                //       Get.to(() => SearchScreen());
+                //     }),
+                // const Divider(),
+                // MyListTitle(
+                //   icon: Icons.announcement_sharp,
+                //   text: "Announcement",
+                //   onPressed: () {
+                //     //Get.back();
+                //     Get.toNamed(RoutesName.homeScreen);
+                //   },
+                // ),
+                // const Divider(),
+                // MyListTitle(
+                //   icon: Icons.person,
+                //   text: "Profile",
+                //   onPressed: () {
+                //     Get.back();
+                //     Get.to(() => ProfileScreen());
+                //   },
+                // ),
+                //const Divider(),
                 MyListTitle(
                     icon: Icons.chat_bubble,
                     text: "Customer Support",
@@ -251,30 +273,45 @@ class _MyDrawerState extends State<MyDrawer> {
                             ),
                             const Divider(),
                             MyListTitle(
-                                icon: Icons.search,
-                                text: "Search",
+                                color: textWhite,
+                                scr: "assets/image/chat_bot.png",
+                                text: "Chat Bot",
                                 onPressed: () {
-                                  Get.to(() => SearchScreen());
+                                  Get.to(() => ChatView(
+                                        chatType: "bot",
+                                      ));
                                 })
                           ],
                         );
                       } else {
-                        return MyListTitle(
-                            icon: Icons.data_array,
-                            text: "Data",
-                            onPressed: () {
-                              Get.to(() => TailorDataEntry());
-                            });
+                        return Column(
+                          children: [
+                            MyListTitle(
+                                icon: Icons.post_add,
+                                text: "TPost",
+                                onPressed: () {
+                                  Get.to(() => TailorDataEntry());
+                                }),
+                            const Divider(),
+                            MyListTitle(
+                              text: "Orders",
+                              onPressed: () {
+                                Get.to(() => ViewOrders(
+                                    uid: FirebaseAuth
+                                        .instance.currentUser!.uid));
+                              },
+                              scr: "assets/image/orders.png",
+                            )
+                          ],
+                        );
                       }
                     }
                   },
                 ),
+                const Divider(),
               ],
             ),
-          ),
-          const Divider(),
-          Expanded(
-            child: MyListTitle(
+            MyListTitle(
               icon: Icons.logout,
               text: "Logout",
               onPressed: () async {
@@ -285,8 +322,8 @@ class _MyDrawerState extends State<MyDrawer> {
                 );
               },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -23,7 +23,7 @@ class MyTextBox extends StatelessWidget {
       width: Get.width,
       padding: const EdgeInsets.only(bottom: 20.0),
       decoration: BoxDecoration(
-        color: mainColor,
+        color: postBlock,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(

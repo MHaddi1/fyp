@@ -17,7 +17,8 @@ class SplashServices {
             () => Get.toNamed(RoutesName.suggestionScreen));
       } else {
         Timer(const Duration(seconds: 3),
-            () => Get.to(()=>SearchScreen()));
+            () => Get.toNamed(RoutesName.homeScreen));
+        //Timer(const Duration(seconds: 3), () => Get.to(() => SearchScreen()));
       }
     }).onError((error, stackTrace) {
       if (kDebugMode) {

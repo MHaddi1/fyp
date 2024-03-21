@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:lottie/lottie.dart';
 import '../const/color.dart';
 import 'home/home_view.dart';
 
@@ -70,8 +71,7 @@ class _TailorServicesState extends State<TailorServices> {
             }
 
             final imagesData = data['images'] as Map<String, dynamic>;
-            final descriptionData =
-            data['description'] as Map<String, dynamic>;
+            final descriptionData = data['description'] as Map<String, dynamic>;
             final price = data['priceList'] as Map<String, dynamic>;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,12 +140,11 @@ class _TailorServicesState extends State<TailorServices> {
                     itemCount: imagesData.length,
                     itemBuilder: (context, index) {
                       final imageType = imagesData.keys.elementAt(index);
-                      final images =
-                      imagesData[imageType] as List<dynamic>;
+                      final images = imagesData[imageType] as List<dynamic>;
                       final descriptionType =
-                      descriptionData.keys.elementAt(index);
+                          descriptionData.keys.elementAt(index);
                       final description =
-                      descriptionData[descriptionType] as String;
+                          descriptionData[descriptionType] as String;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -157,14 +156,14 @@ class _TailorServicesState extends State<TailorServices> {
                                 color: Colors.grey.withOpacity(0.5),
                                 spreadRadius: 3,
                                 blurRadius: 7,
-                                offset: Offset(
-                                    0, 3), // changes position of shadow
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
                               ),
                             ],
                           ),
                           child: Card(
                             elevation:
-                            0, // Set elevation to 0 to remove the shadow of the Card
+                                0, // Set elevation to 0 to remove the shadow of the Card
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -199,23 +198,23 @@ class _TailorServicesState extends State<TailorServices> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: ClipRRect(
                                           borderRadius:
-                                          BorderRadius.circular(12),
+                                              BorderRadius.circular(12),
                                           child: CachedNetworkImage(
                                             imageUrl: images[i],
                                             width: MediaQuery.of(context)
-                                                .size
-                                                .width *
+                                                    .size
+                                                    .width *
                                                 0.8,
                                             height: MediaQuery.of(context)
-                                                .size
-                                                .width *
+                                                    .size
+                                                    .width *
                                                 0.8,
                                             fit: BoxFit.cover,
                                             placeholder: (context, url) =>
                                                 CircularProgressIndicator(),
                                             errorWidget:
                                                 (context, url, error) =>
-                                                Icon(Icons.error),
+                                                    Icon(Icons.error),
                                           ),
                                         ),
                                       );
@@ -317,10 +316,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
       // Fetch tailor's data from Firestore
       DocumentSnapshot<Map<String, dynamic>> tailorSnapshot =
-      await FirebaseFirestore.instance
-          .collection('Tailor_Services')
-          .doc(widget.email)
-          .get();
+          await FirebaseFirestore.instance
+              .collection('Tailor_Services')
+              .doc(widget.email)
+              .get();
 
       if (tailorSnapshot.exists) {
         // Extract required data from tailor's document
@@ -352,8 +351,7 @@ class _OrderScreenState extends State<OrderScreen> {
           // If price doesn't match, show snackbar and return
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content:
-              Text('Selected price does not match. Order not placed.'),
+              content: Text('Selected price does not match. Order not placed.'),
               duration: Duration(seconds: 3),
             ),
           );
@@ -369,7 +367,10 @@ class _OrderScreenState extends State<OrderScreen> {
           'priceType': PriceType,
           "Order Placed": false,
           "Yes": "ORDER PLACED",
-          'NO': "PLACED ORDER FIRST"
+          'NO': "PLACED ORDER FIRST",
+          "orderConfirm": "decline",
+          "OutForDelivery": "No",
+          "delivered": "No"
         });
 
         // Show success message
@@ -395,25 +396,54 @@ class _OrderScreenState extends State<OrderScreen> {
       appBar: AppBar(
         title: Text('Place Order'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _priceController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                labelText: 'Enter Price',
-                border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset('assets/image/money.json'),
+              SizedBox(
+                height: 20.0,
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: placeOrder,
-              child: Text('Place Order'),
-            ),
-          ],
+              SizedBox(
+                height: 100,
+                width: 250.0,
+                child: DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 30.0,
+                    fontFamily: 'Agne',
+                  ),
+                  child: AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                          'Add The Price From Previous Table',
+                          textStyle: TextStyle(color: mainBack)),
+                    ],
+                    onTap: () {
+                      print("Tap Event");
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 50.0,
+              ),
+              TextField(
+                controller: _priceController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: 'Enter Price',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: placeOrder,
+                child: Text('Place Order'),
+              ),
+            ],
+          ),
         ),
       ),
     );

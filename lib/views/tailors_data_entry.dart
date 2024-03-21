@@ -40,13 +40,18 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
               duration: Duration(seconds: 2),
             ),
           );
-
         }
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text('Tailor Data Entry'),
           backgroundColor: mainColor,
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),

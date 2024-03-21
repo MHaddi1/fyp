@@ -95,7 +95,7 @@ class _MessageListState extends State<MessageList> {
                         receiverUser: name,
                         receiverUserEmail: userEmail,
                         receiverUserID: userUID,
-                        image: myImage!,
+                        image: userImage,
                       ));
                 },
                 child: Padding(
@@ -103,7 +103,9 @@ class _MessageListState extends State<MessageList> {
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 30,
-                      backgroundImage: CachedNetworkImageProvider(Rimage.toString(),),
+                      backgroundImage: CachedNetworkImageProvider(
+                        Rimage.toString(),
+                      ),
                     ),
                     title: Text(
                       userNameT.toString(),

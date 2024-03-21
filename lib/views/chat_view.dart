@@ -1,19 +1,25 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_bubbles/bubbles/bubble_normal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fyp/const/color.dart';
+import 'package:fyp/const/components/list_title.dart';
 import 'package:fyp/const/components/my_text_field.dart';
+import 'package:fyp/const/components/profile_card.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/services/chat_services.dart';
 import 'package:fyp/services/notification_services.dart';
 import 'package:fyp/utils/check_internet_utils.dart';
+import 'package:fyp/views/tailors_profile.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class ChatView extends StatefulWidget {
   final String? receiverUserEmail;
@@ -21,9 +27,11 @@ class ChatView extends StatefulWidget {
   final String? receiverUser;
   final String? senderName;
   final String image;
+  final String? chatType;
 
   const ChatView(
       {Key? key,
+      this.chatType,
       this.receiverUserEmail,
       this.receiverUserID,
       this.receiverUser,
@@ -43,6 +51,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   final _auth = FirebaseAuth.instance;
   bool delivered = false;
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  String stars = "";
 
   sendMessage() async {
     if (messageController.text.isNotEmpty) {
@@ -50,15 +59,19 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
       await updateSenderDocument();
       await updateReceiverDocument();
       deviceTokken();
-     setState(() {
-       messageController.clear();
-     });
+      setState(() {
+        messageController.clear();
+      });
     }
   }
+
   void addToken(String token) async {
-    try{
-      await _firebaseFirestore.collection("users").doc(FirebaseAuth.instance.currentUser!.email).set({"FCMToken":token},SetOptions(merge: true));
-    }catch(e){
+    try {
+      await _firebaseFirestore
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .set({"FCMToken": token}, SetOptions(merge: true));
+    } catch (e) {
       Logger().d(e);
     }
   }
@@ -231,7 +244,6 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
       if (checkToken == value) {
         sendNotification(value, messageController.text);
       }
-
     });
   }
 
@@ -261,11 +273,13 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
       Logger().e(e);
     }
   }
-@override
+
+  @override
   void dispose() {
     messageController.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
     super.initState();
@@ -293,67 +307,100 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
             child: Icon(Icons.arrow_back),
           ),
         ),
-        title: StreamBuilder<DocumentSnapshot>(
-            stream: _firebaseFirestore
-                .collection('users')
-                .doc(widget.receiverUserEmail)
-                .snapshots(),
-            builder: (context, snapshot) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(snapshot.data?['status'] == null
-                        ? "Offline"
-                        : snapshot.data!['status']),
-                  ),
-                  SizedBox(
-                    width: 5.0,
-                  ),
-                ],
-              );
-            }),
+        title: widget.chatType != 'bot'
+            ? StreamBuilder<DocumentSnapshot>(
+                stream: _firebaseFirestore
+                    .collection('users')
+                    .doc(widget.receiverUserEmail)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(snapshot.data?['status'] == null
+                            ? "Offline"
+                            : snapshot.data!['status']),
+                      ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
+                    ],
+                  );
+                })
+            : Container(),
         backgroundColor: mainColor,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _buildMessageList(),
-          ),
-          _buildMessageInput(),
-        ],
-      ),
+      body: widget.chatType != "bot"
+          ? Column(
+              children: [
+                Expanded(
+                  child: _buildMessageList(),
+                ),
+                _buildMessageInput(),
+              ],
+            )
+          : Column(
+              children: [
+                Expanded(child: _buildMessageList()),
+                _buildMessageInput()
+              ],
+            ),
     );
   }
 
   Widget _buildMessageList() {
-    return StreamBuilder(
-      stream: chatServices.getMessage(
-        widget.receiverUserID!,
-        _auth.currentUser!.uid,
-      ),
-      builder: ((context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-            child: Text("Error ${snapshot.error}"),
-          );
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return ListView.builder(
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, index) {
-            final document = snapshot.data!.docs[index];
-            return _buildMessageItem(document);
-          },
-        );
-      }),
-    );
+    return widget.chatType != 'bot'
+        ? StreamBuilder(
+            stream: chatServices.getMessage(
+              widget.receiverUserID!,
+              _auth.currentUser!.uid,
+            ),
+            builder: ((context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error ${snapshot.error}"),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final document = snapshot.data!.docs[index];
+                  return _buildMessageItem(document);
+                },
+              );
+            }),
+          )
+        : StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .where('avg', isEqualTo: stars)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error ${snapshot.error}"),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final document = snapshot.data!.docs[index];
+                  return _buildMessageItem(document);
+                },
+              );
+            });
   }
 
   Widget _buildMessageItem(DocumentSnapshot documentSnapshot) {
@@ -361,70 +408,262 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
         documentSnapshot.data()! as Map<String, dynamic>;
 
     final isSender = data["senderId"] == _auth.currentUser!.uid;
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!isSender)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text(
-                widget.receiverUser!,
-                style: TextStyle(fontWeight: FontWeight.bold, color: mainBack),
-              ),
+    return widget.chatType != "bot"
+        ? Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!isSender)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      widget.receiverUser!,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: mainBack),
+                    ),
+                  ),
+                SizedBox(
+                  width: 5.0,
+                ),
+                // CircleAvatar(
+                //   radius: 10,
+                //   backgroundImage: CachedNetworkImageProvider(
+                //     widget.image,
+                //   ),
+                // ),
+
+                BubbleNormal(
+                  text: data['message'],
+                  textStyle: TextStyle(color: Colors.white),
+                  isSender: isSender,
+                  color: isSender ? Colors.blue : Colors.grey[300]!,
+                  tail: true,
+                  sent: delivered ? true : false,
+                  delivered: delivered ? true : false,
+                ),
+              ],
             ),
-          SizedBox(
-            width: 5.0,
-          ),
-          BubbleNormal(
-            text: data['message'],
-            textStyle: TextStyle(color: Colors.white),
-            isSender: isSender,
-            color: isSender ? Colors.blue : Colors.grey[300]!,
-            tail: true,
-            sent: delivered ? true : false,
-            delivered: delivered ? true : false,
-          ),
-        ],
-      ),
-    );
+          )
+        : Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
+            child: Column(
+              children: [
+                if (!isSender) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: MyListTitle(
+                      width: 70,
+                      height: 70,
+                      color: mainBack,
+                      text: "StyloBot",
+                      onPressed: () {},
+                      scr: "assets/image/cb.png",
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5.0,
+                  ),
+                  ProfileCard(
+                    image: data['image'] == null
+                        ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
+                        : data['image']?.toString() ?? '',
+                    //description: starListLength.toString(),
+                    //avg: average.floorToDouble(),
+                    name: data['name']?.toString().capitalized ?? '',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TailorsProfile(
+                            rating: 1,
+                            onRatingChanged: (value) {},
+                            email: data['email']?.toString(),
+                            uid: data['uid']?.toString(),
+                            name: data['name']!.toString(),
+                            description: data['bio']!.toString(),
+                            //star: starListLength,
+                            image: data['image'] == null
+                                ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
+                                : data['image']?.toString() ?? '',
+                            //avg: data['avg'].toDouble(),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                ],
+
+                // StreamBuilder(
+                //   stream: FirebaseFirestore.instance
+                //       .collection("chat_bot")
+                //       .where('uid',
+                //           isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                //       .snapshots(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasError) {
+                //       return Center(
+                //         child: Text("Error ${snapshot.error}"),
+                //       );
+                //     } else if (snapshot.connectionState ==
+                //         ConnectionState.waiting) {
+                //       return const Center(
+                //         child: CircularProgressIndicator(),
+                //       );
+                //     }
+
+                //     return ListView.builder(
+                //       itemCount: snapshot.data!.docs.length,
+                //       itemBuilder: (context, index) {
+                //         final document = snapshot.data!.docs[index];
+                //         Column(
+                //           children: (document['Botmessage'] as List<dynamic>)
+                //               .map((message) {
+                //             return Text(
+                //               message
+                //                   .toString(), // Convert to string if necessary
+                //               style: TextStyle(
+                //                   fontSize:
+                //                       16), // Set your desired text style
+                //             );
+                //           }).toList(),
+                //         );
+                //         return Container();
+                //       },
+                //     );
+                //   },
+                // )
+
+                //Here Show
+              ],
+            ),
+          );
   }
 
   Widget _buildMessageInput() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: Offset(0, -1),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: messageController,
-                decoration: InputDecoration(
-                  hintText: 'Type your message...',
+    return widget.chatType != "bot"
+        ? Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(0, -1),
                 ),
+              ],
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: messageController,
+                      decoration: InputDecoration(
+                        hintText: 'Type your message...',
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: sendMessage,
+                    color: mainColor,
+                  ),
+                ],
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.send),
-              onPressed: sendMessage,
-              color: mainColor,
-            ),
-          ],
-        ),
-      ),
-    );
+          )
+        : Container(
+            child: Column(
+            children: [
+              Text(
+                "Select Tailors By Rating",
+                style: TextStyle(fontSize: 20.0),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: st
+                    .map((e) => Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              final index = st.indexOf(e);
+                              // setState(() {
+                              messageController.text = st[index];
+                              print(messageController.text);
+                              //});
+                            },
+                            child: Container(
+                                width: 70,
+                                padding: const EdgeInsets.all(10.0),
+                                margin: const EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: textWhite,
+                                    border: Border.all(
+                                        color: mainColor, width: 3.0)),
+                                child: Center(child: Text(e))),
+                          ),
+                        ))
+                    .toList(),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, -1),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 4.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          readOnly: true,
+                          controller: messageController,
+                          decoration: InputDecoration(
+                            hintText: 'Type your message...',
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: () {
+                          setState(() {
+                            stars = messageController.text;
+                            FirebaseFirestore.instance
+                                .collection("chat_bot")
+                                .add(
+                              {
+                                "Botmessage": FieldValue.arrayUnion(
+                                    [messageController.text]),
+                                "uid": FirebaseAuth.instance.currentUser!.uid
+                              },
+                            );
+
+                            messageController.clear();
+                          });
+                        },
+                        color: mainColor,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ));
   }
+
+  List<String> st = ["1.0", "2.0", "3.0", "4.0", "5.0"];
 }

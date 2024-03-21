@@ -7,7 +7,7 @@ class ProfileCard extends StatelessWidget {
     Key? key,
     required this.image,
     required this.name,
-    required this.description,
+    this.description = "5.0",
     required this.onPressed,
     this.avg = 0.0,
   }) : super(key: key);
