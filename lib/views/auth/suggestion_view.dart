@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fyp/const/assets/videos/app_videos.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/login/bottom_sheet.dart';
 import 'package:fyp/const/components/my_button.dart';
@@ -13,8 +12,6 @@ import 'package:fyp/views/auth/skip_view.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:video_player/video_player.dart';
-import 'package:flutter/foundation.dart';
 
 class SuggestionView extends StatefulWidget {
   const SuggestionView({super.key});

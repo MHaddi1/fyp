@@ -466,34 +466,40 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                   SizedBox(
                     width: 5.0,
                   ),
-                  ProfileCard(
-                    image: data['image'] == null
-                        ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
-                        : data['image']?.toString() ?? '',
-                    //description: starListLength.toString(),
-                    //avg: average.floorToDouble(),
-                    name: data['name']?.toString().capitalized ?? '',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TailorsProfile(
-                            rating: 1,
-                            onRatingChanged: (value) {},
-                            email: data['email']?.toString(),
-                            uid: data['uid']?.toString(),
-                            name: data['name']!.toString(),
-                            description: data['bio']!.toString(),
-                            //star: starListLength,
-                            image: data['image'] == null
-                                ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
-                                : data['image']?.toString() ?? '',
-                            //avg: data['avg'].toDouble(),
+                  if (data["avg"] != stars)
+                    Container(
+                      child: Text("No User Found With This Rating"),
+                    ),
+                  if (data["avg"] == stars)
+                    ProfileCard(
+                      image: data['image'] == null
+                          ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
+                          : data['image']?.toString() ?? '',
+                      //description: starListLength.toString(),
+                      //avg: average.floorToDouble(),
+                      name: data['name']?.toString().capitalized ?? '',
+                      avg: double.parse(data['avg']),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TailorsProfile(
+                              rating: 1,
+                              onRatingChanged: (value) {},
+                              email: data['email']?.toString(),
+                              uid: data['uid']?.toString(),
+                              name: data['name']!.toString(),
+                              description: data['bio']!.toString(),
+                              //star: starListLength,
+                              image: data['image'] == null
+                                  ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
+                                  : data['image']?.toString() ?? '',
+                              avg: double.parse(data['avg']),
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  )
+                        );
+                      },
+                    )
                 ],
 
                 // StreamBuilder(

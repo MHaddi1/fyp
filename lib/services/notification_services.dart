@@ -12,6 +12,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as local_notifications;
 import 'package:fyp/views/chat_view.dart';
 import 'package:fyp/views/message_user_list.dart';
+import 'package:fyp/views/notification.dart';
 import 'package:fyp/views/view_orders.dart';
 import 'package:get/get.dart';
 
@@ -124,8 +125,8 @@ class MessageNotification {
     if (message.data['type'] == "chat") {
       Get.to(() => MessageList(id: "123456"));
     } else if (message.data['type'] == "order") {
-      Get.to(() => ViewOrders(
-            uid: FirebaseAuth.instance.currentUser!.uid,
+      Get.to(() => NotificationS(
+          //uid: FirebaseAuth.instance.currentUser!.uid,
           ));
     }
 

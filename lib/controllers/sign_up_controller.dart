@@ -123,15 +123,14 @@ class SignUpController extends GetxController {
     final pickedFiles = await picker.pickMultiImage();
 
     for (var pickedFile in pickedFiles) {
-      _image.value =
-          (File(pickedFile.path));
+      _image.value = (File(pickedFile.path));
       await uploadImageToFirebaseStorage(File(pickedFile.path));
     }
   }
 
   Future<void> uploadImageToFirebaseStorage(File imageFile) async {
     try {
-     // String location = await signUpServices.currentCity();
+      // String location = await signUpServices.currentCity();
       final storage = FirebaseStorage.instance;
       final storageRef = storage
           .ref()

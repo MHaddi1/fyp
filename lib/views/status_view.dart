@@ -83,23 +83,22 @@ class _StatusViewState extends State<StatusView> {
   // }
 
   List<TextDto> orderList = [
-    TextDto("Your order has been placed", "Fri, 25th Mar '22 - 10:47pm"),
-    TextDto("Seller ha processed your order", "Sun, 27th Mar '22 - 10:19am"),
-    TextDto("Your item has been picked up by courier partner.",
-        "Tue, 29th Mar '22 - 5:00pm"),
+    TextDto("Your order has been placed", ""),
+    // TextDto("Seller ha processed your order", ""),
+    // TextDto("Your item has been picked up by courier partner.", ""),
   ];
 
   List<TextDto> shippedList = [
-    TextDto("Your order has been shipped", "Tue, 29th Mar '22 - 5:04pm"),
-    TextDto("Your item has been received in the nearest hub to you.", null),
+    TextDto("Your order has been shipped", ""),
+    //TextDto("Your item has been received in the nearest hub to you.", ""),
   ];
 
   List<TextDto> outOfDeliveryList = [
-    TextDto("Your order is out for delivery", "Thu, 31th Mar '22 - 2:27pm"),
+    TextDto("Your order is out for delivery", ""),
   ];
 
   List<TextDto> deliveredList = [
-    TextDto("Your order has been delivered", "Thu, 31th Mar '22 - 3:58pm"),
+    TextDto("Your order has been delivered", ""),
   ];
 
   @override
@@ -144,8 +143,8 @@ class _StatusViewState extends State<StatusView> {
                               ? widget.delivered == "delivered"
                                   ? Status.delivered
                                   : Status.outOfDelivery
-                              : Status.shipped
-                          : Status.delivered
+                              : Status.outOfDelivery
+                          : Status.shipped
                       : Status.order,
                   activeColor: mainColor,
                   inActiveColor: Colors.grey[300],

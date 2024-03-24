@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,7 +17,9 @@ import 'package:fyp/views/home/screens/home_screen.dart';
 import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:fyp/views/message_user_list.dart';
+import 'package:fyp/views/notification.dart';
 import 'package:fyp/views/shopping_cart.dart';
+import 'package:fyp/views/status_view.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -201,6 +204,12 @@ class _HomeViewState extends State<HomeView> {
               }
             },
           ),
+          IconButton(
+            onPressed: () {
+              Get.to(() => NotificationS());
+            },
+            icon: Icon(Icons.notifications),
+          )
         ],
       ),
       drawer: const MyDrawer(),

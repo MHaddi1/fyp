@@ -274,6 +274,32 @@ class RatingController extends GetxController {
       );
       return;
     }
+    final starsData = await userDoc.get();
+
+    double sumStar = 0;
+
+    List<dynamic>? stars = starsData.data()?["star"];
+    int Slength = stars!.length;
+    for (var star in stars) {
+      var value = double.parse(star);
+      sumStar += value;
+      await userDoc.set(
+        {"totalRating": sumStar.toString()},
+        SetOptions(merge: true),
+      );
+    }
+
+    final avgData = await userDoc.get();
+    String t = avgData.data()?['totalRating'];
+    String total = t;
+    final avg = double.parse(total) / Slength;
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.email)
+        .set({
+      "avg": avg.toString(),
+    }, SetOptions(merge: true));
 
     rating.value = index + 1;
     await userDoc.set(

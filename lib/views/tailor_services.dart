@@ -368,9 +368,11 @@ class _OrderScreenState extends State<OrderScreen> {
           "Order Placed": false,
           "Yes": "ORDER PLACED",
           'NO': "PLACED ORDER FIRST",
-          "orderConfirm": "decline",
+          "orderConfirm": "No",
           "OutForDelivery": "No",
-          "delivered": "No"
+          "delivered": "No",
+          "deliveryStatus": "Processing",
+          "isRead": false
         });
 
         // Show success message

@@ -118,15 +118,25 @@ class _SearchScreenState extends State<SearchScreen> {
                             final userData = snapshot.data!.docs[index];
                             List<dynamic>? starList = userData['star'] ?? [];
                             int starListLength = starList!.length;
-                            double num = 0.0;
-                            for (int i = 0; i < starListLength; i++) {
-                              double value =
-                                  double.tryParse(starList[i]) ?? 0.0;
-                              num += value;
-                            }
+                            // double num = 0.0;
+                            // for (int i = 0; i < starListLength; i++) {
+                            //   double value =
+                            //       double.tryParse(starList[i]) ?? 0.0;
+                            //   num += value;
+                            // }
 
-                            var average =
-                                starListLength > 0 ? num / starListLength : 0.0;
+                            // var average = starListLength > 0
+                            //     ? double.parse(userData['totalRating']) /
+                            //         starListLength
+                            //     : 0.0;
+                            // FirebaseFirestore.instance
+                            //     .collection('users')
+                            //     .doc(FirebaseAuth.instance.currentUser!.email)
+                            //     .set({
+                            //   "avg": average,
+                            // }, SetOptions(merge: true));
+
+                            double avg = double.parse(userData['avg']);
 
                             return userData['email'].toString() !=
                                     FirebaseAuth.instance.currentUser!.email
@@ -135,7 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                         ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
                                         : userData['image']?.toString() ?? '',
                                     description: starListLength.toString(),
-                                    avg: average.floorToDouble(),
+                                    avg: avg,
                                     name: userData['name']
                                             ?.toString()
                                             .capitalized ??
@@ -159,7 +169,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 : userData['image']
                                                         ?.toString() ??
                                                     '',
-                                            avg: average.floorToDouble(),
+                                            avg: double.parse(userData['avg']),
                                           ),
                                         ),
                                       );

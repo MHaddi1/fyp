@@ -119,295 +119,536 @@ class _ViewOrdersState extends State<ViewOrders> {
                                   final images = order['images'] ?? [];
                                   final price = order['price'] as double;
 
-                                  return Card(
-                                    elevation: 4,
-                                    color: Colors.white,
-                                    margin: EdgeInsets.all(20),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Order ${index + 1}',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: mainColor,
-                                                    fontSize: 18),
-                                              ),
-                                              Text(
-                                                '${price.toString()} ${order['priceType']}',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
-                                                    color: mainColor),
-                                              ),
-                                            ],
+                                  return order['deliveryType'] ==
+                                          "Cash on Delivery"
+                                      ? Card(
+                                          elevation: 4,
+                                          color: Colors.white,
+                                          margin: EdgeInsets.all(20),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
                                           ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            'Customer: $customerEmail',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                          ),
-                                          Text(
-                                            'Tailor: ${TailorEmail ?? "No Tailor Found"}',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                          ),
-                                          if (images.isNotEmpty)
-                                            SizedBox(
-                                              height: 120.0, // Change here
-                                              child: SingleChildScrollView(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                child: Row(
-                                                  children: images
-                                                      .map<Widget>((image) {
-                                                    return Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 8),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl: image,
-                                                          fit: BoxFit.contain,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                              ),
-                                            ),
-                                          SizedBox(height: 16),
-                                          // order['Order Placed']
-                                          //     ? Container()
-                                          //     : DropdownButton<String>(
-                                          //   value: _paymentMethod,
-                                          //   onChanged: (String? newValue) {
-                                          //     setState(() {
-                                          //       _paymentMethod = newValue!;
-                                          //     });
-                                          //   },
-                                          //   items: <String>[
-                                          //     'Bank',
-                                          //     'Cash on Delivery'
-                                          //   ].map<DropdownMenuItem<String>>(
-                                          //           (String value) {
-                                          //         return DropdownMenuItem<String>(
-                                          //           value: value,
-                                          //           child: Text(
-                                          //             value,
-                                          //             style: TextStyle(color: Colors.blue),
-                                          //           ),
-                                          //         );
-                                          //       }).toList(),
-                                          // ),
-                                          SizedBox(height: 16),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              // order['Order Placed']
-                                              //     ? Container()
-                                              //     : ElevatedButton(
-                                              //         onPressed: () {
-                                              //           // if (_paymentMethod == 'Bank') {
-                                              //           //   ScaffoldMessenger.of(context)
-                                              //           //       .showSnackBar(
-                                              //           //     SnackBar(
-                                              //           //       content: Text(
-                                              //           //           'Bank payment option is currently being worked on.'),
-                                              //           //     ),
-                                              //           //   );
-                                              //           // } else if (_paymentMethod ==
-                                              //           //     'Cash on Delivery') {
-                                              //           //   double currentPrice = price;
-                                              //           //   double deliveryPrice = 200;
-                                              //           //   double updatedPrice =
-                                              //           //       currentPrice + deliveryPrice;
-                                              //           //   print(
-                                              //           //       'Total price with delivery charges: $updatedPrice');
-
-                                              //           //   order['totalPrice'] = updatedPrice;
-                                              //           //   order['delivery'] = deliveryPrice;
-                                              //           //   order['Order Placed'] = true;
-                                              //           //   order['deliveryType'] =
-                                              //           //   'Cash on Delivery';
-                                              //           //   order['deliveryStatus'] =
-                                              //           //   'Processing';
-
-                                              //           //   FirebaseFirestore.instance
-                                              //           //       .collection("Orders")
-                                              //           //       .doc(
-                                              //           //       ordersSnapshot.docs[index].id)
-                                              //           //       .update(order)
-                                              //           //       .then((value) async{
-                                              //           //         final deviceToken = await getToken(FirebaseAuth.instance.currentUser!.email!);
-                                              //           //         print( order['tailorEmail']);
-                                              //           //         print(deviceToken);
-                                              //           //     // Send notification to tailor
-                                              //           //     sendNotification(
-                                              //           //         deviceToken!,
-                                              //           //         'Order placed!',
-                                              //           //         order['tailorEmail']);
-
-                                              //           //     // Show a confirmation message
-                                              //           //     ScaffoldMessenger.of(context)
-                                              //           //         .showSnackBar(
-                                              //           //       SnackBar(
-                                              //           //         content: Text(
-                                              //           //           'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
-                                              //           //           style: TextStyle(
-                                              //           //               color: Colors.white),
-                                              //           //         ),
-                                              //           //       ),
-                                              //           //     );
-                                              //           //   }).catchError((error) {
-                                              //           //     print(
-                                              //           //         "Failed to update document: $error");
-                                              //           //   });
-                                              //           // }
-                                              //         },
-                                              //         child: Text(
-                                              //           'Pay',
-                                              //           style: TextStyle(
-                                              //               color:
-                                              //                   Colors.white),
-                                              //         ),
-                                              //         style: ButtonStyle(
-                                              //           backgroundColor:
-                                              //               MaterialStateProperty
-                                              //                   .all<Color>(
-                                              //                       Colors
-                                              //                           .green),
-                                              //         ),
-                                              //       ),
-                                              order["orderConfirm"] == "Accept"
-                                                  ? Container()
-                                                  : Obx(
-                                                      () => DropdownButton<
-                                                          String>(
-                                                        value: _controller
-                                                            .dropdownValue
-                                                            .value,
-                                                        icon: Icon(Icons
-                                                            .arrow_downward),
-                                                        iconSize: 24,
-                                                        elevation: 16,
-                                                        style: TextStyle(
-                                                            color: mainColor),
-                                                        underline: Container(
-                                                          height: 2,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Order ${index + 1}',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                           color: mainColor,
-                                                        ),
-                                                        onChanged: (newValue) {
-                                                          _controller
-                                                              .changeValue(
-                                                                  newValue!);
-                                                          print(_controller
-                                                              .dropdownValue
-                                                              .value);
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  "Orders")
-                                                              .doc(
-                                                                  ordersSnapshot
-                                                                      .docs[
-                                                                          index]
-                                                                      .id)
-                                                              .set(
-                                                                  {
-                                                                "orderConfirm":
-                                                                    _controller
-                                                                        .dropdownValue
-                                                                        .value
-                                                              },
-                                                                  SetOptions(
-                                                                      merge:
-                                                                          true));
-                                                          final message = order[
-                                                                      "orderConfirm"] ==
-                                                                  _controller
-                                                                      .dropdownValue
-                                                                      .value
-                                                              ? "Tailor is Working"
-                                                              : "🤯 Sorry Tailor is Busy Right Now!!";
-                                                          Future.delayed(
-                                                              Duration(
-                                                                  seconds: 10),
-                                                              () {
-                                                            sendNotification(
-                                                                "deviceToken",
-                                                                message,
-                                                                customerEmail);
-                                                          });
-                                                        },
-                                                        items: <String>[
-                                                          'Accept',
-                                                          'Decline'
-                                                        ].map<
-                                                            DropdownMenuItem<
-                                                                String>>((String
-                                                            value) {
-                                                          return DropdownMenuItem<
-                                                              String>(
-                                                            value: value,
-                                                            child: Text(value),
+                                                          fontSize: 18),
+                                                    ),
+                                                    Text(
+                                                      '${price.toString()} ${order['priceType']}',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18,
+                                                          color: mainColor),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 8),
+                                                Text(
+                                                  'Customer: $customerEmail',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black),
+                                                ),
+                                                Text(
+                                                  'Tailor: ${TailorEmail ?? "No Tailor Found"}',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black),
+                                                ),
+                                                if (images.isNotEmpty)
+                                                  SizedBox(
+                                                    height:
+                                                        120.0, // Change here
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      child: Row(
+                                                        children: images
+                                                            .map<Widget>(
+                                                                (image) {
+                                                          return Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        8),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: image,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                            ),
                                                           );
                                                         }).toList(),
                                                       ),
                                                     ),
-                                              // MyButton(
-                                              //   width: 100,
-                                              //   text: "Confirm Orders",
-                                              //   onPressed: () {
+                                                  ),
+                                                SizedBox(height: 16),
+                                                // order['Order Placed']
+                                                //     ? Container()
+                                                //     : DropdownButton<String>(
+                                                //   value: _paymentMethod,
+                                                //   onChanged: (String? newValue) {
+                                                //     setState(() {
+                                                //       _paymentMethod = newValue!;
+                                                //     });
+                                                //   },
+                                                //   items: <String>[
+                                                //     'Bank',
+                                                //     'Cash on Delivery'
+                                                //   ].map<DropdownMenuItem<String>>(
+                                                //           (String value) {
+                                                //         return DropdownMenuItem<String>(
+                                                //           value: value,
+                                                //           child: Text(
+                                                //             value,
+                                                //             style: TextStyle(color: Colors.blue),
+                                                //           ),
+                                                //         );
+                                                //       }).toList(),
+                                                // ),
+                                                SizedBox(height: 16),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    // order['Order Placed']
+                                                    //     ? Container()
+                                                    //     : ElevatedButton(
+                                                    //         onPressed: () {
+                                                    //           // if (_paymentMethod == 'Bank') {
+                                                    //           //   ScaffoldMessenger.of(context)
+                                                    //           //       .showSnackBar(
+                                                    //           //     SnackBar(
+                                                    //           //       content: Text(
+                                                    //           //           'Bank payment option is currently being worked on.'),
+                                                    //           //     ),
+                                                    //           //   );
+                                                    //           // } else if (_paymentMethod ==
+                                                    //           //     'Cash on Delivery') {
+                                                    //           //   double currentPrice = price;
+                                                    //           //   double deliveryPrice = 200;
+                                                    //           //   double updatedPrice =
+                                                    //           //       currentPrice + deliveryPrice;
+                                                    //           //   print(
+                                                    //           //       'Total price with delivery charges: $updatedPrice');
 
-                                              //   },
-                                              // )
-                                              // order["Order Placed"]
-                                              //     ? MyButton(
-                                              //         text: "Status",
-                                              //         width: 90,
-                                              //         height: 36,
-                                              //         onPressed: () {},
-                                              //       )
-                                              //     : Container(),
-                                              Text(
-                                                order["orderConfirm"] ==
-                                                        "Accept"
-                                                    ? "Accepted"
-                                                    : "Accept or Decline",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color:
+                                                    //           //   order['totalPrice'] = updatedPrice;
+                                                    //           //   order['delivery'] = deliveryPrice;
+                                                    //           //   order['Order Placed'] = true;
+                                                    //           //   order['deliveryType'] =
+                                                    //           //   'Cash on Delivery';
+                                                    //           //   order['deliveryStatus'] =
+                                                    //           //   'Processing';
+
+                                                    //           //   FirebaseFirestore.instance
+                                                    //           //       .collection("Orders")
+                                                    //           //       .doc(
+                                                    //           //       ordersSnapshot.docs[index].id)
+                                                    //           //       .update(order)
+                                                    //           //       .then((value) async{
+                                                    //           //         final deviceToken = await getToken(FirebaseAuth.instance.currentUser!.email!);
+                                                    //           //         print( order['tailorEmail']);
+                                                    //           //         print(deviceToken);
+                                                    //           //     // Send notification to tailor
+                                                    //           //     sendNotification(
+                                                    //           //         deviceToken!,
+                                                    //           //         'Order placed!',
+                                                    //           //         order['tailorEmail']);
+
+                                                    //           //     // Show a confirmation message
+                                                    //           //     ScaffoldMessenger.of(context)
+                                                    //           //         .showSnackBar(
+                                                    //           //       SnackBar(
+                                                    //           //         content: Text(
+                                                    //           //           'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
+                                                    //           //           style: TextStyle(
+                                                    //           //               color: Colors.white),
+                                                    //           //         ),
+                                                    //           //       ),
+                                                    //           //     );
+                                                    //           //   }).catchError((error) {
+                                                    //           //     print(
+                                                    //           //         "Failed to update document: $error");
+                                                    //           //   });
+                                                    //           // }
+                                                    //         },
+                                                    //         child: Text(
+                                                    //           'Pay',
+                                                    //           style: TextStyle(
+                                                    //               color:
+                                                    //                   Colors.white),
+                                                    //         ),
+                                                    //         style: ButtonStyle(
+                                                    //           backgroundColor:
+                                                    //               MaterialStateProperty
+                                                    //                   .all<Color>(
+                                                    //                       Colors
+                                                    //                           .green),
+                                                    //         ),
+                                                    //       ),
+                                                    (order["orderConfirm"] ==
+                                                                "Accept" ||
+                                                            order["orderConfirm"] ==
+                                                                "Decline")
+                                                        ? Container()
+                                                        : Obx(
+                                                            () =>
+                                                                DropdownButton<
+                                                                    String>(
+                                                              value: _controller
+                                                                  .dropdownValue
+                                                                  .value,
+                                                              icon: Icon(Icons
+                                                                  .arrow_downward),
+                                                              iconSize: 24,
+                                                              elevation: 16,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      mainColor),
+                                                              underline:
+                                                                  Container(
+                                                                height: 2,
+                                                                color:
+                                                                    mainColor,
+                                                              ),
+                                                              onChanged:
+                                                                  (newValue) {
+                                                                _controller
+                                                                    .changeValue(
+                                                                        newValue!);
+                                                                print(_controller
+                                                                    .dropdownValue
+                                                                    .value);
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "Orders")
+                                                                    .doc(ordersSnapshot
+                                                                        .docs[
+                                                                            index]
+                                                                        .id)
+                                                                    .set({
+                                                                  "orderConfirm":
+                                                                      _controller
+                                                                          .dropdownValue
+                                                                          .value
+                                                                }, SetOptions(merge: true));
+                                                                // final message = ;
+                                                                Future.delayed(
+                                                                    Duration(
+                                                                        seconds:
+                                                                            10),
+                                                                    () {
+                                                                  sendNotification(
+                                                                      "deviceToken",
+                                                                      order["orderConfirm"] !=
+                                                                              "Accept"
+                                                                          ? "Tailor is Working"
+                                                                          : "🤯 Sorry Tailor is Busy Right Now!!",
+                                                                      customerEmail);
+                                                                });
+                                                              },
+                                                              items: <String>[
+                                                                'Accept',
+                                                                'Decline'
+                                                              ].map<
+                                                                  DropdownMenuItem<
+                                                                      String>>((String
+                                                                  value) {
+                                                                return DropdownMenuItem<
+                                                                    String>(
+                                                                  value: value,
+                                                                  child: Text(
+                                                                      value),
+                                                                );
+                                                              }).toList(),
+                                                            ),
+                                                          ),
+
+                                                    (order["deliveryStatus"] ==
+                                                                "Processing" ||
+                                                            order["orderConfirm"] ==
+                                                                "Decline")
+                                                        ? Container()
+                                                        : Obx(
+                                                            () =>
+                                                                DropdownButton<
+                                                                    String>(
+                                                              value: _controller
+                                                                  .dropdownValue2
+                                                                  .value,
+                                                              icon: Icon(Icons
+                                                                  .arrow_downward),
+                                                              iconSize: 24,
+                                                              elevation: 16,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      mainColor),
+                                                              underline:
+                                                                  Container(
+                                                                height: 2,
+                                                                color:
+                                                                    mainColor,
+                                                              ),
+                                                              onChanged:
+                                                                  (newValue) {
+                                                                _controller
+                                                                    .changeValue2(
+                                                                        newValue!);
+                                                                print(_controller
+                                                                    .dropdownValue2
+                                                                    .value);
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "Orders")
+                                                                    .doc(ordersSnapshot
+                                                                        .docs[
+                                                                            index]
+                                                                        .id)
+                                                                    .set({
+                                                                  "deliveryStatus":
+                                                                      "Processing"
+                                                                }, SetOptions(merge: true));
+                                                                // final message = ;
+                                                                Future.delayed(
+                                                                    Duration(
+                                                                        seconds:
+                                                                            10),
+                                                                    () {
+                                                                  sendNotification(
+                                                                      "deviceToken",
+                                                                      "Status Check",
+                                                                      customerEmail);
+                                                                });
+                                                              },
+                                                              items: <String>[
+                                                                'Shipped',
+                                                                // 'Decline'
+                                                              ].map<
+                                                                  DropdownMenuItem<
+                                                                      String>>((String
+                                                                  value) {
+                                                                return DropdownMenuItem<
+                                                                    String>(
+                                                                  value: value,
+                                                                  child: Text(
+                                                                      value),
+                                                                );
+                                                              }).toList(),
+                                                            ),
+                                                          ),
+                                                    //OutForDelivery
+                                                    (order["OutForDelivery"] ==
+                                                                "OutForDelivery" ||
+                                                            order["orderConfirm"] ==
+                                                                "Decline")
+                                                        ? Container()
+                                                        : Obx(
+                                                            () =>
+                                                                DropdownButton<
+                                                                    String>(
+                                                              value: _controller
+                                                                  .dropdownValue3
+                                                                  .value,
+                                                              icon: Icon(Icons
+                                                                  .arrow_downward),
+                                                              iconSize: 24,
+                                                              elevation: 16,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      mainColor),
+                                                              underline:
+                                                                  Container(
+                                                                height: 2,
+                                                                color:
+                                                                    mainColor,
+                                                              ),
+                                                              onChanged:
+                                                                  (newValue) {
+                                                                _controller
+                                                                    .changeValue3(
+                                                                        newValue!);
+                                                                print(_controller
+                                                                    .dropdownValue3
+                                                                    .value);
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "Orders")
+                                                                    .doc(ordersSnapshot
+                                                                        .docs[
+                                                                            index]
+                                                                        .id)
+                                                                    .set({
+                                                                  "OutForDelivery":
+                                                                      "OutForDelivery"
+                                                                }, SetOptions(merge: true));
+                                                                // final message = ;
+                                                                Future.delayed(
+                                                                    Duration(
+                                                                        seconds:
+                                                                            10),
+                                                                    () {
+                                                                  sendNotification(
+                                                                      "deviceToken",
+                                                                      "Status Check",
+                                                                      customerEmail);
+                                                                });
+                                                              },
+                                                              items: <String>[
+                                                                'OutForDelivery',
+                                                                // 'Decline'
+                                                              ].map<
+                                                                  DropdownMenuItem<
+                                                                      String>>((String
+                                                                  value) {
+                                                                return DropdownMenuItem<
+                                                                    String>(
+                                                                  value: value,
+                                                                  child: Text(
+                                                                      value),
+                                                                );
+                                                              }).toList(),
+                                                            ),
+                                                          ),
+
+                                                    //delivered
+                                                    (order["delivered"] ==
+                                                                "delivered" ||
+                                                            order["OutForDelivery"] ==
+                                                                "No")
+                                                        ? Container()
+                                                        : Obx(
+                                                            () =>
+                                                                DropdownButton<
+                                                                    String>(
+                                                              value: _controller
+                                                                  .dropdownValue4
+                                                                  .value,
+                                                              icon: Icon(Icons
+                                                                  .arrow_downward),
+                                                              iconSize: 24,
+                                                              elevation: 16,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      mainColor),
+                                                              underline:
+                                                                  Container(
+                                                                height: 2,
+                                                                color:
+                                                                    mainColor,
+                                                              ),
+                                                              onChanged:
+                                                                  (newValue) {
+                                                                _controller
+                                                                    .changeValue4(
+                                                                        newValue!);
+                                                                print(_controller
+                                                                    .dropdownValue4
+                                                                    .value);
+                                                                FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "Orders")
+                                                                    .doc(ordersSnapshot
+                                                                        .docs[
+                                                                            index]
+                                                                        .id)
+                                                                    .set({
+                                                                  "delivered":
+                                                                      "delivered"
+                                                                }, SetOptions(merge: true));
+                                                                // final message = ;
+                                                                Future.delayed(
+                                                                    Duration(
+                                                                        seconds:
+                                                                            10),
+                                                                    () {
+                                                                  sendNotification(
+                                                                      "deviceToken",
+                                                                      "Status Check",
+                                                                      customerEmail);
+                                                                });
+                                                              },
+                                                              items: <String>[
+                                                                'delivered',
+                                                                // 'Decline'
+                                                              ].map<
+                                                                  DropdownMenuItem<
+                                                                      String>>((String
+                                                                  value) {
+                                                                return DropdownMenuItem<
+                                                                    String>(
+                                                                  value: value,
+                                                                  child: Text(
+                                                                      value),
+                                                                );
+                                                              }).toList(),
+                                                            ),
+                                                          ),
+                                                    // MyButton(
+                                                    //   width: 100,
+                                                    //   text: "Confirm Orders",
+                                                    //   onPressed: () {
+
+                                                    //   },
+                                                    // )
+                                                    // order["Order Placed"]
+                                                    //     ? MyButton(
+                                                    //         text: "Status",
+                                                    //         width: 90,
+                                                    //         height: 36,
+                                                    //         onPressed: () {},
+                                                    //       )
+                                                    //     : Container(),
+                                                    Text(
                                                       order["orderConfirm"] ==
                                                               "Accept"
-                                                          ? Colors.green
-                                                          : Colors.red,
+                                                          ? "Accepted"
+                                                          : "Accept or Decline",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            order["orderConfirm"] ==
+                                                                    "Accept"
+                                                                ? Colors.green
+                                                                : Colors.red,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
+                                        )
+                                      : Container();
                                 },
                               );
                             }

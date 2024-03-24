@@ -5,9 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/components/my_button.dart';
+import 'package:fyp/views/invoice_page.dart';
 import 'package:fyp/views/status_view.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../const/color.dart';
 
@@ -239,7 +242,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               Text(
                                 order["orderConfirm"] == "Accept"
                                     ? "Tailor is Working"
-                                    : "Please Wait...",
+                                    : order["orderConfirm"] == "Decline"
+                                        ? "Rejected"
+                                        : "Please Wait",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: order["orderConfirm"] == "Accept"
@@ -249,6 +254,46 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               ),
                             ],
                           ),
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Get.to(() => InvoiceView(
+                                          customerEmail: order["customerEmail"],
+                                          trackIdNo:
+                                              snapshot.data!.docs[index].id,
+                                          amount: order['price'].toString(),
+                                          total: order['totalPrice'].toString(),
+                                          delivery: order['deliveryType'],
+                                        ));
+                                  },
+                                  icon: Icon(
+                                    Icons.receipt,
+                                    color: mainBack,
+                                  )),
+                              Text("Recipes")
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Socail("assets/image/call.png", "Call", () async {
+                                final phone =
+                                    await _getUserPhoneNo(order['tailorEmail']);
+                                await makingPhoneCall(phone ??
+                                    FirebaseAuth
+                                        .instance.currentUser!.phoneNumber);
+                              }),
+                              Socail("assets/image/wa.png", "Whatsapp",
+                                  () async {
+                                final phone =
+                                    await _getUserPhoneNo(order['tailorEmail']);
+                                _launchWhatsApp(phone ??
+                                    FirebaseAuth
+                                        .instance.currentUser!.phoneNumber);
+                              })
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -260,6 +305,73 @@ class _ShoppingCartState extends State<ShoppingCart> {
         ),
       ),
     );
+  }
+
+  InkWell Socail(String src, String text, Function() onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Image.asset(
+            src,
+            width: Get.width * 0.06,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(text),
+        ],
+      ),
+    );
+  }
+
+  _launchWhatsApp(phoneNo) async {
+    String phone = phoneNo;
+    String url = 'https://wa.me/${phone}?text=Hello';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  makingPhoneCall(phnumber) async {
+    var mobileCall = 'tel:$phnumber';
+    if (await canLaunchUrlString(mobileCall)) {
+      await launchUrlString(mobileCall);
+    } else {
+      throw 'Could not launch $mobileCall';
+    }
+  }
+
+  _getUserPhoneNo(String email) async {
+    try {
+      // Get reference to Firestore collection
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+
+      // Get document snapshot
+      DocumentSnapshot snapshot = await users.doc(email).get();
+
+      // Check if document exists and snapshot data is not null
+      if (snapshot.exists && snapshot.data() != null) {
+        // Get phone number field value
+        var data = snapshot.data() as Map;
+        dynamic phoneNo = data['phoneNo'];
+
+        if (phoneNo != null) {
+          return phoneNo;
+          //print('Phone Number: $phoneNo');
+          // Here you can use the phone number as needed
+        } else {
+          return ('Phone number is null');
+        }
+      } else {
+        return ('Document does not exist');
+      }
+    } catch (e) {
+      print('Error getting phone number: $e');
+    }
   }
 
   Future<String?> getToken(String email) async {
