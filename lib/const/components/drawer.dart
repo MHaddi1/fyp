@@ -1,33 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/chat_persons.dart';
 import 'package:fyp/const/components/list_title.dart';
-import 'package:fyp/const/components/login/bottom_sheet.dart';
 import 'package:fyp/const/components/my_button.dart';
-import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/home_controller.dart';
-import 'package:fyp/main.dart';
 import 'package:fyp/services/SharedPrefernece/shared_preference.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/utils/utils.dart';
-import 'package:fyp/views/auth/login_view.dart';
 import 'package:fyp/views/camera_view.dart';
 import 'package:fyp/views/chat_view.dart';
-import 'package:fyp/views/home/screens/profile_screen.dart';
 import 'package:fyp/views/tailors_data_entry.dart';
-import 'package:fyp/views/tailors_data_entry2.dart';
 import 'package:fyp/views/view_orders.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
-
-import '../../views/home/screens/search_screen.dart';
-import 'camera_view.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -43,7 +31,7 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  Gender? _selectedGender;
+  // Gender? _selectedGender;
   final HomeController homeController = Get.put(HomeController());
   final _phoneNumber = TextEditingController();
   // final UserServices _userServices = UserServices();

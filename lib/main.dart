@@ -3,42 +3,56 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fyp/const/routes/routes.dart';
-import 'package:fyp/const/routes/routes_name.dart';
-import 'package:fyp/firebase_options.dart';
-import 'package:fyp/utils/check_internet_utils.dart';
 import 'package:get/get.dart';
+import 'const/routes/routes.dart';
+import 'const/routes/routes_name.dart';
 import 'const/color.dart';
 import 'const/localization/languages.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fyp/utils/check_internet_utils.dart';
+import 'package:fyp/firebase_options.dart';
 
-bool delivered = false;
-internetCheck() async {
-  delivered = await ConnectivityUtil.instance.checkInternetConnection();
-  return delivered;
-}
-
+// Initialize Firebase Messaging
+FirebaseMessaging messaging = FirebaseMessaging.instance;
 List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  cameras = await availableCameras();
-  delivered = await internetCheck();
+
+  // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHander);
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(const MyApp());
+
+  // Initialize cameras
+  cameras = await availableCameras();
+
+  // Check internet connectivity
+  bool isConnected = await ConnectivityUtil.instance.checkInternetConnection();
+
+  // Set up background message handler
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Set preferred orientations
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  // Run the app
+  runApp(MyApp(isConnected: isConnected));
 }
 
-@pragma('vm-entry-point')
-Future<void> _firebaseMessagingBackgroundHander(
-    RemoteMessage remoteMessage) async {
+// Background message handler
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print(remoteMessage.notification?.title.toString());
+  print('Handling a background message: ${message.messageId}');
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isConnected;
+
+  const MyApp({
+    required this.isConnected,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,37 +66,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: mainColor),
         useMaterial3: true,
       ),
-      builder: EasyLoading.init(),
-      initialRoute: RoutesName.splashScreen,
+      builder: (context, child) {
+        return FlutterEasyLoading(child: child);
+      },
+      initialRoute:
+          isConnected ? RoutesName.splashScreen : RoutesName.noInternet,
       getPages: AppRoutes.appRoutes(),
-      navigatorObservers: [
-        if (!delivered) _InternetConnectionObserver(),
-      ],
     );
-  }
-}
-
-class _InternetConnectionObserver extends NavigatorObserver {
-  @override
-  void didPop(Route route, Route? previousRoute) {
-    super.didPop(route, previousRoute);
-    if (previousRoute is MaterialPageRoute && route is MaterialPageRoute) {
-      if (route.settings.name != previousRoute.settings.name) {
-        _showNoInternetSnackbar("Hello WordPress");
-      }
-    }
-  }
-
-  void _showNoInternetSnackbar(String routeName) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.snackbar(
-        "No Internet Connection",
-        "Please check your internet connection",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 5),
-      );
-    });
   }
 }

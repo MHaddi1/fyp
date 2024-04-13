@@ -10,8 +10,6 @@ import 'package:fyp/views/tailors_profile.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import '../../../const/components/drawer.dart';
-
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -52,46 +50,46 @@ class _SearchScreenState extends State<SearchScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: SearchBar(
-                    trailing: [
-                      GestureDetector(
-                        onTap: () {
-                          if (kDebugMode) {
-                            print("Working...");
-                          }
-                          Get.bottomSheet(
-                            backgroundColor: textWhite,
-                            Container(
-                              width: Get.width,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: Get.height * 0.05,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    height: 10,
-                                    width: Get.width * 0.5,
-                                    decoration: BoxDecoration(
-                                        color: mainBack,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                  ),
-                                  MyListTitle(
-                                      color: mainBack,
-                                      icon: Icons.star,
-                                      text: "Filter By Star",
-                                      onPressed: () {
-                                        showOptions(context);
-                                      })
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                        child:
-                            Icon(IconData(0xe280, fontFamily: 'MaterialIcons')),
-                      )
-                    ],
+                    // trailing: [
+                    //   GestureDetector(
+                    //     onTap: () {
+                    //       if (kDebugMode) {
+                    //         print("Working...");
+                    //       }
+                    //       Get.bottomSheet(
+                    //         backgroundColor: textWhite,
+                    //         Container(
+                    //           width: Get.width,
+                    //           child: Column(
+                    //             children: [
+                    //               SizedBox(
+                    //                 height: Get.height * 0.05,
+                    //               ),
+                    //               Container(
+                    //                 padding: const EdgeInsets.all(10.0),
+                    //                 height: 10,
+                    //                 width: Get.width * 0.5,
+                    //                 decoration: BoxDecoration(
+                    //                     color: mainBack,
+                    //                     borderRadius:
+                    //                         BorderRadius.circular(10)),
+                    //               ),
+                    //               MyListTitle(
+                    //                   color: mainBack,
+                    //                   icon: Icons.star,
+                    //                   text: "Filter By Star",
+                    //                   onPressed: () {
+                    //                     showOptions(context);
+                    //                   })
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       );
+                    //     },
+                    //     child:
+                    //         Icon(IconData(0xe280, fontFamily: 'MaterialIcons')),
+                    //   )
+                    // ],
                     hintText: "Search",
                     leading: Icon(
                       Icons.search,

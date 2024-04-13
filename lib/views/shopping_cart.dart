@@ -291,7 +291,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     await _getUserPhoneNo(order['tailorEmail']);
                                 print(phone);
 
-                                if (phone.isEmpty || phone == null) {
+                                if (phone.isEmpty) {
                                   print("Sorry");
                                 } else {
                                   await _launchWhatsApp(phone);

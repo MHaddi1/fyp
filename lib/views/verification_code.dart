@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
-import 'package:fyp/views/tailors_data_entry.dart';
-
-import 'package:get/get.dart';
 
 class VerificationCode extends StatefulWidget {
   const VerificationCode({super.key, required this.code});

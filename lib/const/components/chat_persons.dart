@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/components/chat_simple.dart';
 import 'package:fyp/views/chat_view.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class ChatPerson extends StatefulWidget {
   const ChatPerson({Key? key});

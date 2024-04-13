@@ -1,15 +1,10 @@
 import 'dart:convert';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_bubbles/bubbles/bubble_normal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/list_title.dart';
-import 'package:fyp/const/components/my_text_field.dart';
 import 'package:fyp/const/components/profile_card.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/services/chat_services.dart';

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
-import 'package:fyp/controllers/suggestion_controller.dart';
 import 'package:fyp/services/splash_services.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
 
-import '../services/auth/sign_up_services.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

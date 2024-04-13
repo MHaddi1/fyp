@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
-import 'package:lottie/lottie.dart';
 import 'package:order_tracker/order_tracker.dart';
 
 // enum Status {

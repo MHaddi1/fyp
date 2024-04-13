@@ -3,6 +3,7 @@ import 'package:fyp/views/auth/sign_up_view_2.dart';
 import 'package:fyp/views/home/home_view.dart';
 import 'package:fyp/views/auth/login_view.dart';
 import 'package:fyp/views/auth/skip_view.dart';
+import 'package:fyp/views/no_internet.dart';
 import 'package:fyp/views/splash_view.dart';
 import 'package:fyp/views/auth/suggestion_view.dart';
 import 'package:get/route_manager.dart';
@@ -31,7 +32,7 @@ class AppRoutes {
         ),
         GetPage(
           name: RoutesName.homeScreen,
-          page: () =>  HomeView(),
+          page: () => HomeView(),
           transition: Transition.leftToRight,
         ),
         GetPage(
@@ -39,5 +40,6 @@ class AppRoutes {
           page: () => const InformationScreen(),
           transition: Transition.leftToRight,
         ),
+        GetPage(name: RoutesName.noInternet, page: () => NoInternet())
       ];
 }

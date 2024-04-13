@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
-import 'package:fyp/controllers/sign_up_controller.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -11,7 +10,7 @@ class MyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SignUpController signUpController = Get.find<SignUpController>();
+   // final SignUpController signUpController = Get.find<SignUpController>();
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     return Scaffold(
       drawer: const Drawer(),

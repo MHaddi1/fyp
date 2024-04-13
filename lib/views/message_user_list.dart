@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +6,6 @@ import 'package:fyp/const/color.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/views/chat_view.dart';
-import 'package:fyp/views/home/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 class MessageList extends StatefulWidget {
@@ -88,7 +86,7 @@ class _MessageListState extends State<MessageList> {
                 onTap: () async {
                   final userName = await ChangeProfile()
                       .getUserName(FirebaseAuth.instance.currentUser!.email);
-                  final myImage = await ChangeProfile().getImageUrl(userEmail);
+                  //final myImage = await ChangeProfile().getImageUrl(userEmail);
                   final name = await myName(userEmail);
                   Get.to(() => ChatView(
                         senderName: userName,

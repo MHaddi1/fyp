@@ -6,7 +6,6 @@ import 'package:fyp/const/components/my_button.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class TailorsDataEntry2 extends StatefulWidget {
   const TailorsDataEntry2({Key? key}) : super(key: key);

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fyp/const/assets/images/app_image.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/social_media_button.dart';
-import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/login_controller.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
 import 'package:fyp/views/auth/sign_up_view.dart';
@@ -15,7 +14,7 @@ class SkipView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controllerLogin = Get.put(LoginController());
-    final _controllerSignup = Get.put(SignUpController());
+    // final _controllerSignup = Get.put(SignUpController());
     return Scaffold(
       backgroundColor: mainBack,
       body: Container(

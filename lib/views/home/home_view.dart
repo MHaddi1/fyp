@@ -1,15 +1,11 @@
 // ignore_for_file: deprecated_member_use
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/drawer.dart';
-import 'package:fyp/const/components/my_button.dart';
-import 'package:fyp/controllers/login_controller.dart';
 import 'package:fyp/services/auth/sign_services.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/services/notification_services.dart';
@@ -19,10 +15,9 @@ import 'package:fyp/views/home/screens/search_screen.dart';
 import 'package:fyp/views/message_user_list.dart';
 import 'package:fyp/views/notification.dart';
 import 'package:fyp/views/shopping_cart.dart';
-import 'package:fyp/views/status_view.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:velocity_x/velocity_x.dart';
+
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);

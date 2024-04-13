@@ -4,10 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
-import 'package:fyp/controllers/profile_controller.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
-import 'package:fyp/models/get_user_model.dart';
-import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +20,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final ProfileController _profileController = Get.put(ProfileController());
+  // final ProfileController _profileController = Get.put(ProfileController());
   final currentUser = FirebaseAuth.instance.currentUser;
   final userCollection = FirebaseFirestore.instance.collection("users");
   final _signUpController = Get.put(SignUpController());

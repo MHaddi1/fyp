@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class MyButton extends StatelessWidget {
   final String text;
