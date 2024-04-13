@@ -135,24 +135,73 @@ class _StatusViewState extends State<StatusView> {
                 //     color: getStatusColor(status),
                 //   ),
                 // ),
+                if (widget.check == 'Decline')
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(12.0)),
+                    padding: const EdgeInsets.all(30.0),
+                    child: Center(child: Text("No Status Found")),
+                  ),
+                if (widget.check == 'Accept')
+                  OrderTracker(
+                    status: Status.order,
+                    activeColor: mainColor,
+                    inActiveColor: Colors.grey[300],
+                    orderTitleAndDateList: orderList,
+                    shippedTitleAndDateList: shippedList,
+                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                    deliveredTitleAndDateList: deliveredList,
+                  ),
+                if (widget.check == 'Processing')
+                  OrderTracker(
+                    status: Status.shipped,
+                    activeColor: mainColor,
+                    inActiveColor: Colors.grey[300],
+                    orderTitleAndDateList: orderList,
+                    shippedTitleAndDateList: shippedList,
+                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                    deliveredTitleAndDateList: deliveredList,
+                  ),
 
-                OrderTracker(
-                  status: widget.check == "Accept"
-                      ? widget.delivery == "Processing"
-                          ? widget.outForDelivery == "OutForDelivery"
-                              ? widget.delivered == "delivered"
-                                  ? Status.delivered
-                                  : Status.outOfDelivery
-                              : Status.outOfDelivery
-                          : Status.shipped
-                      : Status.order,
-                  activeColor: mainColor,
-                  inActiveColor: Colors.grey[300],
-                  orderTitleAndDateList: orderList,
-                  shippedTitleAndDateList: shippedList,
-                  outOfDeliveryTitleAndDateList: outOfDeliveryList,
-                  deliveredTitleAndDateList: deliveredList,
-                ),
+                if (widget.check == 'OutForDelivery')
+                  OrderTracker(
+                    status: Status.outOfDelivery,
+                    activeColor: mainColor,
+                    inActiveColor: Colors.grey[300],
+                    orderTitleAndDateList: orderList,
+                    shippedTitleAndDateList: shippedList,
+                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                    deliveredTitleAndDateList: deliveredList,
+                  ),
+
+                if (widget.check == 'delivered')
+                  OrderTracker(
+                    status: Status.delivered,
+                    activeColor: mainColor,
+                    inActiveColor: Colors.grey[300],
+                    orderTitleAndDateList: orderList,
+                    shippedTitleAndDateList: shippedList,
+                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                    deliveredTitleAndDateList: deliveredList,
+                  ),
+                // OrderTracker(
+                //   status: widget.check == "Accept"
+                //       ? widget.delivery == "Processing"
+                //           ? widget.outForDelivery == "OutForDelivery"
+                //               ? widget.delivered == "delivered"
+                //                   ? Status.delivered
+                //                   : Status.outOfDelivery
+                //               : Status.outOfDelivery
+                //           : Status.shipped
+                //       : Status.order,
+                //   activeColor: mainColor,
+                //   inActiveColor: Colors.grey[300],
+                //   orderTitleAndDateList: orderList,
+                //   shippedTitleAndDateList: shippedList,
+                //   outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                //   deliveredTitleAndDateList: deliveredList,
+                // ),
               ],
             ),
           ),

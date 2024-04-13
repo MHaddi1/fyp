@@ -25,14 +25,14 @@ class _SuggestionViewState extends State<SuggestionView> {
 
   @override
   void dispose() {
-    suggestionController.videoController.dispose();
-    suggestionController.dispose();
+    //suggestionController.videoController.dispose();
+    // suggestionController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    suggestionController.videoController;
+    // suggestionController.videoController;
     super.initState();
     //if (!kDebugMode) {
 

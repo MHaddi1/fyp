@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
-import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_post.dart';
-import 'package:fyp/const/components/profile_card.dart';
 import 'package:fyp/controllers/home_controller.dart';
 import 'package:get/get.dart';
 

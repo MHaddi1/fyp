@@ -55,7 +55,6 @@ class _NotificationSState extends State<NotificationS> {
                   final TailorEmail = order['tailorEmail'] ?? '';
                   final images = order['images'] ?? [];
                   final price = order['price'] as double;
-                 
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(
@@ -145,9 +144,9 @@ class _NotificationSState extends State<NotificationS> {
                                 "Request ${order['orderConfirm']}",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: order['orderConfirm'] == "Accept"
-                                        ? Colors.green
-                                        : Colors.red),
+                                    color: order['orderConfirm'] == 'Decline'
+                                        ? Colors.red
+                                        : Colors.green),
                               ),
                             ),
                             // Text(
@@ -324,9 +323,7 @@ class _NotificationSState extends State<NotificationS> {
                         ),
                       ),
                     ),
-
                   );
-                  
                 },
               );
             }

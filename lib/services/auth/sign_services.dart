@@ -2,24 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fyp/const/color.dart';
-import 'package:fyp/const/components/suggestions/my_text_button.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
 import 'package:fyp/models/get_user_model.dart';
 import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:fyp/utils/logger.dart';
-import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:logger/logger.dart';
-import 'package:velocity_x/velocity_x.dart';
-
 import '../SharedPrefernece/shared_preference.dart';
 
 class SignServices {
   static final FirebaseAuth mAuth = FirebaseAuth.instance;
+  
   static final logger = LoggerService();
   final signUpController = Get.put(SignUpController());
   final SignUpServices signUpServices = SignUpServices();
@@ -91,11 +85,15 @@ class SignServices {
     // Query user data based on user ID
     // DocumentSnapshot userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
     // OR query user data based on email
-    DocumentSnapshot userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.email)
-        .get();
-    return userData.exists;
+    try {
+      DocumentSnapshot userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.email)
+          .get();
+      return userData.exists;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> saveUserData(User user) async {
@@ -103,7 +101,7 @@ class SignServices {
     String myEmail = user.email!;
     String location =
         await SignUpServices().currentCity(); // Provide user location
-    String time = ''; // Provide user time
+    // Provide user time
     String? image =
         'https://imgv3.fotor.com/images/blog-richtext-image/10-profile-picture-ideas-to-make-you-stand-out.jpg'; // Provide user image
 

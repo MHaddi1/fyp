@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fyp/services/SharedPrefernece/state_save.dart';
 import 'package:fyp/views/verification_code.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeProfile {
   final FirebaseAuth _auth = FirebaseAuth.instance;

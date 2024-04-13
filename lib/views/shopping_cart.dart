@@ -232,9 +232,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                   Get.to(() => StatusView(
                                         check: order["orderConfirm"],
                                         delivery: order['deliveryStatus'],
-                                        outForDelivery:
-                                            order['outFordelivery'] ?? "No",
-                                        delivered: order['delivered'] ?? "No",
+                                        outForDelivery: order['OutForDelivery'],
+                                        delivered: order['delivered'],
                                       ));
                                 },
                               ),
@@ -280,17 +279,23 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               Socail("assets/image/call.png", "Call", () async {
                                 final phone =
                                     await _getUserPhoneNo(order['tailorEmail']);
-                                await makingPhoneCall(phone ??
-                                    FirebaseAuth
-                                        .instance.currentUser!.phoneNumber);
+                                if (phone.isNotEmpty || phone == null) {
+                                  await makingPhoneCall(phone ??
+                                      FirebaseAuth
+                                          .instance.currentUser!.phoneNumber);
+                                }
                               }),
                               Socail("assets/image/wa.png", "Whatsapp",
                                   () async {
-                                final phone =
+                                String phone =
                                     await _getUserPhoneNo(order['tailorEmail']);
-                                _launchWhatsApp(phone ??
-                                    FirebaseAuth
-                                        .instance.currentUser!.phoneNumber);
+                                print(phone);
+
+                                if (phone.isEmpty || phone == null) {
+                                  print("Sorry");
+                                } else {
+                                  await _launchWhatsApp(phone);
+                                }
                               })
                             ],
                           )
@@ -326,8 +331,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   _launchWhatsApp(phoneNo) async {
-    String phone = phoneNo;
-    String url = 'https://wa.me/${phone}?text=Hello';
+    String url = 'https://wa.me/${phoneNo}?text=Hello';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

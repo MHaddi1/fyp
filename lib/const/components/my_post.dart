@@ -100,20 +100,20 @@ class _MyPostState extends State<MyPost> {
                             ),
                           ],
                         )),
-                    Align(
-                        alignment: Alignment.topLeft,
-                        child: Column(
-                          children: [
-                            MyLikeButton(isLiked: isLiked, onTap: toggleLike),
-                            5.heightBox,
-                            Text(
-                              widget.likes.length.toString(),
-                              style: const TextStyle(
-                                  color: textWhite,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        )),
+                    // Align(
+                    //     alignment: Alignment.topLeft,
+                    //     child: Column(
+                    //       children: [
+                    //         MyLikeButton(isLiked: isLiked, onTap: toggleLike),
+                    //         5.heightBox,
+                    //         Text(
+                    //           widget.likes.length.toString(),
+                    //           style: const TextStyle(
+                    //               color: textWhite,
+                    //               fontWeight: FontWeight.bold),
+                    //         ),
+                    //       ],
+                    //     )),
                     Align(
                         alignment: Alignment.topLeft,
                         child: Column(

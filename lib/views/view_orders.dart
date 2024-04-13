@@ -68,6 +68,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                 Container(
                   width: double.infinity,
                   height: Get.height,
+                  padding: const EdgeInsets.all(10.0),
                   //padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                       color: textWhite,
@@ -233,6 +234,11 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                 SizedBox(height: 16),
                                                 Row(
                                                   mainAxisAlignment:
+                                                      // order['orderConfirm'] ==
+                                                      //         'Accept'
+                                                      //     ? MainAxisAlignment
+                                                      //         .start
+                                                      //     :
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
@@ -311,307 +317,305 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                     //                           .green),
                                                     //         ),
                                                     //       ),
-                                                    (order["orderConfirm"] ==
-                                                                "Accept" ||
-                                                            order["orderConfirm"] ==
-                                                                "Decline")
-                                                        ? Container()
-                                                        : Obx(
-                                                            () =>
-                                                                DropdownButton<
-                                                                    String>(
-                                                              value: _controller
-                                                                  .dropdownValue
-                                                                  .value,
-                                                              icon: Icon(Icons
-                                                                  .arrow_downward),
-                                                              iconSize: 24,
-                                                              elevation: 16,
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      mainColor),
-                                                              underline:
-                                                                  Container(
-                                                                height: 2,
-                                                                color:
-                                                                    mainColor,
-                                                              ),
-                                                              onChanged:
-                                                                  (newValue) {
-                                                                _controller
-                                                                    .changeValue(
-                                                                        newValue!);
-                                                                print(_controller
-                                                                    .dropdownValue
-                                                                    .value);
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        "Orders")
-                                                                    .doc(ordersSnapshot
-                                                                        .docs[
-                                                                            index]
-                                                                        .id)
-                                                                    .set({
+                                                    if (order["orderConfirm"] ==
+                                                        "Decline")
+                                                      Container(),
+                                                    if (order["orderConfirm"] ==
+                                                        "No")
+                                                      Obx(
+                                                        () => DropdownButton<
+                                                            String>(
+                                                          value: _controller
+                                                              .dropdownValue
+                                                              .value,
+                                                          icon: Icon(Icons
+                                                              .arrow_downward),
+                                                          iconSize: 24,
+                                                          elevation: 16,
+                                                          style: TextStyle(
+                                                              color: mainColor),
+                                                          underline: Container(
+                                                            height: 2,
+                                                            color: mainColor,
+                                                          ),
+                                                          onChanged:
+                                                              (newValue) {
+                                                            _controller
+                                                                .changeValue(
+                                                                    newValue!);
+                                                            print(_controller
+                                                                .dropdownValue
+                                                                .value);
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "Orders")
+                                                                .doc(ordersSnapshot
+                                                                    .docs[index]
+                                                                    .id)
+                                                                .set(
+                                                                    {
                                                                   "orderConfirm":
                                                                       _controller
                                                                           .dropdownValue
                                                                           .value
-                                                                }, SetOptions(merge: true));
-                                                                // final message = ;
-                                                                Future.delayed(
-                                                                    Duration(
-                                                                        seconds:
-                                                                            10),
-                                                                    () {
-                                                                  sendNotification(
-                                                                      "deviceToken",
-                                                                      order["orderConfirm"] !=
-                                                                              "Accept"
-                                                                          ? "Tailor is Working"
-                                                                          : "🤯 Sorry Tailor is Busy Right Now!!",
-                                                                      customerEmail);
-                                                                });
-                                                              },
-                                                              items: <String>[
-                                                                'Accept',
-                                                                'Decline'
-                                                              ].map<
-                                                                  DropdownMenuItem<
-                                                                      String>>((String
-                                                                  value) {
-                                                                return DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
-                                                            ),
-                                                          ),
+                                                                },
+                                                                    SetOptions(
+                                                                        merge:
+                                                                            true));
+                                                            // final message = ;
+                                                            Future.delayed(
+                                                                Duration(
+                                                                    seconds:
+                                                                        10),
+                                                                () {
+                                                              sendNotification(
+                                                                  "deviceToken",
+                                                                  order["orderConfirm"] !=
+                                                                          "Accept"
+                                                                      ? "Tailor is Working"
+                                                                      : "🤯 Sorry Tailor is Busy Right Now!!",
+                                                                  customerEmail);
+                                                            });
+                                                          },
+                                                          items: <String>[
+                                                            'Accept',
+                                                            'Decline'
+                                                          ].map<
+                                                              DropdownMenuItem<
+                                                                  String>>((String
+                                                              value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: value,
+                                                              child:
+                                                                  Text(value),
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
 
-                                                    (order["deliveryStatus"] ==
-                                                                "Processing" ||
-                                                            order["orderConfirm"] ==
-                                                                "Decline")
-                                                        ? Container()
-                                                        : Obx(
-                                                            () =>
-                                                                DropdownButton<
-                                                                    String>(
-                                                              value: _controller
-                                                                  .dropdownValue2
-                                                                  .value,
-                                                              icon: Icon(Icons
-                                                                  .arrow_downward),
-                                                              iconSize: 24,
-                                                              elevation: 16,
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      mainColor),
-                                                              underline:
-                                                                  Container(
-                                                                height: 2,
-                                                                color:
-                                                                    mainColor,
-                                                              ),
-                                                              onChanged:
-                                                                  (newValue) {
-                                                                _controller
-                                                                    .changeValue2(
-                                                                        newValue!);
-                                                                print(_controller
-                                                                    .dropdownValue2
-                                                                    .value);
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        "Orders")
-                                                                    .doc(ordersSnapshot
-                                                                        .docs[
-                                                                            index]
-                                                                        .id)
-                                                                    .set({
+                                                    if (order["orderConfirm"] ==
+                                                        "Accept")
+                                                      Obx(
+                                                        () => DropdownButton<
+                                                            String>(
+                                                          value: _controller
+                                                              .dropdownValue2
+                                                              .value,
+                                                          icon: Icon(Icons
+                                                              .arrow_downward),
+                                                          iconSize: 24,
+                                                          elevation: 16,
+                                                          style: TextStyle(
+                                                              color: mainColor),
+                                                          underline: Container(
+                                                            height: 2,
+                                                            color: mainColor,
+                                                          ),
+                                                          onChanged:
+                                                              (newValue) {
+                                                            _controller
+                                                                .changeValue2(
+                                                                    newValue!);
+                                                            print(_controller
+                                                                .dropdownValue2
+                                                                .value);
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "Orders")
+                                                                .doc(ordersSnapshot
+                                                                    .docs[index]
+                                                                    .id)
+                                                                .set(
+                                                                    {
                                                                   "deliveryStatus":
+                                                                      "Processing",
+                                                                  "orderConfirm":
                                                                       "Processing"
-                                                                }, SetOptions(merge: true));
-                                                                // final message = ;
-                                                                Future.delayed(
-                                                                    Duration(
-                                                                        seconds:
-                                                                            10),
-                                                                    () {
-                                                                  sendNotification(
-                                                                      "deviceToken",
-                                                                      "Status Check",
-                                                                      customerEmail);
-                                                                });
-                                                              },
-                                                              items: <String>[
-                                                                'Shipped',
-                                                                // 'Decline'
-                                                              ].map<
-                                                                  DropdownMenuItem<
-                                                                      String>>((String
-                                                                  value) {
-                                                                return DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
-                                                            ),
-                                                          ),
+                                                                },
+                                                                    SetOptions(
+                                                                        merge:
+                                                                            true));
+                                                            // final message = ;
+                                                            Future.delayed(
+                                                                Duration(
+                                                                    seconds:
+                                                                        10),
+                                                                () {
+                                                              sendNotification(
+                                                                  "deviceToken",
+                                                                  "Status Check",
+                                                                  customerEmail);
+                                                            });
+                                                          },
+                                                          items: <String>[
+                                                            'Shipped',
+                                                            // 'Decline'
+                                                          ].map<
+                                                              DropdownMenuItem<
+                                                                  String>>((String
+                                                              value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: value,
+                                                              child:
+                                                                  Text(value),
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
+
                                                     //OutForDelivery
-                                                    (order["OutForDelivery"] ==
-                                                                "OutForDelivery" ||
-                                                            order["orderConfirm"] ==
-                                                                "Decline")
-                                                        ? Container()
-                                                        : Obx(
-                                                            () =>
-                                                                DropdownButton<
-                                                                    String>(
-                                                              value: _controller
-                                                                  .dropdownValue3
-                                                                  .value,
-                                                              icon: Icon(Icons
-                                                                  .arrow_downward),
-                                                              iconSize: 24,
-                                                              elevation: 16,
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      mainColor),
-                                                              underline:
-                                                                  Container(
-                                                                height: 2,
-                                                                color:
-                                                                    mainColor,
-                                                              ),
-                                                              onChanged:
-                                                                  (newValue) {
-                                                                _controller
-                                                                    .changeValue3(
-                                                                        newValue!);
-                                                                print(_controller
-                                                                    .dropdownValue3
-                                                                    .value);
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        "Orders")
-                                                                    .doc(ordersSnapshot
-                                                                        .docs[
-                                                                            index]
-                                                                        .id)
-                                                                    .set({
-                                                                  "OutForDelivery":
-                                                                      "OutForDelivery"
-                                                                }, SetOptions(merge: true));
-                                                                // final message = ;
-                                                                Future.delayed(
-                                                                    Duration(
-                                                                        seconds:
-                                                                            10),
-                                                                    () {
-                                                                  sendNotification(
-                                                                      "deviceToken",
-                                                                      "Status Check",
-                                                                      customerEmail);
-                                                                });
-                                                              },
-                                                              items: <String>[
-                                                                'OutForDelivery',
-                                                                // 'Decline'
-                                                              ].map<
-                                                                  DropdownMenuItem<
-                                                                      String>>((String
-                                                                  value) {
-                                                                return DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
-                                                            ),
+                                                    if (order["orderConfirm"] ==
+                                                        "Processing")
+                                                      Obx(
+                                                        () => DropdownButton<
+                                                            String>(
+                                                          value: _controller
+                                                              .dropdownValue3
+                                                              .value,
+                                                          icon: Icon(Icons
+                                                              .arrow_downward),
+                                                          iconSize: 24,
+                                                          elevation: 16,
+                                                          style: TextStyle(
+                                                              color: mainColor),
+                                                          underline: Container(
+                                                            height: 2,
+                                                            color: mainColor,
                                                           ),
+                                                          onChanged:
+                                                              (newValue) {
+                                                            _controller
+                                                                .changeValue3(
+                                                                    newValue!);
+                                                            print(_controller
+                                                                .dropdownValue3
+                                                                .value);
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "Orders")
+                                                                .doc(ordersSnapshot
+                                                                    .docs[index]
+                                                                    .id)
+                                                                .set(
+                                                                    {
+                                                                  "OutForDelivery":
+                                                                      "OutForDelivery",
+                                                                  "orderConfirm":
+                                                                      "OutForDelivery"
+                                                                },
+                                                                    SetOptions(
+                                                                        merge:
+                                                                            true));
+                                                            // final message = ;
+                                                            Future.delayed(
+                                                                Duration(
+                                                                    seconds:
+                                                                        10),
+                                                                () {
+                                                              sendNotification(
+                                                                  "deviceToken",
+                                                                  "Status Check",
+                                                                  customerEmail);
+                                                            });
+                                                          },
+                                                          items: <String>[
+                                                            'OutForDelivery',
+                                                            // 'Decline'
+                                                          ].map<
+                                                              DropdownMenuItem<
+                                                                  String>>((String
+                                                              value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: value,
+                                                              child:
+                                                                  Text(value),
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
 
                                                     //delivered
-                                                    (order["delivered"] ==
-                                                                "delivered" ||
-                                                            order["OutForDelivery"] ==
-                                                                "No")
-                                                        ? Container()
-                                                        : Obx(
-                                                            () =>
-                                                                DropdownButton<
-                                                                    String>(
-                                                              value: _controller
-                                                                  .dropdownValue4
-                                                                  .value,
-                                                              icon: Icon(Icons
-                                                                  .arrow_downward),
-                                                              iconSize: 24,
-                                                              elevation: 16,
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      mainColor),
-                                                              underline:
-                                                                  Container(
-                                                                height: 2,
-                                                                color:
-                                                                    mainColor,
-                                                              ),
-                                                              onChanged:
-                                                                  (newValue) {
-                                                                _controller
-                                                                    .changeValue4(
-                                                                        newValue!);
-                                                                print(_controller
-                                                                    .dropdownValue4
-                                                                    .value);
-                                                                FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        "Orders")
-                                                                    .doc(ordersSnapshot
-                                                                        .docs[
-                                                                            index]
-                                                                        .id)
-                                                                    .set({
-                                                                  "delivered":
-                                                                      "delivered"
-                                                                }, SetOptions(merge: true));
-                                                                // final message = ;
-                                                                Future.delayed(
-                                                                    Duration(
-                                                                        seconds:
-                                                                            10),
-                                                                    () {
-                                                                  sendNotification(
-                                                                      "deviceToken",
-                                                                      "Status Check",
-                                                                      customerEmail);
-                                                                });
-                                                              },
-                                                              items: <String>[
-                                                                'delivered',
-                                                                // 'Decline'
-                                                              ].map<
-                                                                  DropdownMenuItem<
-                                                                      String>>((String
-                                                                  value) {
-                                                                return DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child: Text(
-                                                                      value),
-                                                                );
-                                                              }).toList(),
-                                                            ),
+                                                    if (order["orderConfirm"] ==
+                                                        "OutForDelivery")
+                                                      Obx(
+                                                        () => DropdownButton<
+                                                            String>(
+                                                          value: _controller
+                                                              .dropdownValue4
+                                                              .value,
+                                                          icon: Icon(Icons
+                                                              .arrow_downward),
+                                                          iconSize: 24,
+                                                          elevation: 16,
+                                                          style: TextStyle(
+                                                              color: mainColor),
+                                                          underline: Container(
+                                                            height: 2,
+                                                            color: mainColor,
                                                           ),
+                                                          onChanged:
+                                                              (newValue) {
+                                                            _controller
+                                                                .changeValue4(
+                                                                    newValue!);
+                                                            print(_controller
+                                                                .dropdownValue4
+                                                                .value);
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    "Orders")
+                                                                .doc(ordersSnapshot
+                                                                    .docs[index]
+                                                                    .id)
+                                                                .set(
+                                                                    {
+                                                                  "delivered":
+                                                                      "delivered",
+                                                                  'orderConfirm':
+                                                                      'delivered'
+                                                                },
+                                                                    SetOptions(
+                                                                        merge:
+                                                                            true));
+                                                            // final message = ;
+                                                            Future.delayed(
+                                                                Duration(
+                                                                    seconds:
+                                                                        10),
+                                                                () {
+                                                              sendNotification(
+                                                                  "deviceToken",
+                                                                  "Status Check",
+                                                                  customerEmail);
+                                                            });
+                                                          },
+                                                          items: <String>[
+                                                            'delivered',
+
+                                                            // 'Decline'
+                                                          ].map<
+                                                              DropdownMenuItem<
+                                                                  String>>((String
+                                                              value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              value: value,
+                                                              child:
+                                                                  Text(value),
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
+                                                    if (order['orderConfirm'] ==
+                                                        'delivered')
+                                                      Container(),
                                                     // MyButton(
                                                     //   width: 100,
                                                     //   text: "Confirm Orders",
@@ -628,18 +632,17 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                     //       )
                                                     //     : Container(),
                                                     Text(
-                                                      order["orderConfirm"] ==
-                                                              "Accept"
+                                                      order["Order Placed"]
                                                           ? "Accepted"
                                                           : "Accept or Decline",
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color:
-                                                            order["orderConfirm"] ==
-                                                                    "Accept"
-                                                                ? Colors.green
-                                                                : Colors.red,
+                                                            order['orderConfirm'] ==
+                                                                    'Decline'
+                                                                ? Colors.red
+                                                                : Colors.green,
                                                       ),
                                                     ),
                                                   ],

@@ -1,16 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/routes/routes_name.dart';
-import 'package:fyp/models/get_user_model.dart';
 import 'package:fyp/services/SharedPrefernece/shared_preference.dart';
 import 'package:fyp/services/auth/sign_services.dart';
-import 'package:fyp/services/auth/sign_up_services.dart';
 import 'package:fyp/utils/logger.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginController extends GetxController {

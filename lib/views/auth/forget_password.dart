@@ -31,73 +31,75 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     return Scaffold(
       backgroundColor: mainBack,
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        child: Column(
-          children: [
-            Form(
-              key: key,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                children: [
-                  Lottie.asset(AppImage.forgetPassword,
-                      width: 200, height: 150),
-                  20.heightBox,
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      "please enter you email to"
-                          .text
-                          .xl
-                          .color(Colors.grey[500])
-                          .make()
-                          .box
-                          .alignCenterLeft
-                          .make(),
-                      "change your password"
-                          .text
-                          .xl2
-                          .color(textWhite)
-                          .make()
-                          .box
-                          .alignCenterLeft
-                          .make()
-                    ],
-                  ),
-                  10.heightBox,
-                  MyField(
-                      onChanged: (value) {
-                        signUpController.setEmail(value!);
-                      },
-                      controller: _emailController,
-                      text: "email_hint".tr,
-                      validate: (value) {
-                        if (value!.isEmpty) {
-                          return "email_hint".tr;
-                        } else if (!value.isEmail) {
-                          return "Enter a valid email";
-                        }
-                        return null;
-                      }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          child: Column(
+            children: [
+              Form(
+                key: key,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  children: [
+                    Lottie.asset(AppImage.forgetPassword,
+                        width: 200, height: 150),
+                    20.heightBox,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        "please enter you email to"
+                            .text
+                            .xl
+                            .color(Colors.grey[500])
+                            .make()
+                            .box
+                            .alignCenterLeft
+                            .make(),
+                        "change your password"
+                            .text
+                            .xl2
+                            .color(textWhite)
+                            .make()
+                            .box
+                            .alignCenterLeft
+                            .make()
+                      ],
+                    ),
+                    10.heightBox,
+                    MyField(
+                        onChanged: (value) {
+                          signUpController.setEmail(value!);
+                        },
+                        controller: _emailController,
+                        text: "email_hint".tr,
+                        validate: (value) {
+                          if (value!.isEmpty) {
+                            return "email_hint".tr;
+                          } else if (!value.isEmail) {
+                            return "Enter a valid email";
+                          }
+                          return null;
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            60.heightBox,
-            MyButton(
-              height: 50,
-              width: Get.width,
-              text: "Continue",
-              onPressed: () {
-                if (key.currentState!.validate()) {
-                  key.currentState!.save();
-                  signUpController.forgetPassword();
-                }
-              },
-            ).box.make()
-          ],
+              60.heightBox,
+              MyButton(
+                height: 50,
+                width: Get.width,
+                text: "Continue",
+                onPressed: () {
+                  if (key.currentState!.validate()) {
+                    key.currentState!.save();
+                    signUpController.forgetPassword();
+                  }
+                },
+              ).box.make()
+            ],
+          ),
         ),
       ),
     );
