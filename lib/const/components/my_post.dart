@@ -123,7 +123,10 @@ class _MyPostState extends State<MyPost> {
                                   Share.share(
                                       "${widget.user}\n${widget.message}");
                                 },
-                                icon: Icon(Icons.share_rounded)),
+                                icon: Icon(
+                                  Icons.share_rounded,
+                                  color: textWhite,
+                                )),
                             5.heightBox,
                             // Text(
                             //   widget.likes.length.toString(),
