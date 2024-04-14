@@ -26,6 +26,7 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   bool _uploading = false;
+  int p = 1000;
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +122,13 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
                           child: TextFormField(
                             keyboardType: TextInputType.number,
                             validator: (value) {
+                              int price = int.parse(value.toString());
+                              value;
                               if (value == null || value.isEmpty) {
                                 return 'Please enter a price';
+                                // ignore: unnecessary_null_comparison
+                              } else if (price == null || price < 1000) {
+                                return 'Price atleast 1000 PKR';
                               }
                               return null;
                             },

@@ -31,7 +31,7 @@ class _TailorsDataEntry2State extends State<TailorsDataEntry2> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mainColor, // Adjust app bar color
+        backgroundColor: mainColor,
         title: Text(
           'Tailor Services Data Entry',
           style: TextStyle(
