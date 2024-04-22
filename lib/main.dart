@@ -3,11 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fyp/const/localization/languages.dart';
 import 'package:get/get.dart';
 import 'const/routes/routes.dart';
 import 'const/routes/routes_name.dart';
 import 'const/color.dart';
-import 'const/localization/languages.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyp/utils/check_internet_utils.dart';
 import 'package:fyp/firebase_options.dart';
@@ -36,8 +36,11 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Run the app
-  runApp(MyApp(isConnected: isConnected));
+  runApp(
+    MyApp(
+      isConnected: isConnected,
+    ),
+  );
 }
 
 // Background message handler

@@ -28,6 +28,14 @@ class StatusView extends StatefulWidget {
 }
 
 class _StatusViewState extends State<StatusView> {
+  late int _currentStep;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentStep = _getInitialStep();
+  }
   // Status getStatus() {
   //   if (widget.check == "Accept") {
   //     if (widget.delivery == "Processing") {
@@ -81,24 +89,38 @@ class _StatusViewState extends State<StatusView> {
   //   }
   // }
 
-  List<TextDto> orderList = [
-    TextDto("Your order has been placed", ""),
-    // TextDto("Seller ha processed your order", ""),
-    // TextDto("Your item has been picked up by courier partner.", ""),
-  ];
+  // List<TextDto> orderList = [
+  //   TextDto("Your order has been placed", ""),
+  //   // TextDto("Seller ha processed your order", ""),
+  //   // TextDto("Your item has been picked up by courier partner.", ""),
+  // ];
 
-  List<TextDto> shippedList = [
-    TextDto("Your order has been shipped", ""),
-    //TextDto("Your item has been received in the nearest hub to you.", ""),
-  ];
+  // List<TextDto> shippedList = [
+  //   TextDto("Your order has been shipped", ""),
+  //   //TextDto("Your item has been received in the nearest hub to you.", ""),
+  // ];
 
-  List<TextDto> outOfDeliveryList = [
-    TextDto("Your order is out for delivery", ""),
-  ];
+  // List<TextDto> outOfDeliveryList = [
+  //   TextDto("Your order is out for delivery", ""),
+  // ];
 
-  List<TextDto> deliveredList = [
-    TextDto("Your order has been delivered", ""),
-  ];
+  // List<TextDto> deliveredList = [
+  //   TextDto("Your order has been delivered", ""),
+  // ];
+  int _getInitialStep() {
+    switch (widget.check) {
+      case "Accept":
+        return 0;
+      case "Processing":
+        return 1;
+      case "OutForDelivery":
+        return 2;
+      case "delivered":
+        return 3;
+      default:
+        return -1;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +156,46 @@ class _StatusViewState extends State<StatusView> {
                 //     color: getStatusColor(status),
                 //   ),
                 // ),
+                Stepper(
+                  currentStep: _currentStep,
+                  steps: [
+                    Step(
+                      title: Text("Accept"),
+                      content: Text("Talior is working on your clothes"),
+                      isActive: widget.check == "Accept",
+                    ),
+                    Step(
+                      title: Text("On the way"),
+                      content: Text("Content for Step 2"),
+                      isActive: widget.check == "Processing",
+                    ),
+                    Step(
+                      title: Text("Out For Delivery"),
+                      content:
+                          Text("Please Be patient your clothes is on the way"),
+                      isActive: widget.check == "OutForDelivery",
+                    ),
+                    Step(
+                      title: Text("delivered"),
+                      content: Text("I Hope You Enjoy our service"),
+                      isActive: widget.check == "delivered",
+                    ),
+                  ],
+                  onStepContinue: () {
+                    setState(() {
+                      _currentStep = (_currentStep + 1) % 4;
+                    });
+                  },
+                  onStepTapped: (step) {
+                    // Allow users to navigate to the previous steps
+                    if (step < _currentStep) {
+                      setState(() {
+                        _currentStep = step;
+                      });
+                    }
+                  },
+                ),
+
                 if (widget.check == 'Decline')
                   Container(
                     decoration: BoxDecoration(
@@ -142,48 +204,48 @@ class _StatusViewState extends State<StatusView> {
                     padding: const EdgeInsets.all(30.0),
                     child: Center(child: Text("No Status Found")),
                   ),
-                if (widget.check == 'Accept')
-                  OrderTracker(
-                    status: Status.order,
-                    activeColor: mainColor,
-                    inActiveColor: Colors.grey[300],
-                    orderTitleAndDateList: orderList,
-                    shippedTitleAndDateList: shippedList,
-                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
-                    deliveredTitleAndDateList: deliveredList,
-                  ),
-                if (widget.check == 'Processing')
-                  OrderTracker(
-                    status: Status.shipped,
-                    activeColor: mainColor,
-                    inActiveColor: Colors.grey[300],
-                    orderTitleAndDateList: orderList,
-                    shippedTitleAndDateList: shippedList,
-                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
-                    deliveredTitleAndDateList: deliveredList,
-                  ),
+                // if (widget.check == 'Accept')
+                //   OrderTracker(
+                //     status: Status.order,
+                //     activeColor: mainColor,
+                //     inActiveColor: Colors.grey[300],
+                //     orderTitleAndDateList: orderList,
+                //     shippedTitleAndDateList: shippedList,
+                //     outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                //     deliveredTitleAndDateList: deliveredList,
+                //   ),
+                // if (widget.check == 'Processing')
+                //   OrderTracker(
+                //     status: Status.shipped,
+                //     activeColor: mainColor,
+                //     inActiveColor: Colors.grey[300],
+                //     orderTitleAndDateList: orderList,
+                //     shippedTitleAndDateList: shippedList,
+                //     outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                //     deliveredTitleAndDateList: deliveredList,
+                //   ),
 
-                if (widget.check == 'OutForDelivery')
-                  OrderTracker(
-                    status: Status.outOfDelivery,
-                    activeColor: mainColor,
-                    inActiveColor: Colors.grey[300],
-                    orderTitleAndDateList: orderList,
-                    shippedTitleAndDateList: shippedList,
-                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
-                    deliveredTitleAndDateList: deliveredList,
-                  ),
+                // if (widget.check == 'OutForDelivery')
+                //   OrderTracker(
+                //     status: Status.outOfDelivery,
+                //     activeColor: mainColor,
+                //     inActiveColor: Colors.grey[300],
+                //     orderTitleAndDateList: orderList,
+                //     shippedTitleAndDateList: shippedList,
+                //     outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                //     deliveredTitleAndDateList: deliveredList,
+                //   ),
 
-                if (widget.check == 'delivered')
-                  OrderTracker(
-                    status: Status.delivered,
-                    activeColor: mainColor,
-                    inActiveColor: Colors.grey[300],
-                    orderTitleAndDateList: orderList,
-                    shippedTitleAndDateList: shippedList,
-                    outOfDeliveryTitleAndDateList: outOfDeliveryList,
-                    deliveredTitleAndDateList: deliveredList,
-                  ),
+                // if (widget.check == 'delivered')
+                //   OrderTracker(
+                //     status: Status.delivered,
+                //     activeColor: mainColor,
+                //     inActiveColor: Colors.grey[300],
+                //     orderTitleAndDateList: orderList,
+                //     shippedTitleAndDateList: shippedList,
+                //     outOfDeliveryTitleAndDateList: outOfDeliveryList,
+                //     deliveredTitleAndDateList: deliveredList,
+                //   ),
                 // OrderTracker(
                 //   status: widget.check == "Accept"
                 //       ? widget.delivery == "Processing"

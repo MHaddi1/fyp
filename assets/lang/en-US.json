@@ -1,0 +1,23 @@
+{
+    "email_hint": "Email",
+    "password_hint": "Password",
+    "enter_validate_email": "Enter a valid email",
+    "title": "A²RI Craft",
+    "des": "Tailor Service is.\nOn Demand",
+    "tailor": "Tailor",
+    "customer": "Customer",
+    "sign_in": "Sign In",
+    "skip": "Skip",
+    "facebook": "Continue with Facebook",
+    "google": "Continue with Google",
+    "email": "Continue with Email",
+    "sign_up": "ign Up",
+    "sign_out": "Sign Out",
+    "sign_in_with_facebook": "Sign In with Facebook",
+    "sign_in_with_google": "Sign In with Google",
+    "text_home": "Home",
+    "text_announcement": "Announcement",
+    "text_profile": "Profile",
+    "location": "Location",
+    "text_language ": "Language"
+}

@@ -1,4 +1,29 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:fyp/const/color.dart';
+import 'package:fyp/const/components/my_button.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:screenshot/screenshot.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: InvoiceView(
+        customerEmail: 'example@example.com',
+        trackIdNo: '123456',
+        amount: '100',
+        delivery: '10',
+        total: '110',
+      ),
+    );
+  }
+}
 
 class InvoiceView extends StatefulWidget {
   final String trackIdNo;
@@ -21,34 +46,59 @@ class InvoiceView extends StatefulWidget {
 }
 
 class _InvoiceViewState extends State<InvoiceView> {
+  final _controller = ScreenshotController();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  saveToGallary() {
+    _controller.capture().then((Uint8List? image) {
+      saveScreenShoot(image!);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Image save in Gallary!"),
+    ));
+  }
+
+  saveScreenShoot(Uint8List bytes) async {
+    final time = DateTime.now()
+        .toIso8601String()
+        .replaceAll(".", "-")
+        .replaceAll(":", "-");
+    final name = 'ScreenShoot$time';
+    await ImageGallerySaver.saveImage(name: name, bytes);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainBack,
       appBar: AppBar(
         title: Text('Invoice'),
         //backgroundColor: Colors.blueAccent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            SizedBox(height: 20),
-            _buildItemList(),
-            Divider(),
-            _buildTotal(),
-            // SizedBox(height: 20),
-            // Center(
-            //   child: ElevatedButton(
-            //     onPressed: () {
-            //       // Placeholder action for downloading PDF
-            //       print('Downloading PDF');
-            //     },
-            //     child: Text('Download PDF'),
-            //   ),
-            // ),
-          ],
+      body: Screenshot(
+        controller: _controller,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              SizedBox(height: 20),
+              _buildItemList(),
+              Divider(),
+              _buildTotal(),
+              // SizedBox(height: 20),
+              // Center(
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // Placeholder action for downloading PDF
+              //       print('Downloading PDF');
+              //     },
+              //     child: Text('Download PDF'),
+              //   ),
+              // ),
+              Center(child: _buuton())
+            ],
+          ),
         ),
       ),
     );
@@ -60,7 +110,8 @@ class _InvoiceViewState extends State<InvoiceView> {
       children: [
         Text(
           'Track No: ${widget.trackIdNo}',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: textWhite),
         ),
         SizedBox(height: 10),
         Text(
@@ -77,7 +128,8 @@ class _InvoiceViewState extends State<InvoiceView> {
       children: [
         Text(
           'Items:',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: textWhite),
         ),
         SizedBox(height: 10),
         _buildItem('Amount: ', widget.amount.toString()),
@@ -94,14 +146,34 @@ class _InvoiceViewState extends State<InvoiceView> {
         children: [
           Text(
             name,
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 18, color: textWhite),
           ),
           Text(
             '$price',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 18, color: textWhite),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buuton() {
+    return MyButton(
+      text: "Save This Into Gallary",
+      onPressed: () async {
+        saveToGallary();
+        // final image = await _controller.captureFromWidget(
+        //     InvoiceView(
+        //         customerEmail: widget.customerEmail,
+        //         trackIdNo: widget.trackIdNo,
+        //         amount: widget.amount,
+        //         delivery: widget.delivery,
+        //         total: widget.total),
+        //     pixelRatio: 2);
+        // Share.shareXFiles([
+        //   XFile.fromData(image, mimeType: "png"),
+        // ]);
+      },
     );
   }
 
@@ -111,7 +183,8 @@ class _InvoiceViewState extends State<InvoiceView> {
       children: [
         Text(
           'Total: ',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: textWhite),
         ),
         SizedBox(height: 10),
         Text(

@@ -138,7 +138,9 @@ class ChangeProfile {
           this.vrID = verificationId;
           StateSave().saveState();
           Get.to(() => VerificationCode(
+                reCode: resendToken!,
                 code: verificationId,
+                phoneNumber: phoneNumber,
               ));
         },
         codeAutoRetrievalTimeout: (String verificationId) {

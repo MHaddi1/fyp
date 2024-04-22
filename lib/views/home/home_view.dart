@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
@@ -17,7 +18,6 @@ import 'package:fyp/views/notification.dart';
 import 'package:fyp/views/shopping_cart.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);

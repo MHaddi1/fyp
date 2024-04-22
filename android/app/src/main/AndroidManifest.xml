@@ -17,7 +17,7 @@
         </intent>
     </queries>
 
-    <application android:label="A²RI Craft" android:name="${applicationName}" android:icon="@mipmap/launcher_icon">
+    <application android:label="A²RI Craft" android:name="${applicationName}" android:icon="@mipmap/launcher_icon" android:requestLegacyExternalStorage="true">
 
         <!-- <meta-data android:name="com.google.android.gms.auth.api.signin.client.web.client_id" android:value="@string/default_web_client_id" /> -->
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">

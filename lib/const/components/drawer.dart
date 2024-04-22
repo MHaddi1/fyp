@@ -1,5 +1,5 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
@@ -13,6 +13,7 @@ import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/utils/utils.dart';
 import 'package:fyp/views/camera_view.dart';
 import 'package:fyp/views/chat_view.dart';
+import 'package:fyp/views/language.dart';
 import 'package:fyp/views/tailors_data_entry.dart';
 import 'package:fyp/views/view_orders.dart';
 import 'package:get/get.dart';
@@ -296,6 +297,13 @@ class _MyDrawerState extends State<MyDrawer> {
                     }
                   },
                 ),
+                // const Divider(),
+                // MyListTitle(
+                //     icon: Icons.language,
+                //     text: tr("text_language"),
+                //     onPressed: () {
+                //       Get.to(() => Language());
+                //     }),
                 const Divider(),
               ],
             ),
