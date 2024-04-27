@@ -42,8 +42,8 @@ class _C_DPaymentState extends State<C_DPayment> {
   makePayment() async {
     try {
       paymentIntent = await createPaymentIntent();
-      var gPage = const PaymentSheetGooglePay(
-          amount: "10",
+      var gPage = PaymentSheetGooglePay(
+          amount: widget.amount.toString(),
           merchantCountryCode: "US",
           testEnv: true,
           currencyCode: "US");
@@ -77,7 +77,7 @@ class _C_DPaymentState extends State<C_DPayment> {
   createPaymentIntent() async {
     try {
       Map<String, dynamic> body = {
-        "amount": "1000",
+        "amount": widget.amount.toString(),
         "currency": "USD",
         'payment_method_types[]': 'card',
       };
@@ -133,6 +133,8 @@ class _C_DPaymentState extends State<C_DPayment> {
   @override
   void initState() {
     super.initState();
+    print("----------AMOUNT-----------");
+    print(widget.amount);
     googlePayButton = pay.GooglePayButton(
       width: Get.width,
       height: 55,

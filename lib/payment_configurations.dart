@@ -34,7 +34,7 @@ String get googlePayPaymentProfile => """{
     },
     "transactionInfo": {
       "countryCode": "US",
-      "currencyCode": "USD"
+      "currencyCode": "PKR"
     }
   }
 }""";
