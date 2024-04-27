@@ -71,6 +71,9 @@ dependencies:
   velocity_x: ^4.1.1
   screenshot: ^2.3.0
   image_gallery_saver: ^2.0.3
+  google_fonts: ^5.0.0
+  flutter_stripe: ^10.1.1
+  pay:
 
 dev_dependencies:
   animated_text_kit: ^4.2.2
@@ -79,8 +82,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   intl_phone_number_input: ^0.7.4
-  order_tracker: ^0.0.2
-  text2pdf: ^0.0.2
 
 flutter_launcher_icons:
   android: "launcher_icon"

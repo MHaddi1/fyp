@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyListTitle extends StatelessWidget {
   final String text;
@@ -25,7 +26,7 @@ class MyListTitle extends StatelessWidget {
       onTap: onPressed,
       title: Text(
         text,
-        style: TextStyle(color: color),
+        style: GoogleFonts.poppins(color: color),
       ),
       leading: icon != Icons.abc
           ? Icon(

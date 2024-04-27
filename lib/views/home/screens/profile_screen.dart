@@ -7,6 +7,7 @@ import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -52,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       //   elevation: 0,
       //   title: const Text(
       //     'Profile',
-      //     style: TextStyle(color: Colors.white),
+      //     style: GoogleFonts.poppins(color: Colors.white),
       //   ),
       // ),
       body: StreamBuilder<DocumentSnapshot>(
@@ -89,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 20),
                     Text(
                       currentUser!.email!,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: textWhite,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -100,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () => editBio("bio"),
                       child: Text(
                         "Edit Bio",
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           color: textWhite,
                           fontSize: 16,
                           decoration: TextDecoration.underline,
@@ -114,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: userData['bio'] != null
                           ? Text(
                               userData['bio'].toString(),
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 color: textWhite,
                                 fontSize: 16,
                               ),
@@ -122,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )
                           : Text(
                               "Your Bio",
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 color: textWhite,
                                 fontSize: 16,
                               ),
@@ -132,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 30),
                     Text(
                       'Details',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: textWhite,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -181,14 +182,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String newValue = "";
     Get.defaultDialog(
       backgroundColor: Colors.black,
-      titleStyle: TextStyle(color: Colors.white),
+      titleStyle: GoogleFonts.poppins(color: Colors.white),
       title: "Edit $field",
       content: TextField(
         autofocus: true,
-        style: const TextStyle(color: Colors.white),
+        style: GoogleFonts.poppins(color: Colors.white),
         decoration: InputDecoration(
           hintText: "Enter New $field",
-          hintStyle: const TextStyle(color: Colors.grey),
+          hintStyle: GoogleFonts.poppins(color: Colors.grey),
         ),
         onChanged: (value) {
           newValue = value;

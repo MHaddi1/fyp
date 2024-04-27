@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
-import 'package:order_tracker/order_tracker.dart';
 
 // enum Status {
 //   order,
@@ -11,16 +10,10 @@ import 'package:order_tracker/order_tracker.dart';
 
 class StatusView extends StatefulWidget {
   final String check;
-  final String delivery;
-  final String outForDelivery;
-  final String delivered;
 
   const StatusView({
     Key? key,
     required this.check,
-    required this.delivery,
-    required this.outForDelivery,
-    required this.delivered,
   }) : super(key: key);
 
   @override
@@ -32,7 +25,6 @@ class _StatusViewState extends State<StatusView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _currentStep = _getInitialStep();
   }
@@ -150,7 +142,7 @@ class _StatusViewState extends State<StatusView> {
                 SizedBox(height: 20),
                 // Text(
                 //   getStatusText(status),
-                //   style: TextStyle(
+                //   style: GoogleFonts.poppins(
                 //     fontSize: 24,
                 //     fontWeight: FontWeight.bold,
                 //     color: getStatusColor(status),

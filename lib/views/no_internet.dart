@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -29,7 +30,7 @@ class NoInternet extends StatelessWidget {
                       color: textWhite.withOpacity(0.8)),
                   child: Text(
                     "No Internet connection",
-                    style: TextStyle(fontSize: 25),
+                    style: GoogleFonts.poppins(fontSize: 25),
                   ))
             ],
           ),

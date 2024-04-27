@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyButton extends StatelessWidget {
   final String text;
@@ -28,26 +29,26 @@ class MyButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
-              color: mainColor.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3), // changes position of shadow
+              color: mainColor.withOpacity(0.2),
+              spreadRadius: 2.0,
+              blurRadius: 2.0,
+              offset: Offset(0, 3),
             ),
           ],
         ),
         child: Center(
           child: isLoading
               ? CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-          )
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
               : Text(
-            text,
-            style: TextStyle(
-              color: textWhite,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+                  text,
+                  style: GoogleFonts.poppins(
+                    color: textWhite,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
         ),
       ),
     );

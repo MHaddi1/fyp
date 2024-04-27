@@ -7,6 +7,7 @@ import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:fyp/views/chat_view.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MessageList extends StatefulWidget {
   MessageList({super.key, required this.id});
@@ -39,7 +40,7 @@ class _MessageListState extends State<MessageList> {
         ),
         title: Text(
           'Chats',
-          style: TextStyle(color: textWhite),
+          style: GoogleFonts.poppins(color: textWhite),
         ),
         backgroundColor: mainColor,
       ),
@@ -107,13 +108,13 @@ class _MessageListState extends State<MessageList> {
                     ),
                     title: Text(
                       userNameT.toString(),
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     subtitle: Text(
                       lastMsg, // You can add last message here
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: Colors.grey,
                       ),
                     ),

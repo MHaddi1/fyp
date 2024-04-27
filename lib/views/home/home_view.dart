@@ -17,6 +17,7 @@ import 'package:fyp/views/message_user_list.dart';
 import 'package:fyp/views/notification.dart';
 import 'package:fyp/views/shopping_cart.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 
 class HomeView extends StatefulWidget {
@@ -185,7 +186,7 @@ class _HomeViewState extends State<HomeView> {
                                 color: Colors.red, shape: BoxShape.circle),
                             child: Text(
                               length.toString(),
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 9,
                                 fontWeight: FontWeight.bold,

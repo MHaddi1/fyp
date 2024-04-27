@@ -18,6 +18,7 @@ import 'package:fyp/views/tailors_data_entry.dart';
 import 'package:fyp/views/view_orders.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 enum Gender { Male, Female }
@@ -108,7 +109,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       Text(
                         FirebaseAuth.instance.currentUser?.email ??
                             "Please Login The Account",
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           color: Colors.white,
                           fontSize: 16,
                         ),
@@ -128,7 +129,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         } else {
                           return Text(
                             snapshot.data == 2 ? "Tailor" : "Customer",
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

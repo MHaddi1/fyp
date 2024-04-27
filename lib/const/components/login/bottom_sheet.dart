@@ -14,6 +14,7 @@ import 'package:fyp/views/auth/forget_password.dart';
 import 'package:fyp/views/auth/login_view.dart';
 import 'package:fyp/views/auth/suggestion_view.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -192,13 +193,13 @@ class _MyBottomLoginSheetState extends State<MyBottomLoginSheet> {
                 }),
           ),
           20.heightBox,
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Divider(
                 color: textWhite,
               ),
-              Text("Or", style: TextStyle(color: textWhite)),
+              Text("Or", style: GoogleFonts.poppins(color: textWhite)),
               Divider(
                 color: textWhite,
               ),

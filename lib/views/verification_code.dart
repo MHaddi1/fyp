@@ -4,7 +4,7 @@ import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/const/components/my_text_field.dart';
 import 'dart:async';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'package:lottie/lottie.dart';
 
@@ -89,7 +89,7 @@ class _VerificationCodeState extends State<VerificationCode> {
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: Text(
                   "Verification Code",
-                  style: TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -129,7 +129,7 @@ class _VerificationCodeState extends State<VerificationCode> {
                           },
                     child: Text(
                       "Resend Code",
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: mainColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -140,7 +140,7 @@ class _VerificationCodeState extends State<VerificationCode> {
               SizedBox(height: 15.0),
               Text(
                 "Please do not exit your app.",
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 16,
                   color: Colors.grey,
                 ),

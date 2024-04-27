@@ -10,6 +10,7 @@ import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/suggestion_controller.dart';
 import 'package:fyp/views/auth/skip_view.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -171,9 +172,10 @@ class _SuggestionViewState extends State<SuggestionView> {
                                             ),
                                           ),
                                           5.heightBox,
-                                          const Text(
+                                          Text(
                                             "Close",
-                                            style: TextStyle(color: textWhite),
+                                            style: GoogleFonts.poppins(
+                                                color: textWhite),
                                           ),
                                         ],
                                       ),
@@ -248,9 +250,9 @@ class _SuggestionViewState extends State<SuggestionView> {
                                                   .box
                                                   .alignTopLeft
                                                   .make(),
-                                              const Text(
+                                              Text(
                                                 "Profile mirrors you; choose words for professionalism and authenticity.",
-                                                style: TextStyle(
+                                                style: GoogleFonts.poppins(
                                                   color: textWhite,
                                                   fontSize: 15,
                                                 ),
@@ -280,9 +282,9 @@ class _SuggestionViewState extends State<SuggestionView> {
                                                       .box
                                                       .alignTopLeft
                                                       .make(),
-                                                  const Text(
+                                                  Text(
                                                     "Swift delivery builds trust, ensuring reliability and satisfaction in every transaction.",
-                                                    style: TextStyle(
+                                                    style: GoogleFonts.poppins(
                                                       color: textWhite,
                                                       fontSize: 15,
                                                     ),
@@ -312,9 +314,9 @@ class _SuggestionViewState extends State<SuggestionView> {
                                                   .box
                                                   .alignTopLeft
                                                   .make(),
-                                              const Text(
+                                              Text(
                                                 "Craft your GetPaid profile with words reflecting professionalism and authenticity.",
-                                                style: TextStyle(
+                                                style: GoogleFonts.poppins(
                                                   color: textWhite,
                                                   fontSize: 15,
                                                 ),

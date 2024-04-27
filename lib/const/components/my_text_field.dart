@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../color.dart';
 
 class MyField extends StatelessWidget {
@@ -36,7 +37,8 @@ class MyField extends StatelessWidget {
       validator: validate,
       keyboardType: textInputType,
       decoration: InputDecoration(
-        hintStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        hintStyle: GoogleFonts.poppins(
+            color: Colors.black, fontWeight: FontWeight.bold),
         fillColor: textWhite,
         filled: true,
         suffixIcon: iconData != null

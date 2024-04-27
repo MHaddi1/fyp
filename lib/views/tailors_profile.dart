@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/services/changeProfile.dart';
 import 'chat_view.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TailorsProfile extends StatefulWidget {
   const TailorsProfile({
@@ -86,7 +87,7 @@ class _TailorsProfileState extends State<TailorsProfile>
             Text(
               widget.name,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: textWhite,
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -100,7 +101,7 @@ class _TailorsProfileState extends State<TailorsProfile>
                 SizedBox(width: 5),
                 Text(
                   "Verified",
-                  style: TextStyle(color: Colors.blue, fontSize: 16),
+                  style: GoogleFonts.poppins(color: Colors.blue, fontSize: 16),
                 ),
               ],
             ),
@@ -137,12 +138,12 @@ class _TailorsProfileState extends State<TailorsProfile>
               children: [
                 Text(
                   "Total Rating: ${widget.star.toString()} ⭐",
-                  style: TextStyle(color: textWhite, fontSize: 20),
+                  style: GoogleFonts.poppins(color: textWhite, fontSize: 20),
                 ),
                 SizedBox(width: 10),
                 Text(
                   "⭐ ${widget.avg}",
-                  style: TextStyle(fontSize: 20, color: textWhite),
+                  style: GoogleFonts.poppins(fontSize: 20, color: textWhite),
                 ),
               ],
             ),
@@ -151,7 +152,7 @@ class _TailorsProfileState extends State<TailorsProfile>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 "Description",
-                style: TextStyle(color: textWhite, fontSize: 20),
+                style: GoogleFonts.poppins(color: textWhite, fontSize: 20),
               ),
             ),
             SizedBox(height: 10),
@@ -159,7 +160,7 @@ class _TailorsProfileState extends State<TailorsProfile>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 widget.description,
-                style: TextStyle(color: textWhite, fontSize: 16),
+                style: GoogleFonts.poppins(color: textWhite, fontSize: 16),
                 textAlign: TextAlign.justify,
               ),
             ),
@@ -206,7 +207,7 @@ class _TailorsProfileState extends State<TailorsProfile>
               ),
               child: Text(
                 'Check Out Services',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 18,
                 ),

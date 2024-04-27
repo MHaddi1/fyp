@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:fyp/views/invoice_page.dart';
+import 'package:fyp/views/payment_page.dart';
 import 'package:fyp/views/status_view.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -62,15 +64,21 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   final images = order['images'] ?? [];
                   final price = order['price'] as double;
 
-                  return Card(
-                    elevation: 4,
-                    color: Colors.white,
-                    margin: EdgeInsets.all(20),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
+                  return Container(
+                    margin: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                        color: textWhite,
+                        borderRadius: BorderRadius.circular(15.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 1.2,
+                              blurRadius: 2.0,
+                              blurStyle: BlurStyle.solid,
+                              offset: Offset(0, 2.0))
+                        ]),
                     child: Padding(
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -79,14 +87,14 @@ class _ShoppingCartState extends State<ShoppingCart> {
                             children: [
                               Text(
                                 'Order ${index + 1}',
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
                                     color: mainColor,
                                     fontSize: 18),
                               ),
                               Text(
                                 '${price.toString()} ${order['priceType']}',
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
                                     color: mainColor),
@@ -96,11 +104,13 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           SizedBox(height: 8),
                           Text(
                             'Customer: $customerEmail',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            style: GoogleFonts.poppins(
+                                fontSize: 16, color: Colors.black),
                           ),
                           Text(
                             'Tailor: ${TailorEmail ?? "No Tailor Found"}',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            style: GoogleFonts.poppins(
+                                fontSize: 16, color: Colors.black),
                           ),
                           if (images.isNotEmpty)
                             SizedBox(
@@ -124,29 +134,30 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                 ),
                               ),
                             ),
-                          SizedBox(height: 16),
-                          order['Order Placed']
-                              ? Container()
-                              : DropdownButton<String>(
-                                  value: _paymentMethod,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _paymentMethod = newValue!;
-                                    });
-                                  },
-                                  items: <String>['Bank', 'Cash on Delivery']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(color: Colors.blue),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                          SizedBox(height: 16),
+                          // SizedBox(height: 16),
+                          // order['Order Placed']
+                          //     ? Container()
+                          //     : DropdownButton<String>(
+                          //         value: _paymentMethod,
+                          //         onChanged: (String? newValue) {
+                          //           setState(() {
+                          //             _paymentMethod = newValue!;
+                          //           });
+                          //         },
+                          //         items: <String>['Bank', 'Cash on Delivery']
+                          //             .map<DropdownMenuItem<String>>(
+                          //                 (String value) {
+                          //           return DropdownMenuItem<String>(
+                          //             value: value,
+                          //             child: Text(
+                          //               value,
+                          //               style: GoogleFonts.poppins(
+                          //                   color: Colors.blue),
+                          //             ),
+                          //           );
+                          //         }).toList(),
+                          //       ),
+                          // SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -178,43 +189,44 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                               'Cash on Delivery';
                                           order['deliveryStatus'] = 'Work';
 
-                                          FirebaseFirestore.instance
-                                              .collection("Orders")
-                                              .doc(
-                                                  ordersSnapshot.docs[index].id)
-                                              .update(order)
-                                              .then((value) async {
-                                            final deviceToken = await getToken(
-                                                FirebaseAuth.instance
-                                                    .currentUser!.email!);
-                                            print(order['tailorEmail']);
-                                            print(deviceToken);
-                                            // Send notification to tailor
-                                            sendNotification(
-                                                deviceToken!,
-                                                'Order placed!',
-                                                order['tailorEmail']);
+                                          // FirebaseFirestore.instance
+                                          //     .collection("Orders")
+                                          //     .doc(
+                                          //         ordersSnapshot.docs[index].id)
+                                          //     .update(order)
+                                          //     .then((value) async {
+                                          //   final deviceToken = await getToken(
+                                          //       FirebaseAuth.instance
+                                          //           .currentUser!.email!);
+                                          //   print(order['tailorEmail']);
+                                          //   print(deviceToken);
+                                          //   // Send notification to tailor
+                                          //   sendNotification(
+                                          //       deviceToken!,
+                                          //       'Order placed!',
+                                          //       order['tailorEmail']);
 
-                                            // Show a confirmation message
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            );
-                                          }).catchError((error) {
-                                            print(
-                                                "Failed to update document: $error");
-                                          });
+                                          //   // Show a confirmation message
+                                          //   ScaffoldMessenger.of(context)
+                                          //       .showSnackBar(
+                                          //     SnackBar(
+                                          //       content: Text(
+                                          //         'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
+                                          //         style: GoogleFonts.poppins(
+                                          //             color: Colors.white),
+                                          //       ),
+                                          //     ),
+                                          //   );
+                                          // }).catchError((error) {
+                                          //   print(
+                                          //       "Failed to update document: $error");
+                                          // });
                                         }
                                       },
                                       child: Text(
                                         'Pay',
-                                        style: TextStyle(color: Colors.white),
+                                        style: GoogleFonts.poppins(
+                                            color: Colors.white),
                                       ),
                                       style: ButtonStyle(
                                         backgroundColor:
@@ -224,57 +236,46 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     ),
                               // order["Order Placed"]
                               //     ?
-                              MyButton(
-                                text: "Status",
-                                width: 90,
-                                height: 36,
-                                onPressed: () {
-                                  Get.to(() => StatusView(
-                                        check: order["orderConfirm"],
-                                        delivery: order['deliveryStatus'],
-                                        outForDelivery: order['OutForDelivery'],
-                                        delivered: order['delivered'],
+                              InkWell(
+                                onTap: () {
+                                  Get.to(() => InvoiceView(
+                                        customerEmail: order["customerEmail"],
+                                        trackIdNo:
+                                            snapshot.data!.docs[index].id,
+                                        amount: order['price'].toString(),
+                                        total: order['totalPrice'].toString(),
+                                        delivery: order['deliveryType'],
                                       ));
                                 },
-                              ),
-                              // : Container(),
-                              Text(
-                                order["orderConfirm"] == "Accept"
-                                    ? "Tailor is Working"
-                                    : order["orderConfirm"] == "Decline"
-                                        ? "Rejected"
-                                        : "Please Wait",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: order["orderConfirm"] == "Accept"
-                                      ? Colors.green
-                                      : Colors.red,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.receipt,
+                                      color: mainBack,
+                                    ),
+                                    Text("Recipes"),
+                                  ],
                                 ),
                               ),
+
+                              // : Container(),
+                              // Text(
+                              //   order["orderConfirm"] == "Accept"
+                              //       ? "Tailor is Working"
+                              //       : order["orderConfirm"] == "Decline"
+                              //           ? "Rejected"
+                              //           : "Please Wait",
+                              //   style: GoogleFonts.poppins(
+                              //     fontWeight: FontWeight.bold,
+                              //     color: order["orderConfirm"] == "Accept"
+                              //         ? Colors.green
+                              //         : Colors.red,
+                              //   ),
+                              // ),
                             ],
                           ),
                           Row(
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    Get.to(() => InvoiceView(
-                                          customerEmail: order["customerEmail"],
-                                          trackIdNo:
-                                              snapshot.data!.docs[index].id,
-                                          amount: order['price'].toString(),
-                                          total: order['totalPrice'].toString(),
-                                          delivery: order['deliveryType'],
-                                        ));
-                                  },
-                                  icon: Icon(
-                                    Icons.receipt,
-                                    color: mainBack,
-                                  )),
-                              Text("Recipes")
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Socail("assets/image/call.png", "Call", () async {
                                 final phone =
@@ -296,7 +297,38 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                 } else {
                                   await _launchWhatsApp(phone);
                                 }
-                              })
+                              }),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MyButton(
+                                text: "Status",
+                                width: 90,
+                                height: 36,
+                                onPressed: () {
+                                  Get.to(() => StatusView(
+                                        check: order["orderConfirm"],
+                                      ));
+                                },
+                              ),
+                              if (order["Order Placed"])
+                                MyButton(
+                                  text: "Pay",
+                                  width: 90,
+                                  height: 36,
+                                  onPressed: () {
+                                    Get.to(() => PaymentPage(
+                                          order: order,
+                                          snapshot:
+                                              ordersSnapshot.docs[index].id,
+                                        ));
+                                  },
+                                ),
                             ],
                           )
                         ],

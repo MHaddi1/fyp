@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NotificationS extends StatefulWidget {
   const NotificationS({super.key});
@@ -105,7 +106,7 @@ class _NotificationSState extends State<NotificationS> {
                               //     icon: Icon(Icons.more_vert)),
                               title: Text(
                                 '${price.toString()} ${order['priceType']}',
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
                                     color: mainColor),
@@ -140,7 +141,7 @@ class _NotificationSState extends State<NotificationS> {
                                   const EdgeInsets.only(left: 10.0, top: 10.0),
                               child: Text(
                                 "Request ${order['orderConfirm']}",
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
                                     color: order['orderConfirm'] == 'Decline'
                                         ? Colors.red
@@ -149,11 +150,11 @@ class _NotificationSState extends State<NotificationS> {
                             ),
                             // Text(
                             //   'Customer: $customerEmail',
-                            //   style: TextStyle(fontSize: 16, color: Colors.black),
+                            //   style: GoogleFonts.poppins(fontSize: 16, color: Colors.black),
                             // ),
                             // Text(
                             //   'Tailor: ${TailorEmail ?? "No Tailor Found"}',
-                            //   style: TextStyle(fontSize: 16, color: Colors.black),
+                            //   style: GoogleFonts.poppins(fontSize: 16, color: Colors.black),
                             // ),
                             //if (images.isNotEmpty)
 
@@ -177,7 +178,7 @@ class _NotificationSState extends State<NotificationS> {
                             //             value: value,
                             //             child: Text(
                             //               value,
-                            //               style: TextStyle(
+                            //               style: GoogleFonts.poppins(
                             //                   color: Colors.blue),
                             //             ),
                             //           );
@@ -257,7 +258,7 @@ class _NotificationSState extends State<NotificationS> {
                             //                     SnackBar(
                             //                       content: Text(
                             //                         'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
-                            //                         style: TextStyle(
+                            //                         style: GoogleFonts.poppins(
                             //                             color: Colors
                             //                                 .white),
                             //                       ),
@@ -271,7 +272,7 @@ class _NotificationSState extends State<NotificationS> {
                             //             },
                             //             child: Text(
                             //               'Pay',
-                            //               style: TextStyle(
+                            //               style: GoogleFonts.poppins(
                             //                   color: Colors.white),
                             //             ),
                             //             style: ButtonStyle(
@@ -307,7 +308,7 @@ class _NotificationSState extends State<NotificationS> {
                             //       order["orderConfirm"] == "Accept"
                             //           ? "Tailor is Working"
                             //           : "Please Wait...",
-                            //       style: TextStyle(
+                            //       style: GoogleFonts.poppins(
                             //         fontWeight: FontWeight.bold,
                             //         color: order["orderConfirm"] ==
                             //                 "Accept"

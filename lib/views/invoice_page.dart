@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -110,13 +111,13 @@ class _InvoiceViewState extends State<InvoiceView> {
       children: [
         Text(
           'Track No: ${widget.trackIdNo}',
-          style: TextStyle(
+          style: GoogleFonts.poppins(
               fontSize: 24, fontWeight: FontWeight.bold, color: textWhite),
         ),
         SizedBox(height: 10),
         Text(
           'Customer: ${widget.customerEmail}',
-          style: TextStyle(fontSize: 18, color: Colors.grey),
+          style: GoogleFonts.poppins(fontSize: 18, color: Colors.grey),
         ),
       ],
     );
@@ -128,7 +129,7 @@ class _InvoiceViewState extends State<InvoiceView> {
       children: [
         Text(
           'Items:',
-          style: TextStyle(
+          style: GoogleFonts.poppins(
               fontSize: 20, fontWeight: FontWeight.bold, color: textWhite),
         ),
         SizedBox(height: 10),
@@ -146,11 +147,11 @@ class _InvoiceViewState extends State<InvoiceView> {
         children: [
           Text(
             name,
-            style: TextStyle(fontSize: 18, color: textWhite),
+            style: GoogleFonts.poppins(fontSize: 18, color: textWhite),
           ),
           Text(
             '$price',
-            style: TextStyle(fontSize: 18, color: textWhite),
+            style: GoogleFonts.poppins(fontSize: 18, color: textWhite),
           ),
         ],
       ),
@@ -183,13 +184,13 @@ class _InvoiceViewState extends State<InvoiceView> {
       children: [
         Text(
           'Total: ',
-          style: TextStyle(
+          style: GoogleFonts.poppins(
               fontSize: 24, fontWeight: FontWeight.bold, color: textWhite),
         ),
         SizedBox(height: 10),
         Text(
           '${widget.total}',
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.blueAccent,

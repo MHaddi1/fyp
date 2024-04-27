@@ -12,6 +12,7 @@ import 'package:fyp/services/notification_services.dart';
 import 'package:fyp/utils/check_internet_utils.dart';
 import 'package:fyp/views/tailors_profile.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -415,7 +416,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
                       widget.receiverUser!,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold, color: mainBack),
                     ),
                   ),
@@ -431,7 +432,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
 
                 BubbleNormal(
                   text: data['message'],
-                  textStyle: TextStyle(color: Colors.white),
+                  textStyle: GoogleFonts.poppins(color: Colors.white),
                   isSender: isSender,
                   color: isSender ? Colors.blue : Colors.grey[300]!,
                   tail: true,
@@ -525,7 +526,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                 //             return Text(
                 //               message
                 //                   .toString(), // Convert to string if necessary
-                //               style: TextStyle(
+                //               style: GoogleFonts.poppins(
                 //                   fontSize:
                 //                       16), // Set your desired text style
                 //             );
@@ -584,7 +585,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
             children: [
               Text(
                 "Select Tailors By Rating",
-                style: TextStyle(fontSize: 20.0),
+                style: GoogleFonts.poppins(fontSize: 20.0),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

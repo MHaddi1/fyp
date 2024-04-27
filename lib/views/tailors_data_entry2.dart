@@ -6,6 +6,7 @@ import 'package:fyp/const/components/my_button.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TailorsDataEntry2 extends StatefulWidget {
   const TailorsDataEntry2({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _TailorsDataEntry2State extends State<TailorsDataEntry2> {
         backgroundColor: mainColor,
         title: Text(
           'Tailor Services Data Entry',
-          style: TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -59,7 +60,7 @@ class _TailorsDataEntry2State extends State<TailorsDataEntry2> {
                           SizedBox(height: 20),
                           Text(
                             key,
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: mainColor,

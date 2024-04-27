@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TailorDataEntry extends StatefulWidget {
   const TailorDataEntry({Key? key}) : super(key: key);
@@ -95,7 +96,8 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(key,
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold)),
                         Expanded(
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,

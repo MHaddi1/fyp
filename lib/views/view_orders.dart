@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -142,32 +142,36 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                   children: [
                                                     Text(
                                                       'Order ${index + 1}',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: mainColor,
-                                                          fontSize: 18),
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: mainColor,
+                                                              fontSize: 18),
                                                     ),
                                                     Text(
                                                       '${price.toString()} ${order['priceType']}',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 18,
-                                                          color: mainColor),
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 18,
+                                                              color: mainColor),
                                                     ),
                                                   ],
                                                 ),
                                                 SizedBox(height: 8),
                                                 Text(
                                                   'Customer: $customerEmail',
-                                                  style: TextStyle(
+                                                  style: GoogleFonts.poppins(
                                                       fontSize: 16,
                                                       color: Colors.black),
                                                 ),
                                                 Text(
                                                   'Tailor: ${TailorEmail ?? "No Tailor Found"}',
-                                                  style: TextStyle(
+                                                  style: GoogleFonts.poppins(
                                                       fontSize: 16,
                                                       color: Colors.black),
                                                 ),
@@ -225,7 +229,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                 //           value: value,
                                                 //           child: Text(
                                                 //             value,
-                                                //             style: TextStyle(color: Colors.blue),
+                                                //             style: GoogleFonts.poppins(color: Colors.blue),
                                                 //           ),
                                                 //         );
                                                 //       }).toList(),
@@ -291,7 +295,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                     //           //       SnackBar(
                                                     //           //         content: Text(
                                                     //           //           'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
-                                                    //           //           style: TextStyle(
+                                                    //           //           style: GoogleFonts.poppins(
                                                     //           //               color: Colors.white),
                                                     //           //         ),
                                                     //           //       ),
@@ -304,7 +308,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                     //         },
                                                     //         child: Text(
                                                     //           'Pay',
-                                                    //           style: TextStyle(
+                                                    //           style: GoogleFonts.poppins(
                                                     //               color:
                                                     //                   Colors.white),
                                                     //         ),
@@ -331,8 +335,10 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                               .arrow_downward),
                                                           iconSize: 24,
                                                           elevation: 16,
-                                                          style: TextStyle(
-                                                              color: mainColor),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                                  color:
+                                                                      mainColor),
                                                           underline: Container(
                                                             height: 2,
                                                             color: mainColor,
@@ -406,8 +412,10 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                               .arrow_downward),
                                                           iconSize: 24,
                                                           elevation: 16,
-                                                          style: TextStyle(
-                                                              color: mainColor),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                                  color:
+                                                                      mainColor),
                                                           underline: Container(
                                                             height: 2,
                                                             color: mainColor,
@@ -479,8 +487,10 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                               .arrow_downward),
                                                           iconSize: 24,
                                                           elevation: 16,
-                                                          style: TextStyle(
-                                                              color: mainColor),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                                  color:
+                                                                      mainColor),
                                                           underline: Container(
                                                             height: 2,
                                                             color: mainColor,
@@ -552,8 +562,10 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                               .arrow_downward),
                                                           iconSize: 24,
                                                           elevation: 16,
-                                                          style: TextStyle(
-                                                              color: mainColor),
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                                  color:
+                                                                      mainColor),
                                                           underline: Container(
                                                             height: 2,
                                                             color: mainColor,
@@ -634,7 +646,8 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                       order["Order Placed"]
                                                           ? "Accepted"
                                                           : "Accept or Decline",
-                                                      style: TextStyle(
+                                                      style:
+                                                          GoogleFonts.poppins(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color:

@@ -8,6 +8,7 @@ import 'package:fyp/const/components/profile_card.dart';
 import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/views/tailors_profile.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -180,7 +181,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         print("error: ${snapshot.error}");
                         return Text(
                           'Error: ${snapshot.error}',
-                          style: TextStyle(color: textWhite),
+                          style: GoogleFonts.poppins(color: textWhite),
                         );
                       } else {
                         return Center(child: const CircularProgressIndicator());

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyContainer extends StatelessWidget {
   final double height;
@@ -50,7 +51,7 @@ class MyContainer extends StatelessWidget {
               ),
               child: Text(
                 text!,
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                   color: textWhite,
                   fontSize: 20,
                 ),

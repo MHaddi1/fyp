@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import '../const/color.dart';
 import 'home/home_view.dart';
@@ -93,7 +94,7 @@ class _TailorServicesState extends State<TailorServices> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   'Service',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -104,7 +105,7 @@ class _TailorServicesState extends State<TailorServices> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   'Price',
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -175,14 +176,14 @@ class _TailorServicesState extends State<TailorServices> {
                                       horizontal: 10.0, vertical: 20.0),
                                   child: Text(
                                     snapshot.data!['title'],
-                                    style: TextStyle(fontSize: 25),
+                                    style: GoogleFonts.poppins(fontSize: 25),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Text(
                                     imageType,
-                                    style: TextStyle(
+                                    style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20,
                                     ),
@@ -225,7 +226,7 @@ class _TailorServicesState extends State<TailorServices> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     "Description",
-                                    style: TextStyle(
+                                    style: GoogleFonts.poppins(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold),
                                     maxLines: 1,
@@ -238,7 +239,7 @@ class _TailorServicesState extends State<TailorServices> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
                                     description,
-                                    style: TextStyle(fontSize: 14),
+                                    style: GoogleFonts.poppins(fontSize: 14),
                                     maxLines: 6,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -412,15 +413,14 @@ class _OrderScreenState extends State<OrderScreen> {
                 height: 100,
                 width: 250.0,
                 child: DefaultTextStyle(
-                  style: const TextStyle(
+                  style: GoogleFonts.poppins(
                     fontSize: 30.0,
-                    fontFamily: 'Agne',
                   ),
                   child: AnimatedTextKit(
                     animatedTexts: [
                       TypewriterAnimatedText(
                           'Add The Price From Previous Table',
-                          textStyle: TextStyle(color: mainBack)),
+                          textStyle: GoogleFonts.poppins(color: mainBack)),
                     ],
                     onTap: () {
                       print("Tap Event");

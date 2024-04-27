@@ -6,6 +6,7 @@ import 'package:fyp/const/routes/routes_name.dart';
 import 'package:fyp/controllers/login_controller.dart';
 import 'package:fyp/controllers/sign_up_controller.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SignUpView extends StatefulWidget {
@@ -54,7 +55,7 @@ class _SignUpViewState extends State<SignUpView> {
               SizedBox(height: 100.0),
               Text(
                 'Sign Up',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold,
                     color: textWhite),

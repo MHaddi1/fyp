@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 import 'coordinate_translator.dart';
@@ -119,7 +120,7 @@ class PosePainter extends CustomPainter {
         text: TextSpan(
           text:
               'left to Right shoulder: ${shoulder.toStringAsFixed(2)}', // Format the distance as needed
-          style: TextStyle(color: Colors.white, fontSize: 16),
+          style: GoogleFonts.poppins(color: Colors.white, fontSize: 16),
         ),
         textDirection: TextDirection.ltr,
       );
@@ -128,7 +129,7 @@ class PosePainter extends CustomPainter {
         text: TextSpan(
           text:
               'left shoulder to elbo: ${shoulder.toStringAsFixed(2)}', // Format the distance as needed
-          style: TextStyle(color: Colors.white, fontSize: 16),
+          style: GoogleFonts.poppins(color: Colors.white, fontSize: 16),
         ),
         textDirection: TextDirection.ltr,
       );

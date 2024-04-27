@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({
@@ -62,7 +63,7 @@ class ProfileCard extends StatelessWidget {
             ),
             title: Text(
               name,
-              style: TextStyle(
+              style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -74,7 +75,7 @@ class ProfileCard extends StatelessWidget {
                 SizedBox(height: 4.0),
                 Text(
                   description,
-                  style: TextStyle(color: Colors.white),
+                  style: GoogleFonts.poppins(color: Colors.white),
                 ),
                 SizedBox(height: 4.0),
                 Row(
@@ -87,7 +88,7 @@ class ProfileCard extends StatelessWidget {
                     SizedBox(width: 4.0),
                     Text(
                       avg.toString(),
-                      style: TextStyle(color: Colors.white),
+                      style: GoogleFonts.poppins(color: Colors.white),
                     ),
                   ],
                 ),
@@ -104,7 +105,7 @@ class ProfileCard extends StatelessWidget {
               ),
               child: Text(
                 "Visit",
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: mainColor,
                   fontSize: 14.0,
                 ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -70,7 +71,7 @@ class _MyPostState extends State<MyPost> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       widget.user,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold, color: textWhite),
                     )),
                 Align(
@@ -78,7 +79,7 @@ class _MyPostState extends State<MyPost> {
                   child: Text(
                     widget.message,
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w400, color: textWhite),
                   ),
                 ),
@@ -94,7 +95,7 @@ class _MyPostState extends State<MyPost> {
                             5.heightBox,
                             Text(
                               widget.likes.length.toString(),
-                              style: const TextStyle(
+                              style: GoogleFonts.poppins(
                                   color: textWhite,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -108,7 +109,7 @@ class _MyPostState extends State<MyPost> {
                     //         5.heightBox,
                     //         Text(
                     //           widget.likes.length.toString(),
-                    //           style: const TextStyle(
+                    //           style: const GoogleFonts.poppins(
                     //               color: textWhite,
                     //               fontWeight: FontWeight.bold),
                     //         ),
@@ -130,7 +131,7 @@ class _MyPostState extends State<MyPost> {
                             5.heightBox,
                             // Text(
                             //   widget.likes.length.toString(),
-                            //   style: const TextStyle(
+                            //   style: const GoogleFonts.poppins(
                             //       color: textWhite,
                             //       fontWeight: FontWeight.bold),
                             // ),
