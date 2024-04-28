@@ -56,6 +56,7 @@ class _ViewOrdersState extends State<ViewOrders> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SafeArea(
@@ -71,7 +72,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                   //padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                       color: textWhite,
-                      borderRadius: BorderRadius.circular(10.0),
+                      //borderRadius: BorderRadius.circular(10.0),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5), // Shadow color
@@ -121,14 +122,21 @@ class _ViewOrdersState extends State<ViewOrders> {
 
                                   return order['deliveryType'] ==
                                           "Cash on Delivery"
-                                      ? Card(
-                                          elevation: 4,
-                                          color: Colors.white,
-                                          margin: EdgeInsets.all(20),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
+                                      ? Container(
+                                          margin: const EdgeInsets.all(10.0),
+                                          decoration: BoxDecoration(
+                                              color: textWhite,
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey
+                                                        .withOpacity(0.2),
+                                                    spreadRadius: 1.2,
+                                                    blurRadius: 2.0,
+                                                    blurStyle: BlurStyle.solid,
+                                                    offset: Offset(0, 2.0))
+                                              ]),
                                           child: Padding(
                                             padding: EdgeInsets.all(8),
                                             child: Column(

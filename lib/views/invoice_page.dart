@@ -144,6 +144,7 @@ class _InvoiceViewState extends State<InvoiceView> {
   Widget _buildItem(String name, String price) {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
             name,
@@ -160,7 +161,8 @@ class _InvoiceViewState extends State<InvoiceView> {
 
   Widget _buuton() {
     return MyButton(
-      text: "Save This Into Gallary",
+      width: 70,
+      text: "Save",
       onPressed: () async {
         saveToGallary();
         // final image = await _controller.captureFromWidget(
@@ -191,9 +193,14 @@ class _InvoiceViewState extends State<InvoiceView> {
         Text(
           '${widget.total}',
           style: GoogleFonts.poppins(
+            height: 2.0,
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.blueAccent,
+            color: mainColor,
+            fontStyle: FontStyle.italic,
+            decoration: TextDecoration.underline,
+            decorationStyle: TextDecorationStyle.solid,
+            decorationColor: mainColor,
           ),
         ),
       ],
