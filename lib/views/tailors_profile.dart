@@ -1,13 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:fyp/views/tailor_services.dart';
 import 'package:get/get.dart';
-import 'package:fyp/const/color.dart';
-import 'package:fyp/services/changeProfile.dart';
-import 'chat_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import '../const/color.dart';
+import '../services/changeProfile.dart';
+import 'chat_view.dart';
 
 class TailorsProfile extends StatefulWidget {
   const TailorsProfile({
@@ -16,7 +17,7 @@ class TailorsProfile extends StatefulWidget {
     this.description = "",
     this.name = "",
     this.star = 0,
-    this.avg = 0.0,
+    this.avg = "0.0",
     this.email,
     this.uid,
     this.onRatingChanged,
@@ -27,7 +28,7 @@ class TailorsProfile extends StatefulWidget {
   final String description;
   final int star;
   final String image;
-  final double avg;
+  final String avg;
   final String? uid;
   final String? email;
   final int? rating;
@@ -40,16 +41,35 @@ class TailorsProfile extends StatefulWidget {
 class _TailorsProfileState extends State<TailorsProfile>
     with SingleTickerProviderStateMixin {
   late RatingController ratingController;
+  final changeProfile = ChangeProfile();
+  int typeCheck = 1;
 
   @override
   void initState() {
     super.initState();
     ratingController = Get.put(RatingController());
     ratingController.rating.value = widget.rating!;
+    userType();
+  }
+
+  userType() async {
+    try {
+      var myType = await changeProfile.getType();
+      print('Retrieved type: $myType'); // Debugging line
+      if (mounted) {
+        setState(() {
+          typeCheck = myType ?? 1;
+          print('Updated typeCheck: $typeCheck'); // Debugging line
+        });
+      }
+    } catch (e) {
+      print('Error retrieving type: $e'); // Debugging line
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    userType();
     return Scaffold(
       backgroundColor: mainBack,
       body: SingleChildScrollView(
@@ -119,14 +139,17 @@ class _TailorsProfileState extends State<TailorsProfile>
                       color: Colors.yellow,
                     ),
                     onPressed: () {
-                      setState(() {
-                        ratingController.updateRating(
-                          index,
-                          widget.email!,
-                          context,
-                        );
-                        widget.onRatingChanged!(ratingController.rating.value);
-                      });
+                      if (mounted) {
+                        setState(() {
+                          ratingController.updateRating(
+                            index,
+                            widget.email!,
+                            context,
+                          );
+                          widget
+                              .onRatingChanged!(ratingController.rating.value);
+                        });
+                      }
                     },
                   ),
                 ),
@@ -141,9 +164,14 @@ class _TailorsProfileState extends State<TailorsProfile>
                   style: GoogleFonts.poppins(color: textWhite, fontSize: 20),
                 ),
                 SizedBox(width: 10),
-                Text(
-                  "⭐ ${widget.avg}",
-                  style: GoogleFonts.poppins(fontSize: 20, color: textWhite),
+                SizedBox(
+                  width: 90.0,
+                  child: Text(
+                    "⭐ ${widget.avg}",
+                    style: GoogleFonts.poppins(fontSize: 20, color: textWhite),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ),
               ],
             ),
@@ -167,36 +195,147 @@ class _TailorsProfileState extends State<TailorsProfile>
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                FirebaseFirestore.instance
-                    .collection('Tailor_Services')
-                    .doc(widget.email)
-                    .get()
-                    .then((doc) {
-                  if (doc.exists) {
-                    Get.to(() => TailorServices(
-                          email: widget.email,
-                        ));
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Services Not Available"),
-                          content: Text(
-                              "Tailor services are not available for this profile."),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("OK"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                });
+                // if (typeCheck == 1) {
+                //   FirebaseFirestore.instance
+                //       .collection('Tailor_Services')
+                //       .doc(widget.email)
+                //       .get()
+                //       .then(
+                //     (doc) {
+                //       if (doc.exists) {
+                //         Get.to(() => TailorServices(
+                //               email: widget.email,
+                //             ));
+                //       } else {
+                //         showDialog(
+                //           context: context,
+                //           builder: (BuildContext context) {
+                //             return AlertDialog(
+                //               title: Text("Services Not Available"),
+                //               content: Text(
+                //                   "Tailor services are not available for this profile."),
+                //               actions: <Widget>[
+                //                 TextButton(
+                //                   onPressed: () {
+                //                     Navigator.of(context).pop();
+                //                   },
+                //                   child: Text("OK"),
+                //                 ),
+                //               ],
+                //             );
+                //           },
+                //         );
+                //       }
+                //     },
+                //   );
+                // } else if (typeCheck == 2) {
+                //   showDialog(
+                //     context: context,
+                //     builder: (_) {
+                //       return AlertDialog(
+                //         title: Text("Change Your Profile to Customer"),
+                //         content: Container(
+                //           height: Get.height * 0.15,
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.end,
+                //             children: [
+                //               Expanded(
+                //                 child: Row(
+                //                   children: [
+                //                     Text("Change Profile"),
+                //                     SizedBox(width: 15.0),
+                //                     Obx(
+                //                       () => Switch(
+                //                         value: ratingController.getType.value,
+                //                         onChanged: (value) async {
+                //                           ratingController.changeType = value;
+                //                           if (value) {
+                //                             confirmChange();
+                //                             Get.back();
+                //                           } else {
+                //                             confirmChange();
+                //                             Get.back();
+                //                           }
+                //                         },
+                //                       ),
+                //                     ),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   );
+                // }
+                print("typeCheck ");
+                print(typeCheck);
+                if (typeCheck == 1) {
+                  FirebaseFirestore.instance
+                      .collection('Tailor_Services')
+                      .doc(widget.email)
+                      .get()
+                      .then((doc) {
+                    if (doc.exists) {
+                      Get.to(() => TailorServices(email: widget.email));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Services Not Available"),
+                            content: Text(
+                                "Tailor services are not available for this profile."),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("OK"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  });
+                } else if (typeCheck == 2) {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text("Change Your Profile to Customer"),
+                        content: Container(
+                          height: Get.height * 0.15,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text("Change Profile"),
+                                    SizedBox(width: 15.0),
+                                    Obx(
+                                      () => Switch(
+                                        value: ratingController.getType.value,
+                                        onChanged: (value) async {
+                                          ratingController.changeType = value;
+                                          confirmChange();
+                                          Get.back();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: mainColor,
@@ -239,12 +378,34 @@ class _TailorsProfileState extends State<TailorsProfile>
       ),
     );
   }
+
+  Future<void> confirmChange() async {
+    EasyLoading.show(
+      dismissOnTap: true,
+      status: "Profile change",
+      indicator: CircularProgressIndicator(),
+      maskType: EasyLoadingMaskType.black,
+    );
+    int? userType = await changeProfile.getType();
+    if (userType == 2 || userType == 1) {
+      changeProfile.changeProfileType();
+    }
+    EasyLoading.dismiss();
+  }
 }
 
 class RatingController extends GetxController {
   RxInt rating = 1.obs;
+  RxBool _change = false.obs;
 
-  Future<void> updateRating(int index, String email, context) async {
+  set changeType(bool value) {
+    _change.value = value;
+  }
+
+  get getType => _change;
+
+  Future<void> updateRating(
+      int index, String email, BuildContext context) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       return;
@@ -274,40 +435,21 @@ class RatingController extends GetxController {
       );
       return;
     }
-    final starsData = await userDoc.get();
-
-    double sumStar = 0;
-
-    List<dynamic>? stars = starsData.data()?["star"];
-    int Slength = stars!.length;
-    for (var star in stars) {
-      var value = double.parse(star);
-      sumStar += value;
-      await userDoc.set(
-        {"totalRating": sumStar.toString()},
-        SetOptions(merge: true),
-      );
-    }
-
-    final avgData = await userDoc.get();
-    String t = avgData.data()?['totalRating'];
-    String total = t;
-    final avg = double.parse(total) / Slength;
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .set({
-      "avg": avg.toString(),
-    }, SetOptions(merge: true));
 
     rating.value = index + 1;
-    await userDoc.set(
-      {
-        "ratings": FieldValue.arrayUnion([currentUser.uid]),
-        "star": FieldValue.arrayUnion([rating.value.toString()])
-      },
-      SetOptions(merge: true),
-    );
+    List<dynamic> stars = userData.data()?["star"] ?? [];
+
+    stars.add(rating.value.toDouble());
+    double sumStar = stars
+        .map((star) => (star is String ? double.parse(star) : star) as double)
+        .reduce((a, b) => a + b);
+    double avg = sumStar / stars.length;
+
+    await userDoc.set({
+      "ratings": FieldValue.arrayUnion([currentUser.uid]),
+      "star": stars,
+      "totalRating": sumStar,
+      "avg": avg,
+    }, SetOptions(merge: true));
   }
 }

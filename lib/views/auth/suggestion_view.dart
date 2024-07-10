@@ -128,7 +128,9 @@ class _SuggestionViewState extends State<SuggestionView> {
                                 const Duration(milliseconds: 500),
                             enterBottomSheetDuration:
                                 const Duration(milliseconds: 500),
-                            const SkipView());
+                            SkipView(
+                              type: 1,
+                            ));
                       },
                     )
                   ]).marginZero,
@@ -330,8 +332,9 @@ class _SuggestionViewState extends State<SuggestionView> {
                                     MyButton(
                                       text: "Continue",
                                       onPressed: () async {
-                                        await Get.toNamed(
-                                            RoutesName.skipScreen);
+                                        await Get.to(() => SkipView(
+                                              type: 2,
+                                            ));
                                       },
                                     ),
                                   ],
@@ -369,7 +372,9 @@ class _SuggestionViewState extends State<SuggestionView> {
                                 const Duration(milliseconds: 500),
                             enterBottomSheetDuration:
                                 const Duration(milliseconds: 500),
-                            const SkipView());
+                            SkipView(
+                              type: 1,
+                            ));
                       },
                       text: "customer".tr,
                       width: 170,

@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       currentUser!.email!,
                       style: GoogleFonts.poppins(
                         color: textWhite,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -7,6 +7,8 @@ class GetUserModel {
   final int? type;
   final String? bio;
   final String? uid;
+  final List<dynamic>? star;
+  final dynamic avg;
 
   GetUserModel({
     this.name,
@@ -17,6 +19,8 @@ class GetUserModel {
     this.type,
     this.bio,
     this.uid,
+    this.star,
+    this.avg,
   });
 
   Map<String, dynamic> toJson() {
@@ -29,25 +33,28 @@ class GetUserModel {
       'type': type,
       'bio': bio,
       'uid': uid,
+      'star': star,
+      "avg": avg
     };
   }
 
   factory GetUserModel.fromJson(Map<String, dynamic> json) {
     return GetUserModel(
-      name: json['name'],
-      email: json['email'],
-      dateTime:
-          json['dateTime'] != null ? DateTime.parse(json['dateTime']) : null,
-      image: json['image'],
-      location: json['location'],
-      type: json['type'],
-      bio: json['bio'],
-      uid: json['uid'],
-    );
+        name: json['name'],
+        email: json['email'],
+        dateTime:
+            json['dateTime'] != null ? DateTime.parse(json['dateTime']) : null,
+        image: json['image'],
+        location: json['location'],
+        type: json['type'],
+        bio: json['bio'],
+        uid: json['uid'],
+        star: json['star'] != null ? List<dynamic>.from(json['star']) : null,
+        avg: json['avg'] != null ? json['avg'].toString() : "0.0");
   }
 
   @override
   String toString() {
-    return 'GetUserModel{name: $name, email: $email, dateTime: $dateTime, image: $image, location: $location, type: $type, bio: $bio, uid: $uid}';
+    return 'GetUserModel{name: $name, email: $email, dateTime: $dateTime, image: $image, location: $location, type: $type, bio: $bio, uid: $uid, star: $star, avg: $avg}';
   }
 }

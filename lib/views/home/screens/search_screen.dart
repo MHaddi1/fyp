@@ -21,6 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final userCollection = FirebaseFirestore.instance.collection("users");
   String search = '';
   String stars = "4";
+
   @override
   void dispose() {
     print("Hello");
@@ -135,7 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             //   "avg": average,
                             // }, SetOptions(merge: true));
 
-                            double avg = double.parse(userData['avg']);
+                            //double avg = double.parse(userData['avg']);
 
                             return userData['email'].toString() !=
                                     FirebaseAuth.instance.currentUser!.email
@@ -143,8 +144,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                     image: userData['image'] == null
                                         ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
                                         : userData['image']?.toString() ?? '',
-                                    description: starListLength.toString(),
-                                    avg: avg,
+                                    description: userData['bio'],
+                                    avg: userData['avg'].toString(),
                                     name: userData['name']
                                             ?.toString()
                                             .capitalized ??
@@ -168,13 +169,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 : userData['image']
                                                         ?.toString() ??
                                                     '',
-                                            avg: double.parse(userData['avg']),
+                                            avg: userData['avg'] == null
+                                                ? "0.0"
+                                                : userData['avg'].toString(),
                                           ),
                                         ),
                                       );
                                     },
                                   )
-                                : Container();
+                                : SizedBox();
                           },
                         );
                       } else if (snapshot.hasError) {

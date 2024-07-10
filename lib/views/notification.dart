@@ -14,9 +14,11 @@ class NotificationS extends StatefulWidget {
 
 class _NotificationSState extends State<NotificationS> {
   var docs = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainBack,
       appBar: AppBar(
         centerTitle: true,
         title: Text("Notification"),
@@ -25,7 +27,7 @@ class _NotificationSState extends State<NotificationS> {
         child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: FirebaseFirestore.instance
               .collection("Orders")
-              .where('tailorEmail',
+              .where('customerEmail',
                   isEqualTo: FirebaseAuth.instance.currentUser!.email)
               .snapshots(),
           builder: (context, snapshot) {
@@ -43,6 +45,7 @@ class _NotificationSState extends State<NotificationS> {
               }
 
               return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: ordersSnapshot.docs.length,
                 itemBuilder: (context, index) {
                   final order =

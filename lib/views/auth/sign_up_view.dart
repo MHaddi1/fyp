@@ -9,8 +9,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../../services/auth/sign_up_services.dart';
+
 class SignUpView extends StatefulWidget {
-  const SignUpView({super.key});
+  SignUpView({Key? key, this.type}) : super(key: key);
+  dynamic type;
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
@@ -23,12 +26,20 @@ class _SignUpViewState extends State<SignUpView> {
   final _formKey = GlobalKey<FormState>();
   final LoginController loginController = Get.put(LoginController());
   final SignUpController signUpController = Get.put(SignUpController());
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   signUpController.isVerify();
-  //   signUpController.mySingUp();
-  // }
+  final signUpServices = SignUpServices();
+
+  checkLocation() async {
+    if (widget.type == 2) {
+    } else {
+      await signUpServices.currentCity();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkLocation();
+  }
 
   @override
   void dispose() {
@@ -40,6 +51,8 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+    print("type");
+    print(widget.type);
     return Scaffold(
       backgroundColor: mainBack,
       appBar: AppBar(),
@@ -121,7 +134,7 @@ class _SignUpViewState extends State<SignUpView> {
                           text: "Confirm Password".tr,
                           validate: (value) {
                             if (value!.isEmpty) {
-                              return "passwrod is required";
+                              return "password is required";
                             }
                             return null;
                           }),
@@ -135,8 +148,14 @@ class _SignUpViewState extends State<SignUpView> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    signUpController.mySignUp();
-                    Get.toNamed(RoutesName.signScreen);
+                    if (widget.type == 2) {
+                      Get.toNamed(RoutesName.getNumberScreen,
+                          arguments: widget.type);
+                    } else {
+                      signUpController.mySignUp(type: widget.type);
+                      //Get.toNamed(RoutesName.signScreen);
+                    }
+
                     //Get.toNamed(RoutesName.signUpScreen2);
                   }
                 },

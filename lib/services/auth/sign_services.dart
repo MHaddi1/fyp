@@ -113,6 +113,8 @@ class SignServices {
         dateTime: DateTime.now(),
         image: image,
         type: 1,
+        star: [0],
+        avg: 0.0,
         bio: "Write The About You If Tailer Write Expertize",
         uid: mAuth.currentUser!.uid);
 

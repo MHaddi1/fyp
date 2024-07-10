@@ -19,7 +19,7 @@ List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey =
-      "pk_test_51P29RKJd5Hj3kQdBXWGvzYfAmkrHpIDA4KZVnyK2BJGoG1yAsGl8I5GDV2S0WymnApKXWyCtNleEDO9dMyFUCOfM00gy22LQtI";
+      "pk_test_51PBbZECF5TkBhPkXLE5jNlJBKua4dCucA3rSpgEvFVIsHsdAjRQsweJkcr64czx25YrobXcJihd3OZxnZngNrezY00tkenl2PJ";
   Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
   Stripe.urlScheme = 'flutterstripe';
   await Stripe.instance.applySettings();

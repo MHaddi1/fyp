@@ -24,6 +24,7 @@ class SignUpController extends GetxController {
   RxString name = ''.obs;
   Rx<GetUserModel?> user = Rx<GetUserModel?>(null);
   final userCollection = FirebaseFirestore.instance.collection("users");
+
   void setEmail(String value) {
     email.value = value;
   }
@@ -45,32 +46,40 @@ class SignUpController extends GetxController {
   }
 
   String get myEmail => email.value;
+
   String get myPassword => password.value;
+
   File? get image => _image.value;
+
   int get myType => type.value;
+
   String get myName => name.value;
 
-  void mySignUp() async {
+  void mySignUp({int? type}) async {
     try {
       await signUpServices.signUp(myEmail.trim(), myPassword.trim());
       GetUserModel userModel = GetUserModel(
-        name: myEmail.split("@")[0],
-        email: myEmail,
-        type: 1,
-        location: await SignUpServices().currentCity(),
-        dateTime: DateTime.now(),
-        bio: "Write You Bio",
-        uid: FirebaseAuth.instance.currentUser?.uid,
-      );
+          image:
+              "https://i1.rgstatic.net/ii/profile.image/1142222359674881-1649338440466_Q512/Ab-Cd-120.jpg",
+          name: myEmail.split("@")[0],
+          email: myEmail,
+          type: type,
+          avg: 0.0,
+          location: await SignUpServices().currentCity(),
+          dateTime: DateTime.now(),
+          bio: "Write You Bio",
+          uid: FirebaseAuth.instance.currentUser?.uid,
+          star: [0]);
       await signUpServices.userData(userModel);
     } catch (e) {
       print('Error signing up: $e');
     }
   }
 
-  void forgetPassword() async {
+  void forgetPassword(BuildContext context) async {
     try {
-      await signUpServices.resetPassword(myEmail);
+      //await signUpServices.resetPassword(myEmail);
+      signUpServices.sendPasswordResetEmail(context,myEmail);
     } catch (e) {
       Utils.snackBar("Error", e.toString());
     }

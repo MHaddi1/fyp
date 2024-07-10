@@ -8,12 +8,23 @@ import 'package:fyp/views/auth/sign_up_view.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class SkipView extends StatelessWidget {
-  const SkipView({super.key});
+class SkipView extends StatefulWidget {
+  dynamic type;
 
+  SkipView({super.key, this.type});
+
+  @override
+  State<SkipView> createState() => _SkipViewState();
+}
+
+class _SkipViewState extends State<SkipView> {
   @override
   Widget build(BuildContext context) {
     final _controllerLogin = Get.put(LoginController());
+    var data = widget.type;
+    print("type");
+    print(data);
+
     // final _controllerSignup = Get.put(SignUpController());
     return Scaffold(
       backgroundColor: mainBack,
@@ -30,8 +41,11 @@ class SkipView extends StatelessWidget {
                     onPressed: () {
                       Get.back();
                     },
-                    icon: const Icon(Icons.close)),
-                "Close".text.make()
+                    icon: const Icon(
+                      Icons.close,
+                      color: textWhite,
+                    )),
+                "Close".text.color(textWhite).make()
               ],
             ),
             20.heightBox,
@@ -92,7 +106,11 @@ class SkipView extends StatelessWidget {
                         image: AssetImage(AppImage.google))),
                 SocialMedia(
                     onPressed: () {
-                      Get.to(() => const SignUpView());
+                      Get.to(
+                        () => SignUpView(
+                          type: widget.type,
+                        ),
+                      );
                     },
                     color: Colors.white,
                     width: 40,

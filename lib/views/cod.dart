@@ -8,12 +8,30 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-class CODPage extends StatelessWidget {
-  const CODPage({Key? key, required this.order, this.index, this.snapshot})
+class CODPage extends StatefulWidget {
+  const CODPage(
+      {Key? key,
+      required this.order,
+      this.index,
+      this.snapshot,
+      this.deliveryPrice,
+      this.updatePrice})
       : super(key: key);
   final Map<String, dynamic> order;
   final dynamic index;
   final dynamic snapshot;
+  final dynamic deliveryPrice;
+  final dynamic updatePrice;
+
+  @override
+  State<CODPage> createState() => _CODPageState();
+}
+
+class _CODPageState extends State<CODPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +54,11 @@ class CODPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              _buildOrderInfoRow('Price', order['price'].toString()),
-              _buildOrderInfoRow('Price Type', order['priceType'].toString()),
-              _buildOrderInfoRow('Delivery', order['delivery'].toString()),
-              _buildOrderInfoRow('Total Price', order['totalPrice'].toString()),
+              _buildOrderInfoRow('Price', widget.order['price'].toString()),
+              _buildOrderInfoRow(
+                  'Price Type', widget.order['priceType'].toString()),
+              _buildOrderInfoRow('Delivery', widget.deliveryPrice.toString()),
+              _buildOrderInfoRow('Total Price', widget.updatePrice.toString()),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -98,41 +117,39 @@ class CODPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                double currentPrice = order['price'];
-                double deliveryPrice = 200;
-                double updatedPrice = currentPrice + deliveryPrice;
-                order['totalPrice'] = updatedPrice;
-                order['delivery'] = deliveryPrice;
-                order['Order Placed'] = true;
-                order['deliveryType'] = 'Cash on Delivery';
-                order['deliveryStatus'] = 'Work';
+                widget.order['totalPrice'] = widget.updatePrice;
+                widget.order['delivery'] = widget.deliveryPrice;
+                widget.order['Order Placed'] = true;
+                widget.order['deliveryType'] = 'Cash on Delivery';
+                widget.order['deliveryStatus'] = 'Work';
                 FirebaseFirestore.instance
                     .collection("Orders")
-                    .doc(snapshot)
-                    .update(order)
+                    .doc(widget.snapshot)
+                    .update(widget.order)
                     .then((value) async {
                   final deviceToken =
                       await getToken(FirebaseAuth.instance.currentUser!.email!);
-                  print(order['tailorEmail']);
+                  print(widget.order['tailorEmail']);
                   print(deviceToken);
+
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(
+                  //       'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
+                  //       style: GoogleFonts.poppins(color: Colors.white),
+                  //     ),
+                  //   ),
+                  // );
                   // Send notification to tailor
-                  sendNotification(
-                      deviceToken!, 'Order placed!', order['tailorEmail']);
+                  sendNotification(deviceToken!, 'Order placed!',
+                      widget.order['tailorEmail']);
 
                   // Show a confirmation message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Order is being processed for delivery. Total amount with delivery charges: $updatedPrice',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                    ),
-                  );
                 }).catchError((error) {
                   print("Failed to update document: $error");
                 });
                 Get.back();
-                Get.to(() => Cong());
+                Get.offAll(() => Cong());
               },
               child: Text("Confirm"),
             ),

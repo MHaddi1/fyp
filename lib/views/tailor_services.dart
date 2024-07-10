@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fyp/views/body_measuremnt_view.dart';
 import 'package:get/get.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,7 @@ import 'home/home_view.dart';
 class TailorServices extends StatefulWidget {
   const TailorServices({Key? key, required this.email}) : super(key: key);
   final email;
+
   @override
   State<TailorServices> createState() => _TailorServicesState();
 }
@@ -81,7 +83,7 @@ class _TailorServicesState extends State<TailorServices> {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: mainColor, // Set your desired color here
+                      color: textWhite,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Table(
@@ -163,8 +165,8 @@ class _TailorServicesState extends State<TailorServices> {
                             ],
                           ),
                           child: Card(
-                            elevation:
-                                0, // Set elevation to 0 to remove the shadow of the Card
+                            elevation: 0,
+                            // Set elevation to 0 to remove the shadow of the Card
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -260,6 +262,10 @@ class _TailorServicesState extends State<TailorServices> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Navigate to the order screen
+
+          dynamic data = {"email": widget.email, "price": Price};
+
+          //Get.to(() => BodyMeasurementsScreen(), arguments: data);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -291,12 +297,14 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late String PriceType;
-  final TextEditingController _priceController = TextEditingController();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _notesController = TextEditingController();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   // Function to place the order
   void placeOrder() async {
     try {
+      print("CLICK WORKING");
       // QuerySnapshot<Map<String, dynamic>> ordersSnapshot =
       // await FirebaseFirestore.instance.collection('Orders')
       //     .where('customerEmail', isEqualTo: FirebaseAuth.instance.currentUser!.email)
@@ -339,7 +347,7 @@ class _OrderScreenState extends State<OrderScreen> {
         }
 
         // Match the selected price with the price in the priceList
-        double selectedPrice = double.parse(_priceController.text.trim());
+        double selectedPrice = double.parse(_notesController.text.trim());
         bool priceMatched = false;
         price.forEach((serviceName, price) {
           if (price == selectedPrice) {
@@ -360,7 +368,7 @@ class _OrderScreenState extends State<OrderScreen> {
         }
 
         // Create the new order
-        await FirebaseFirestore.instance.collection('Orders').add({
+        DocumentReference newOrderRef =  await FirebaseFirestore.instance.collection('Orders').add({
           'tailorEmail': widget.email,
           'customerEmail': FirebaseAuth.instance.currentUser!.email,
           'images': images,
@@ -385,7 +393,7 @@ class _OrderScreenState extends State<OrderScreen> {
         );
 
         // Navigate to home screen
-        Get.offAll(() => HomeView());
+        Get.to(() => BodyMeasurementsScreen(), arguments: newOrderRef.id);
       }
     } catch (e) {
       print('Error placing order: $e');
@@ -395,6 +403,7 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: mainBack,
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Place Order'),
@@ -413,14 +422,12 @@ class _OrderScreenState extends State<OrderScreen> {
                 height: 100,
                 width: 250.0,
                 child: DefaultTextStyle(
-                  style: GoogleFonts.poppins(
-                    fontSize: 30.0,
-                  ),
+                  style: GoogleFonts.poppins(fontSize: 30.0, color: textWhite),
                   child: AnimatedTextKit(
                     animatedTexts: [
                       TypewriterAnimatedText(
                           'Add The Price From Previous Table',
-                          textStyle: GoogleFonts.poppins(color: mainBack)),
+                          textStyle: GoogleFonts.poppins(color: textWhite)),
                     ],
                     onTap: () {
                       print("Tap Event");
@@ -432,11 +439,17 @@ class _OrderScreenState extends State<OrderScreen> {
                 height: 50.0,
               ),
               TextField(
-                controller: _priceController,
+                style: GoogleFonts.poppins(color: textWhite),
+                controller: _notesController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 decoration: InputDecoration(
+                  hintStyle: GoogleFonts.poppins(color: textWhite),
                   labelText: 'Enter Price',
-                  border: OutlineInputBorder(),
+                  labelStyle: GoogleFonts.poppins(color: textWhite),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: textWhite)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: textWhite)),
                 ),
               ),
               SizedBox(height: 20),

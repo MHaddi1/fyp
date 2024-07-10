@@ -85,22 +85,20 @@ class _MyPostState extends State<MyPost> {
                 ),
                 const Divider(),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Align(
-                        alignment: Alignment.topLeft,
-                        child: Column(
-                          children: [
-                            MyLikeButton(isLiked: isLiked, onTap: toggleLike),
-                            5.heightBox,
-                            Text(
-                              widget.likes.length.toString(),
-                              style: GoogleFonts.poppins(
-                                  color: textWhite,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        )),
+                    Column(
+                      children: [
+                        MyLikeButton(isLiked: isLiked, onTap: toggleLike),
+                        5.heightBox,
+                        Text(
+                          widget.likes.length.toString(),
+                          style: GoogleFonts.poppins(
+                              color: textWhite,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                     // Align(
                     //     alignment: Alignment.topLeft,
                     //     child: Column(
@@ -115,28 +113,29 @@ class _MyPostState extends State<MyPost> {
                     //         ),
                     //       ],
                     //     )),
-                    Align(
-                        alignment: Alignment.topLeft,
-                        child: Column(
-                          children: [
-                            IconButton(
-                                onPressed: () async {
-                                  Share.share(
-                                      "${widget.user}\n${widget.message}");
-                                },
-                                icon: Icon(
-                                  Icons.share_rounded,
-                                  color: textWhite,
-                                )),
-                            5.heightBox,
-                            // Text(
-                            //   widget.likes.length.toString(),
-                            //   style: const GoogleFonts.poppins(
-                            //       color: textWhite,
-                            //       fontWeight: FontWeight.bold),
-                            // ),
-                          ],
-                        )),
+                    Column(
+                      children: [
+                             InkWell(
+                               onTap:(){
+                                 Share.share(
+                                     "${widget.user}\n${widget.message}");
+                               },
+                               child: Icon(
+                                Icons.share_rounded,
+                                color: textWhite,
+                                                           ),
+                             ),
+                        5.heightBox,
+
+                        Text(
+                          "Share",
+                          style:  GoogleFonts.poppins(
+                              color: textWhite,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 //count Likes

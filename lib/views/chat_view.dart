@@ -377,7 +377,10 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
         : StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('users')
-                .where('avg', isEqualTo: stars)
+                .where(
+                  'avg',
+                  isEqualTo: stars,
+                )
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -389,10 +392,12 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                   child: CircularProgressIndicator(),
                 );
               }
+
               return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   final document = snapshot.data!.docs[index];
+                  print("The Avg is ${document.data()['avg']}{}");
                   return _buildMessageItem(document);
                 },
               );
@@ -402,6 +407,7 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
   Widget _buildMessageItem(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data =
         documentSnapshot.data()! as Map<String, dynamic>;
+    var avgValue = data['avg'];
 
     final isSender = data["senderId"] == _auth.currentUser!.uid;
     return widget.chatType != "bot"
@@ -447,7 +453,10 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
             alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
             child: Column(
               children: [
-                if (!isSender) ...[
+                if (!isSender ||
+                    avgValue.isNotEmpty ||
+                    avgValue is String ||
+                    avgValue != stars) ...[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: MyListTitle(
@@ -462,41 +471,45 @@ class _ChatViewState extends State<ChatView> with WidgetsBindingObserver {
                   SizedBox(
                     width: 5.0,
                   ),
-                  if (data["avg"] != stars)
-                    Container(
-                      child: Text("No User Found With This Rating"),
-                    ),
-                  if (data["avg"] == stars)
-                    ProfileCard(
-                      image: data['image'] == null
-                          ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
-                          : data['image']?.toString() ?? '',
-                      //description: starListLength.toString(),
-                      //avg: average.floorToDouble(),
-                      name: data['name']?.toString().capitalized ?? '',
-                      avg: double.parse(data['avg']),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TailorsProfile(
-                              rating: 1,
-                              onRatingChanged: (value) {},
-                              email: data['email']?.toString(),
-                              uid: data['uid']?.toString(),
-                              name: data['name']!.toString(),
-                              description: data['bio']!.toString(),
-                              //star: starListLength,
-                              image: data['image'] == null
-                                  ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
-                                  : data['image']?.toString() ?? '',
-                              avg: double.parse(data['avg']),
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                ],
+                  (avgValue == null ||
+                          (avgValue is String && avgValue.isEmpty) ||
+                          avgValue != stars * 1)
+                      ? Container(
+                          child: Visibility(
+                              visible: true,
+                              child:
+                                  Text("No User Found With This Rating" * 1)),
+                        )
+                      : ProfileCard(
+                          image: data['image'] == null
+                              ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_2RVIZc1ppKuC-d8egbHChBoGMCcEjVe-K7GNmBjvsSdrKyXibk-ao7jJArJHoqU3xHc&usqp=CAU"
+                              : data['image']?.toString() ?? '',
+                          //description: starListLength.toString(),
+                          //avg: average.floorToDouble(),
+                          name: data['name']?.toString().capitalized ?? '',
+                          avg: data['avg'],
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TailorsProfile(
+                                  rating: 1,
+                                  onRatingChanged: (value) {},
+                                  email: data['email']?.toString(),
+                                  uid: data['uid']?.toString(),
+                                  name: data['name']!.toString(),
+                                  description: data['bio']!.toString(),
+                                  //star: starListLength,
+                                  image: data['image'] == null
+                                      ? "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg?w=740&t=st=1706427756~exp=1706428356~hmac=3d3a5aa4798754cc09aafb2fcf7a1b246824aa67b35ba49b5e4e7d5614b54b0b"
+                                      : data['image']?.toString() ?? '',
+                                  avg: data['avg'].toString(),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                ]
 
                 // StreamBuilder(
                 //   stream: FirebaseFirestore.instance

@@ -1,30 +1,10 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:screenshot/screenshot.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: InvoiceView(
-        customerEmail: 'example@example.com',
-        trackIdNo: '123456',
-        amount: '100',
-        delivery: '10',
-        total: '110',
-      ),
-    );
-  }
-}
 
 class InvoiceView extends StatefulWidget {
   final String trackIdNo;

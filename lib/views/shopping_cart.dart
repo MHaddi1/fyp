@@ -31,6 +31,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   late PageController _pageController;
   int _currentIndex = 0;
   final _cartController = Get.put(CartController());
+
   @override
   void initState() {
     // TODO: implement initState
@@ -48,7 +49,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: mainBack,
       appBar: AppBar(
         title: Text('Shopping Cart'),
         backgroundColor: mainColor, // Customize app bar color
@@ -71,7 +72,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
               final ordersSnapshot = snapshot.data;
 
               if (ordersSnapshot == null || ordersSnapshot.docs.isEmpty) {
-                return Center(child: Text('No orders found'));
+                return Center(
+                    child: Text('No orders found',
+                        style: GoogleFonts.poppins(color: textWhite)));
               }
 
               return ListView.builder(
@@ -173,13 +176,17 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                 0.8,
                                         maxScale:
                                             PhotoViewComputedScale.covered * 2,
+                                        // heroAttributes:
+                                        //     PhotoViewHeroAttributes(tag: index),
+                                        initialScale:
+                                            PhotoViewComputedScale.contained,
                                       );
                                     },
                                     scrollPhysics: BouncingScrollPhysics(),
                                     // Set the background color to the "classic white"
-                                    backgroundDecoration: BoxDecoration(
-                                      color: Theme.of(context).canvasColor,
-                                    ),
+                                    // backgroundDecoration: BoxDecoration(
+                                    //   color: Theme.of(context).canvasColor,
+                                    // ),
                                     loadingBuilder: (context, event) => Center(
                                       child: Container(
                                         width: 20.0,
@@ -325,28 +332,31 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                         delivery: order['deliveryType'],
                                       ));
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: mainBack),
-                                      borderRadius:
-                                          BorderRadius.circular(15.0)),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.receipt,
-                                        color: mainBack,
-                                      ),
-                                      Text(
-                                        "Recipes",
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
+                                child: order['deliveryType'] ==
+                                        'Cash on Delivery'
+                                    ? Container(
+                                        padding: const EdgeInsets.all(10.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(color: mainBack),
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.receipt,
+                                              color: mainBack,
+                                            ),
+                                            Text(
+                                              "Recipes",
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                      )
+                                    : Container(),
                               ),
                               SizedBox(height: 15.0),
                               // : Container(),
@@ -397,19 +407,22 @@ class _ShoppingCartState extends State<ShoppingCart> {
                           SizedBox(
                             height: 15.0,
                           ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              MyButton(
-                                text: "Status",
-                                width: 90,
-                                height: 36,
-                                onPressed: () {
-                                  Get.to(() => StatusView(
-                                        check: order["orderConfirm"],
-                                      ));
-                                },
-                              ),
+                              (order["orderConfirm"] == "No")
+                                  ? Container()
+                                  : MyButton(
+                                      text: "Status",
+                                      width: 90,
+                                      height: 36,
+                                      onPressed: () {
+                                        Get.to(() => StatusView(
+                                              check: order["orderConfirm"],
+                                            ));
+                                      },
+                                    ),
                               if (order["Order Placed"] == false)
                                 MyButton(
                                   text: "Pay",

@@ -28,6 +28,7 @@ class _StatusViewState extends State<StatusView> {
     super.initState();
     _currentStep = _getInitialStep();
   }
+
   // Status getStatus() {
   //   if (widget.check == "Accept") {
   //     if (widget.delivery == "Processing") {
@@ -110,7 +111,7 @@ class _StatusViewState extends State<StatusView> {
       case "delivered":
         return 3;
       default:
-        return -1;
+        return 4;
     }
   }
 
@@ -148,54 +149,64 @@ class _StatusViewState extends State<StatusView> {
                 //     color: getStatusColor(status),
                 //   ),
                 // ),
-                Stepper(
-                  currentStep: _currentStep,
-                  steps: [
-                    Step(
-                      title: Text("Accept"),
-                      content: Text("Talior is working on your clothes"),
-                      isActive: widget.check == "Accept",
-                    ),
-                    Step(
-                      title: Text("On the way"),
-                      content: Text("Content for Step 2"),
-                      isActive: widget.check == "Processing",
-                    ),
-                    Step(
-                      title: Text("Out For Delivery"),
-                      content:
-                          Text("Please Be patient your clothes is on the way"),
-                      isActive: widget.check == "OutForDelivery",
-                    ),
-                    Step(
-                      title: Text("delivered"),
-                      content: Text("I Hope You Enjoy our service"),
-                      isActive: widget.check == "delivered",
-                    ),
-                  ],
-                  onStepContinue: () {
-                    setState(() {
-                      _currentStep = (_currentStep + 1) % 4;
-                    });
-                  },
-                  onStepTapped: (step) {
-                    // Allow users to navigate to the previous steps
-                    if (step < _currentStep) {
-                      setState(() {
-                        _currentStep = step;
-                      });
-                    }
-                  },
-                ),
-
-                if (widget.check == 'Decline')
+                if (widget.check == 'Decline' || _currentStep == 4) ...[
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.black12,
-                        borderRadius: BorderRadius.circular(12.0)),
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
                     padding: const EdgeInsets.all(30.0),
-                    child: Center(child: Text("No Status Found")),
+                    child: Center(child: Text("😔 No Status Found")),
                   ),
+                ] else
+                  Stepper(
+                    currentStep: _currentStep,
+                    steps: [
+                      Step(
+                        title: Text("Accept"),
+                        content: Text("Tailor is working on your clothes"),
+                        isActive: widget.check == "Accept",
+                      ),
+                      Step(
+                        title: Text("On the way"),
+                        content: Text("Content for Step 2"),
+                        isActive: widget.check == "Processing",
+                      ),
+                      Step(
+                        title: Text("Out For Delivery"),
+                        content: Text(
+                            "Please Be patient your clothes is on the way"),
+                        isActive: widget.check == "OutForDelivery",
+                      ),
+                      Step(
+                        title: Text("delivered"),
+                        content: Text("I Hope You Enjoy our service"),
+                        isActive: widget.check == "delivered",
+                      ),
+                    ],
+                    onStepContinue: () {
+                      setState(() {
+                        _currentStep = (_currentStep + 1) % 4;
+                      });
+                    },
+                    onStepTapped: (step) {
+                      // Allow users to navigate to the previous steps
+                      if (step < _currentStep) {
+                        setState(() {
+                          _currentStep = step;
+                        });
+                      }
+                    },
+                  ),
+
+                // if (widget.check == 'Decline' || _currentStep == 4)
+                // Container(
+                //   decoration: BoxDecoration(
+                //       color: Colors.black12,
+                //       borderRadius: BorderRadius.circular(12.0)),
+                //   padding: const EdgeInsets.all(30.0),
+                //   child: Center(child: Text("No Status Found")),
+                // ),
                 // if (widget.check == 'Accept')
                 //   OrderTracker(
                 //     status: Status.order,

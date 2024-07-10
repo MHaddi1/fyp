@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fyp/payment_configurations.dart';
+import 'package:fyp/views/congratulation.dart';
 import 'package:get/get.dart';
 import "package:http/http.dart" as http;
 import 'package:pay/pay.dart' as pay;
@@ -11,6 +12,7 @@ import 'dart:io' show Platform;
 
 class C_DPayment extends StatefulWidget {
   const C_DPayment({super.key, this.amount});
+
   final dynamic amount;
 
   @override
@@ -21,6 +23,7 @@ class _C_DPaymentState extends State<C_DPayment> {
   Map<String, dynamic>? paymentIntent;
   GooglePayButton? googlePayButton;
   ApplePayButton? applePayButton;
+
   // Future<void> onGooglePayResult(paymentResult) async {
   //   final response = await createPaymentIntent();
   //   final clientSecret = response['clientSecret'];
@@ -69,15 +72,24 @@ class _C_DPaymentState extends State<C_DPayment> {
     try {
       await Stripe.instance.presentPaymentSheet();
       print("Done");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Payment successful!')),
+      );
+     await Future.delayed(Duration(seconds: 3)).then((value){
+       Get.offAll(()=>Cong());
+     });
     } catch (e) {
       print("error $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Payment failed: $e')),
+      );
     }
   }
 
   createPaymentIntent() async {
     try {
       Map<String, dynamic> body = {
-        "amount": widget.amount.toString(),
+        "amount": "100",
         "currency": "USD",
         'payment_method_types[]': 'card',
       };
@@ -86,7 +98,7 @@ class _C_DPaymentState extends State<C_DPayment> {
           body: body,
           headers: {
             "Authorization":
-                "Bearer sk_test_51P29RKJd5Hj3kQdBmEPY0Z2aWt5xcNmsGRMQXYk5iGzExaDf7mWEBGY270HKyT4Pdy0JlhBlqYiVHApqNYMo5b9O00JjLBaqWy",
+                "Bearer sk_test_51PBbZECF5TkBhPkXR0GMYoJpw0YBXfdTT32WTb0D7Gl4BM626aYYrl7ATILCotfwIDSZ0Z7wW7tgpMbOCS4l2SDg00u3TJ2RBl",
             "Content-Type": "application/x-www-form-urlencoded"
           });
       return json.decode(response.body);
@@ -116,10 +128,11 @@ class _C_DPaymentState extends State<C_DPayment> {
       );
       Get.log('params: $params');
       // 3. Confirm Google pay payment method
-      await Stripe.instance.confirmPayment(
+     await Stripe.instance.confirmPayment(
         paymentIntentClientSecret: clientSecret,
         data: params,
       );
+      //print("The Payment ${pay}");
       debugPrint('payment successful');
       //await purchaseTicket();
     } catch (e, trace) {
@@ -145,7 +158,7 @@ class _C_DPaymentState extends State<C_DPayment> {
       paymentItems: [
         pay.PaymentItem(
           label: "Product 1",
-          amount: "100",
+          amount: "1000",
           status: pay.PaymentItemStatus.final_price,
         )
       ],
@@ -184,7 +197,7 @@ class _C_DPaymentState extends State<C_DPayment> {
         child: CircularProgressIndicator(),
       ),
       childOnError: const Text(
-        'Google Pay is not available in this device',
+        'Apple Pay is not available in this device',
       ),
       onError: (e) {
         print("-------------------Error-------------------");
@@ -202,8 +215,12 @@ class _C_DPaymentState extends State<C_DPayment> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
           if (Platform.isIOS) applePayButton!,
-          if (Platform.isAndroid) googlePayButton!,
+          if (Platform.isAndroid)
+            Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: googlePayButton!),
           Center(
               child: Container(
             height: 56,

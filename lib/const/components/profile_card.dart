@@ -10,14 +10,14 @@ class ProfileCard extends StatelessWidget {
     required this.name,
     this.description = "5.0",
     required this.onPressed,
-    this.avg = 0.0,
+    this.avg = "0.0",
   }) : super(key: key);
 
   final String image;
   final String name;
   final String description;
   final Function() onPressed;
-  final double avg;
+  final String avg;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +76,8 @@ class ProfileCard extends StatelessWidget {
                 Text(
                   description,
                   style: GoogleFonts.poppins(color: Colors.white),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 4.0),
                 Row(
@@ -86,9 +88,14 @@ class ProfileCard extends StatelessWidget {
                       size: 16.0,
                     ),
                     SizedBox(width: 4.0),
-                    Text(
-                      avg.toString(),
-                      style: GoogleFonts.poppins(color: Colors.white),
+                    SizedBox(
+                      width: 30,
+                      child: Text(
+                        avg.toString(),
+                        style: GoogleFonts.poppins(color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
                   ],
                 ),

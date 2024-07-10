@@ -9,9 +9,11 @@ import 'package:fyp/const/color.dart';
 import 'package:fyp/controllers/order_controllers.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewOrders extends StatefulWidget {
   final String uid;
+
   const ViewOrders({super.key, required this.uid});
 
   @override
@@ -20,6 +22,8 @@ class ViewOrders extends StatefulWidget {
 
 class _ViewOrdersState extends State<ViewOrders> {
   final _controller = Get.put(OrdersController());
+  List<bool> _showDetail = [];
+
   Future<String?> getCustomerEmail(String orderId) async {
     try {
       // Initialize Firebase if not already initialized
@@ -54,9 +58,19 @@ class _ViewOrdersState extends State<ViewOrders> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: mainBack,
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Orders"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SafeArea(
@@ -67,11 +81,11 @@ class _ViewOrdersState extends State<ViewOrders> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: Get.height,
+                  height: Get.height * 0.92,
                   padding: const EdgeInsets.all(10.0),
                   //padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                      color: textWhite,
+                      color: mainBack,
                       //borderRadius: BorderRadius.circular(10.0),
                       boxShadow: [
                         BoxShadow(
@@ -83,7 +97,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                       ]),
                   child: Column(
                     children: [
-                      Expanded(
+                      Flexible(
                         child:
                             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                           stream: FirebaseFirestore.instance
@@ -105,10 +119,15 @@ class _ViewOrdersState extends State<ViewOrders> {
 
                               if (ordersSnapshot == null ||
                                   ordersSnapshot.docs.isEmpty) {
-                                return Center(child: Text('No orders found'));
+                                return Center(
+                                    child: Text(
+                                  'No orders found',
+                                  style: GoogleFonts.poppins(color: textWhite),
+                                ));
                               }
 
                               return ListView.builder(
+                                physics: const BouncingScrollPhysics(),
                                 itemCount: ordersSnapshot.docs.length,
                                 itemBuilder: (context, index) {
                                   final order =
@@ -119,9 +138,47 @@ class _ViewOrdersState extends State<ViewOrders> {
                                       order['tailorEmail'] ?? '';
                                   final images = order['images'] ?? [];
                                   final price = order['price'] as double;
+                                  dynamic value;
+                                  dynamic measurement;
+                                  List<Widget> measurementWidgets = [];
+
+                                  if (order['measurements'] == null) {
+                                    print("Measurement is Null");
+                                  } else {
+                                    for (dynamic data
+                                        in order["measurements"]) {
+                                      value = data['value'];
+                                      measurement = data['measurement'];
+                                      Widget measurementWidget = Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                measurement,
+                                                style: GoogleFonts.poppins(
+                                                    color: mainBack,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Text(
+                                                value + " inch",
+                                                style: GoogleFonts.poppins(
+                                                    color: mainBack),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      );
+
+                                      // Add the Text widget to the list
+                                      measurementWidgets.add(measurementWidget);
+                                    }
+                                  }
 
                                   return order['deliveryType'] ==
-                                          "Cash on Delivery"
+                                          'Cash on Delivery'
                                       ? Container(
                                           margin: const EdgeInsets.all(10.0),
                                           decoration: BoxDecoration(
@@ -242,7 +299,7 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                 //         );
                                                 //       }).toList(),
                                                 // ),
-                                                SizedBox(height: 16),
+                                                // SizedBox(height: 16),
                                                 Row(
                                                   mainAxisAlignment:
                                                       // order['orderConfirm'] ==
@@ -386,8 +443,8 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                                   "deviceToken",
                                                                   order["orderConfirm"] !=
                                                                           "Accept"
-                                                                      ? "Tailor is Working"
-                                                                      : "🤯 Sorry Tailor is Busy Right Now!!",
+                                                                      ? "Status Check"
+                                                                      : "Status Check",
                                                                   customerEmail);
                                                             });
                                                           },
@@ -650,28 +707,199 @@ class _ViewOrdersState extends State<ViewOrders> {
                                                     //         onPressed: () {},
                                                     //       )
                                                     //     : Container(),
-                                                    Text(
-                                                      order["Order Placed"]
-                                                          ? "Accepted"
-                                                          : "Accept or Decline",
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color:
-                                                            order['orderConfirm'] ==
-                                                                    'Decline'
-                                                                ? Colors.red
-                                                                : Colors.green,
-                                                      ),
-                                                    ),
+                                                    // Text(
+                                                    //   order["Order Placed"]
+                                                    //       ? "Accepted"
+                                                    //       : "Accept or Decline",
+                                                    //   style:
+                                                    //       GoogleFonts.poppins(
+                                                    //     fontWeight:
+                                                    //         FontWeight.bold,
+                                                    //     color:
+                                                    //         order['orderConfirm'] ==
+                                                    //                 'Decline'
+                                                    //             ? Colors.red
+                                                    //             : Colors.green,
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
+                                                if (order['measurements'] !=
+                                                    null)
+                                                  Text(
+                                                    "Measurements ${order['type']}",
+                                                    style: GoogleFonts.poppins(
+                                                        color: mainColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                order['measurements'] != null
+                                                    ? Container(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        margin:
+                                                            EdgeInsets.all(8.0),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                          border: Border.all(
+                                                              color: mainColor),
+                                                        ),
+                                                        child: Column(
+                                                          children:
+                                                              measurementWidgets,
+                                                        ))
+                                                    : SizedBox(),
+                                                if ((order['measurements'] ==
+                                                    null))
+                                                  Text(
+                                                    "If measurements is Not Show Contact Customer",
+                                                    style: GoogleFonts.poppins(
+                                                        color: mainBack),
+                                                  ),
+
+                                                (order['measurements'] == null)
+                                                    ? InkWell(
+                                                        onTap: () {
+                                                          sendEmail(
+                                                              order[
+                                                                  'customerEmail'],
+                                                              order[
+                                                                  'tailorEmail']);
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  8.0),
+                                                          margin:
+                                                              EdgeInsets.all(
+                                                                  8.0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                            border: Border.all(
+                                                                color:
+                                                                    mainColor),
+                                                          ),
+                                                          child: Text(
+                                                            "Contact Customer",
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                                    color:
+                                                                        mainColor),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox()
+                                                // Align(
+                                                //   alignment: Alignment.center,
+                                                //   child: InkWell(
+                                                //     onTap: () {
+                                                //       setState(() {
+                                                //         _showDetail[index] = !_showDetail[index]; // Toggle the visibility of the detail
+                                                //       });
+                                                //     },
+                                                //     child: Column(
+                                                //       mainAxisSize: MainAxisSize.min,
+                                                //       children: [
+                                                //         Container(
+                                                //           padding: EdgeInsets.all(8.0),
+                                                //           margin: EdgeInsets.all(8.0),
+                                                //           decoration: BoxDecoration(
+                                                //             borderRadius: BorderRadius.circular(10.0),
+                                                //             border: Border.all(color: mainColor),
+                                                //           ),
+                                                //           child: Text(
+                                                //             "Check Detail",
+                                                //             style: GoogleFonts.roboto(color: mainColor),
+                                                //           ),
+                                                //         ),
+                                                //         SizedBox(height: 8.0), // Adjust the spacing as needed
+                                                //         AnimatedContainer(
+                                                //           duration: Duration(milliseconds: 300), // Adjust duration as needed
+                                                //           height: _showDetail[index] ? 100.0 : 0.0, // Set height based on visibility
+                                                //           curve: Curves.easeInOut,
+                                                //           child: _showDetail[index]
+                                                //               ? Container(
+                                                //             padding: EdgeInsets.all(8.0),
+                                                //             margin: EdgeInsets.all(8.0),
+                                                //             decoration: BoxDecoration(
+                                                //               borderRadius: BorderRadius.circular(10.0),
+                                                //               border: Border.all(color: mainColor),
+                                                //             ),
+                                                //             child: Text(
+                                                //               "Detail content",
+                                                //               style: GoogleFonts.roboto(color: mainColor),
+                                                //             ),
+                                                //           )
+                                                //               : null,
+                                                //         ),
+                                                //       ],
+                                                //     ),
+                                                //   ),
+                                                // )
+
+                                                // Align(
+                                                //   alignment: Alignment.center,
+                                                //   child: InkWell(
+                                                //     onTap: () {
+                                                //
+                                                //     },
+                                                //     child: Container(
+                                                //       padding:
+                                                //           EdgeInsets.all(8.0),
+                                                //       margin:
+                                                //           EdgeInsets.all(8.0),
+                                                //       decoration: BoxDecoration(
+                                                //           borderRadius:
+                                                //               BorderRadius
+                                                //                   .circular(
+                                                //                       10.0),
+                                                //           border: Border.all(
+                                                //               color:
+                                                //                   mainColor)),
+                                                //       child: Text(
+                                                //         "Check Detail",
+                                                //         style:
+                                                //             GoogleFonts.roboto(
+                                                //                 color:
+                                                //                     mainColor),
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
                                               ],
                                             ),
                                           ),
                                         )
-                                      : Container();
+                                      : Container(
+                                          margin: EdgeInsets.all(16.0),
+                                          padding: EdgeInsets.all(16.0),
+                                          decoration: BoxDecoration(
+                                              color: textWhite,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey
+                                                        .withOpacity(0.2),
+                                                    spreadRadius: 1.2,
+                                                    blurRadius: 2.0,
+                                                    blurStyle: BlurStyle.solid,
+                                                    offset: Offset(0, 2.0))
+                                              ]),
+                                          child: Text(
+                                            "Customer Not paying yet for this order Please wait...",
+                                            style: GoogleFonts.roboto(
+                                                color: mainBack),
+                                          ),
+                                        );
                                 },
                               );
                             }
@@ -687,6 +915,31 @@ class _ViewOrdersState extends State<ViewOrders> {
         ),
       ),
     );
+  }
+
+  Future<void> sendEmail(String email1, String email2) async {
+    final subject = 'Wanted Help';
+    final body = 'write the reason';
+    final encodedSubject = Uri.encodeComponent(subject);
+    final encodedBody = Uri.encodeComponent(body);
+    // Email address and subject
+    final Uri _emailLaunchUri = Uri(
+      //host: FirebaseAuth.instance.currentUser!.email,
+      scheme: 'mailto',
+      path: email1,
+      queryParameters: {
+        "from": FirebaseAuth.instance.currentUser!.email,
+        'subject': "", // Replace with your email subject
+        'body': "use your registered email", // Replace with your email body
+      },
+    );
+
+    // Check if the device can handle emails
+    if (await canLaunch(_emailLaunchUri.toString())) {
+      await launch(_emailLaunchUri.toString());
+    } else {
+      throw 'Could not launch $_emailLaunchUri';
+    }
   }
 
   Future<String?> getToken(String email) async {
@@ -733,5 +986,20 @@ class _ViewOrdersState extends State<ViewOrders> {
     } catch (error) {
       print("Error sending notification: $error");
     }
+  }
+}
+
+class Measurement {
+  final int value;
+  final String measurement;
+
+  Measurement({required this.value, required this.measurement});
+
+  // Factory constructor to convert a map to Measurement object
+  factory Measurement.fromJson(Map<String, dynamic> json) {
+    return Measurement(
+      value: json['value'],
+      measurement: json['measurement'],
+    );
   }
 }

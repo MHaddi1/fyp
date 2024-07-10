@@ -1,5 +1,8 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/const/color.dart';
 import 'package:fyp/const/components/my_button.dart';
@@ -16,6 +19,8 @@ class TailorsDataEntry2 extends StatefulWidget {
 }
 
 class _TailorsDataEntry2State extends State<TailorsDataEntry2> {
+  bool _uploading = false;
+
   Map<String, dynamic> description = {
     "MyDescriptions": "",
   };
@@ -27,91 +32,114 @@ class _TailorsDataEntry2State extends State<TailorsDataEntry2> {
     }
     return true;
   }
+  Future<bool> _onWillPop() async {
+    if (_uploading) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gigs Adding in progress..'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    } else if (!_validateDescription()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill description fields.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mainColor,
-        title: Text(
-          'Tailor Services Data Entry',
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: mainColor,
+          title: Text(
+            'Tailor Services Data Entry',
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: description.entries.map((entry) {
-                      String key = entry.key;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          SizedBox(height: 20),
-                          Text(
-                            key,
-                            style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: mainColor,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: description.entries.map((entry) {
+                        String key = entry.key;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(height: 20),
+                            Text(
+                              key,
+                              style: GoogleFonts.poppins(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: mainColor,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          DescriptionField(
-                            onChanged: (value) {
-                              setState(() {
-                                description[key] = value;
-                              });
-                            },
-                            hintText: "Enter the description of $key",
-                          ),
-                        ],
-                      );
-                    }).toList(),
+                            SizedBox(height: 10),
+                            DescriptionField(
+                              onChanged: (value) {
+                                setState(() {
+                                  description[key] = value;
+                                });
+                              },
+                              hintText: "Enter the description of $key",
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              MyButton(
-                text: "Submit",
-                onPressed: () async {
-                  if (_validateDescription()) {
-                    EasyLoading.show(
-                      dismissOnTap: true,
-                      status: "Data In Process",
-                      indicator: CircularProgressIndicator(),
-                      maskType: EasyLoadingMaskType.black,
-                    );
-                    Map<String, dynamic> userData = {
-                      "description": description
-                    };
-                    await FirebaseFirestore.instance
-                        .collection("Tailor_Services")
-                        .doc(FirebaseAuth.instance.currentUser!.email)
-                        .set(userData, SetOptions(merge: true));
-                    EasyLoading.dismiss();
-                    Get.toNamed(RoutesName.homeScreen);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Please fill description fields.'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
+                SizedBox(height: 20),
+                MyButton(
+                  text: "Submit",
+                  onPressed: () async {
+                    if (_validateDescription()) {
+                      EasyLoading.show(
+                        dismissOnTap: true,
+                        status: "Data In Process",
+                        indicator: CircularProgressIndicator(),
+                        maskType: EasyLoadingMaskType.black,
+                      );
+                      Map<String, dynamic> userData = {
+                        "description": description
+                      };
+                      await FirebaseFirestore.instance
+                          .collection("Tailor_Services")
+                          .doc(FirebaseAuth.instance.currentUser!.email)
+                          .set(userData, SetOptions(merge: true));
+                      EasyLoading.dismiss();
+                      Get.toNamed(RoutesName.homeScreen);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please fill description fields.'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -145,4 +173,5 @@ class DescriptionField extends StatelessWidget {
       ),
     );
   }
+
 }

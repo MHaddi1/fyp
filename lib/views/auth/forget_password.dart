@@ -94,7 +94,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 onPressed: () {
                   if (key.currentState!.validate()) {
                     key.currentState!.save();
-                    signUpController.forgetPassword();
+                    signUpController.forgetPassword(context);
                   }
                 },
               ).box.make()

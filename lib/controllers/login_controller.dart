@@ -58,6 +58,7 @@ class LoginController extends GetxController {
           await GoogleSignIn().signIn();
 
       if (googleSignInAccount == null) {
+        EasyLoading.dismiss();
         // Google Sign-In canceled by user
         return;
       }
@@ -74,6 +75,7 @@ class LoginController extends GetxController {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       User? user = userCredential.user;
+      EasyLoading.dismiss();
 
       if (user != null) {
         if (user.email!.endsWith('@gmail.com')) {
@@ -92,7 +94,8 @@ class LoginController extends GetxController {
           Get.toNamed(RoutesName.homeScreen);
           EasyLoading.dismiss();
         } else {
-          // Show an error message to the user
+          EasyLoading.dismiss();
+
           showDialog(
             context: context,
             builder: (BuildContext context) {

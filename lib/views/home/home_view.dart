@@ -133,6 +133,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   DateTime? currentBackPressTime;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +142,13 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       backgroundColor: mainBack,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.menu,color: mainColor,),
+          onPressed: () {
+            // Open the Drawer when the menu icon is pressed
+            _scaffoldKey.currentState!.openDrawer();
+          },
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -149,6 +157,7 @@ class _HomeViewState extends State<HomeView> {
             },
             icon: const Icon(
               Icons.chat,
+              color: mainColor,
             ),
           ),
           StreamBuilder<QuerySnapshot>(
@@ -174,7 +183,7 @@ class _HomeViewState extends State<HomeView> {
                   },
                   icon: Stack(
                     children: [
-                      Icon(Icons.shopping_cart), // Icon for the shopping cart
+                      Icon(Icons.shopping_cart,color: mainColor,), // Icon for the shopping cart
                       if (length >
                           0) // Display badge only if length is greater than 0
                         Positioned(
@@ -188,7 +197,7 @@ class _HomeViewState extends State<HomeView> {
                               length.toString(),
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
-                                fontSize: 9,
+                                fontSize: 6,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -204,11 +213,13 @@ class _HomeViewState extends State<HomeView> {
             onPressed: () {
               Get.to(() => NotificationS());
             },
-            icon: Icon(Icons.notifications),
+            icon: Icon(Icons.notifications,color: mainColor,),
           )
         ],
       ),
+      key: _scaffoldKey,
       drawer: const MyDrawer(),
+
       body: PopScope(
         canPop: false,
         onPopInvoked: (bool didPop) async {

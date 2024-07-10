@@ -8,6 +8,8 @@ import 'package:fyp/views/splash_view.dart';
 import 'package:fyp/views/auth/suggestion_view.dart';
 import 'package:get/route_manager.dart';
 
+import '../../views/auth/get_phone_number.dart';
+
 class AppRoutes {
   static appRoutes() => [
         GetPage(
@@ -27,7 +29,7 @@ class AppRoutes {
         ),
         GetPage(
           name: RoutesName.skipScreen,
-          page: () => const SkipView(),
+          page: () =>  SkipView(),
           transition: Transition.leftToRight,
         ),
         GetPage(
@@ -40,6 +42,10 @@ class AppRoutes {
           page: () => const InformationScreen(),
           transition: Transition.leftToRight,
         ),
-        GetPage(name: RoutesName.noInternet, page: () => NoInternet())
+        GetPage(name: RoutesName.noInternet, page: () => NoInternet()),
+        GetPage(
+          name: RoutesName.getNumberScreen,
+          page: () => GetNumberScreen(),
+        ),
       ];
 }

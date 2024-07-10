@@ -4,8 +4,8 @@ class PostModel {
   String image;
   DateTime date;
   String post;
-  int likes;
-   final bool isLiked;
+  dynamic likes;
+  final bool isLiked;
 
   PostModel({
     required this.name,
@@ -35,13 +35,12 @@ class PostModel {
     return PostModel(
       name: json['name'] ?? '', // Add a null check and fallback value if needed
       image: json['image'] ?? '',
-      date: json['date'] != null
-          ? DateTime.parse(json['date'])
-          : DateTime.now(), 
+      date:
+          json['date'] != null ? DateTime.parse(json['date']) : DateTime.now(),
       post: json['post'] ?? '',
       likes: json['likes'] ?? 0,
-      id: json['id']?? '',
-      isLiked: json['isLiked']?? false,
+      id: json['id'] ?? '',
+      isLiked: json['isLiked'] ?? false,
     );
   }
 }

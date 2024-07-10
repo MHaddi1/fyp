@@ -24,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     splashService.isLogin();
     // SignUpServices().currentCity();
-
   }
 
   @override

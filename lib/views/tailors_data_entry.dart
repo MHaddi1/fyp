@@ -45,6 +45,7 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
         }
       },
       child: Scaffold(
+        backgroundColor: mainBack,
         appBar: AppBar(
           title: Text('Tailor Data Entry'),
           backgroundColor: mainColor,
@@ -64,6 +65,7 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
               children: [
                 SizedBox(height: 20.0),
                 TextFormField(
+                  style: GoogleFonts.poppins(color: textWhite),
                   controller: _titleController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -72,8 +74,12 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
                     return null;
                   },
                   decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: textWhite)),
                     labelText: 'Project Title',
-                    border: OutlineInputBorder(),
+                    labelStyle: GoogleFonts.poppins(color: textWhite),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: textWhite)),
                   ),
                 ),
                 SizedBox(height: 20.0),
@@ -97,14 +103,17 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
                       children: [
                         Text(key,
                             style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.bold,color: textWhite)),
                         Expanded(
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _images[key]!.length,
-                            itemBuilder: (context, idx) {
-                              return Image.file(_images[key]![idx]);
-                            },
+                          child: Container(
+                            width: Get.width,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _images[key]!.length,
+                              itemBuilder: (context, idx) {
+                                return Image.file(_images[key]![idx]);
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -116,12 +125,16 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
                   children: myPriceList.entries.map((entry) {
                     String key = entry.key;
                     return ListTile(
-                      title: Text(key),
+                      title: Text(
+                        key,
+                        style: GoogleFonts.poppins(color: textWhite),
+                      ),
                       trailing: SizedBox(
                         width: 100,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
+                            style: GoogleFonts.poppins(color: textWhite),
                             keyboardType: TextInputType.number,
                             validator: (value) {
                               int price = int.parse(value.toString());
@@ -130,7 +143,7 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
                                 return 'Please enter a price';
                                 // ignore: unnecessary_null_comparison
                               } else if (price == null || price < 1000) {
-                                return 'Price atleast 1000 PKR';
+                                return 'Price at least 1000 PKR';
                               }
                               return null;
                             },
@@ -140,8 +153,12 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
                               });
                             },
                             decoration: InputDecoration(
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: textWhite)),
                               labelText: 'Price',
-                              border: OutlineInputBorder(),
+                              labelStyle: GoogleFonts.poppins(color: textWhite),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: textWhite)),
                             ),
                           ),
                         ),
@@ -184,6 +201,7 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
     return pickedFiles.map((pickedFile) => File(pickedFile.path)).toList();
   }
 
+
   Future<List<String>> _uploadImages(List<File> images) async {
     setState(() {
       _uploading = true;
@@ -204,6 +222,7 @@ class _TailorDataEntryState extends State<TailorDataEntry> {
     });
     return imageUrls;
   }
+
 
   void _saveData() async {
     setState(() {

@@ -28,9 +28,14 @@ class _PaymentPageState extends State<PaymentPage> {
             Divider(),
             InkWell(
               onTap: () {
+                double currentPrice = widget.order['price'];
+                double deliveryPrice = 200;
+                double updatedPrice = currentPrice + deliveryPrice;
                 Get.to(() => CODPage(
                       order: widget.order,
                       snapshot: widget.snapshot,
+                      deliveryPrice: deliveryPrice,
+                      updatePrice: updatedPrice,
                     ));
               },
               child: Row(

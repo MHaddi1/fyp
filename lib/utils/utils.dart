@@ -11,6 +11,7 @@ class Utils {
 
   static void showToastMessage(String message) {
     Fluttertoast.showToast(
+      toastLength: Toast.LENGTH_SHORT,
       msg: message,
       backgroundColor: Colors.black38,
       textColor: Colors.white,
@@ -20,10 +21,12 @@ class Utils {
   }
 
   static void snackBar(String title, String message) {
-    Get.snackbar(title, message,
+    Get.snackbar(
+
+        title, message,
         backgroundColor: Colors.black,
         colorText: Colors.white,
-        duration: const Duration(milliseconds: 750));
+        duration: const Duration(milliseconds: 1000));
   }
 
   static void myBoxShow(
